@@ -10,12 +10,12 @@ import { GeolocationControl, YMapsApi } from 'react-yandex-maps';
 import { RulerControl, SearchControl } from 'react-yandex-maps';
 import { TrafficControl, TypeSelector, ZoomControl } from 'react-yandex-maps';
 
-import GsErrorMessage from './SdcComponents/RgsErrorMessage';
+//import GsErrorMessage from './SdcComponents/RgsErrorMessage';
 import GsDoPlacemarkDo from './SdcComponents/RgsDoPlacemarkDo';
-import RgsCreateObject from './SdcComponents/RgsCreateObject';
-import RgsProcessObject from './SdcComponents/RgsProcessObject';
-import RgsAppointVertex from './SdcComponents/RgsAppointVertex';
-import RgsToDoMode from './SdcComponents/RgsToDoMode';
+// import RgsCreateObject from './SdcComponents/RgsCreateObject';
+// import RgsProcessObject from './SdcComponents/RgsProcessObject';
+// import RgsAppointVertex from './SdcComponents/RgsAppointVertex';
+// import RgsToDoMode from './SdcComponents/RgsToDoMode';
 
 import { getMultiRouteOptions, StrokaHelp } from './SdcServiceFunctions';
 import { getMassMultiRouteOptions } from './SdcServiceFunctions';
@@ -387,15 +387,15 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     }
   };
 
-  const OldSizeWind = (size: number) => {
-    xsMap = size;
-    xsTab = 0.01;
-    widthMap = '99.9%';
-    modeToDo = 0;
-    setToDoMode(false);
-    StatusQuo();
-    setFlagPusk(!flagPusk);
-  };
+  // const OldSizeWind = (size: number) => {
+  //   xsMap = size;
+  //   xsTab = 0.01;
+  //   widthMap = '99.9%';
+  //   modeToDo = 0;
+  //   setToDoMode(false);
+  //   StatusQuo();
+  //   setFlagPusk(!flagPusk);
+  // };
   //=== инициализация ======================================
   if (!flagOpen && Object.keys(map.tflight).length) {
     for (let i = 0; i < addobj.addObjects.length; i++) {
@@ -418,41 +418,41 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     zoom,
   };
 
-  const MenuGl = () => {
-    let soobHelpFiest = 'Маршрут сформирован';
-    if (!datestat.finish) {
-      soobHelpFiest = 'Добавьте перекрёстки в маршруте [';
-      soobHelpFiest += massMem.length + '🔆]';
-    }
+  // const MenuGl = () => {
+  //   let soobHelpFiest = 'Маршрут сформирован';
+  //   if (!datestat.finish) {
+  //     soobHelpFiest = 'Добавьте перекрёстки в маршруте [';
+  //     soobHelpFiest += massMem.length + '🔆]';
+  //   }
 
-    return (
-      <>
-        {modeToDo === 1 && <>{StrokaHelp('Введите реквизиты доп.объекта (<Esc> - сброс)')}</>}
-        {modeToDo === 3 && <>{StrokaHelp('Происходит выполнение режима')}</>}
-        {modeToDo === 0 && (
-          <>
-            {inTarget && (
-              <>
-                {StrokaMenuGlob('Режим управления', PressButton, 51)}
-                {StrokaHelp('Вы находитесь в режиме назначения')}
-              </>
-            )}
-            {!inTarget && (
-              <>
-                {!toDoMode && <>{StrokaMenuGlob('Режим назначения', PressButton, 52)}</>}
-                {StrokaHelp('Вы находитесь в режиме управления')}
-                {massMem.length === 0 && (
-                  <>{StrokaHelp('Начала работы - выбор первого перекрёстка')}</>
-                )}
-                {massMem.length > 0 && helper && <>{StrokaHelp(soobHelpFiest)}</>}
-                {massMem.length > 0 && !helper && <>{StrokaHelp(soobHelpFiest)}</>}
-              </>
-            )}
-          </>
-        )}
-      </>
-    );
-  };
+  //   return (
+  //     <>
+  //       {modeToDo === 1 && <>{StrokaHelp('Введите реквизиты доп.объекта (<Esc> - сброс)')}</>}
+  //       {modeToDo === 3 && <>{StrokaHelp('Происходит выполнение режима')}</>}
+  //       {modeToDo === 0 && (
+  //         <>
+  //           {inTarget && (
+  //             <>
+  //               {StrokaMenuGlob('Режим управления', PressButton, 51)}
+  //               {StrokaHelp('Вы находитесь в режиме назначения')}
+  //             </>
+  //           )}
+  //           {!inTarget && (
+  //             <>
+  //               {!toDoMode && <>{StrokaMenuGlob('Режим назначения', PressButton, 52)}</>}
+  //               {StrokaHelp('Вы находитесь в режиме управления')}
+  //               {massMem.length === 0 && (
+  //                 <>{StrokaHelp('Начала работы - выбор первого перекрёстка')}</>
+  //               )}
+  //               {massMem.length > 0 && helper && <>{StrokaHelp(soobHelpFiest)}</>}
+  //               {massMem.length > 0 && !helper && <>{StrokaHelp(soobHelpFiest)}</>}
+  //             </>
+  //           )}
+  //         </>
+  //       )}
+  //     </>
+  //   );
+  // };
 
   if (needRend) {
     needRend = false;
@@ -462,7 +462,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   return (
     <Grid container sx={{ border: 0, height: '99.9vh' }}>
       <Grid item xs sx={{ border: 0 }}>
-        {MenuGl()}
+        {/* {MenuGl()} */}
         <Grid container sx={{ border: 0, height: '96.9vh' }}>
           <Grid item xs={xsMap} sx={{ border: 0 }}>
             {Object.keys(map.tflight).length && (
@@ -491,23 +491,23 @@ const MainMapSdc = (props: { trigger: boolean }) => {
                   {/* служебные компоненты */}
                   {Pererisovka()}
                   <PlacemarkDo />
-                  {createObject && (
+                  {/* {createObject && (
                     <RgsCreateObject
                       setOpen={setCreateObject}
                       coord={leftCoord}
                       funcMode={ModeToDo}
                     />
-                  )}
-                  {processObject && <RgsProcessObject setOpen={setProcessObject} idx={idxObj} />}
+                  )} */}
+                  {/* {processObject && <RgsProcessObject setOpen={setProcessObject} idx={idxObj} />}
                   {appoint && datestat.readyPict && datestat.readyFaza && (
                     <RgsAppointVertex setOpen={setAppoint} idx={idxObj} />
                   )}
-                  {openSoobErr && <GsErrorMessage setOpen={setOpenSoobErr} sErr={soobErr} />}
+                  {openSoobErr && <GsErrorMessage setOpen={setOpenSoobErr} sErr={soobErr} />} */}
                 </Map>
               </YMaps>
             )}
           </Grid>
-          <Grid item xs={xsTab} sx={{ height: '97.0vh' }}>
+          {/* <Grid item xs={xsTab} sx={{ height: '97.0vh' }}>
             {toDoMode && (
               <RgsToDoMode
                 massMem={massMem}
@@ -520,7 +520,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
                 changeFaz={changeFaz}
               />
             )}
-          </Grid>
+          </Grid> */}
         </Grid>
       </Grid>
     </Grid>
