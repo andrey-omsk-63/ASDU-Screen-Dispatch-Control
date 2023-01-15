@@ -12,12 +12,12 @@ import MenuItem from '@mui/material/MenuItem';
 import GsErrorMessage from './RgsErrorMessage';
 
 //import { SendSocketСreateBindings } from "../RgsSocketFunctions";
-import { SendSocketUpdateBindings } from '../RgsSocketFunctions';
+import { SendSocketUpdateBindings } from '../SdcSocketFunctions';
 
-import { TakeAreaId, CheckKey, MakeTflink } from '../RgsServiceFunctions';
-import { MakingKey, OutputKey, MakingKluch } from '../RgsServiceFunctions';
-import { AppointDirect, AppointHeader } from '../RgsServiceFunctions';
-import { OutputNumFaza, ReplaceInSvg } from '../RgsServiceFunctions';
+import { TakeAreaId, CheckKey, MakeTflink } from '../SdcServiceFunctions';
+import { MakingKey, OutputKey, MakingKluch } from '../SdcServiceFunctions';
+import { AppointDirect, AppointHeader } from '../SdcServiceFunctions';
+import { OutputNumFaza, ReplaceInSvg } from '../SdcServiceFunctions';
 
 import { styleModalEnd, styleModalMenu } from '../MainMapStyle';
 import { styleSetAppoint, styleAppSt02 } from '../MainMapStyle';
@@ -25,7 +25,7 @@ import { styleSetAV, styleBoxFormAV } from '../MainMapStyle';
 import { styleSetFaza, styleBoxFormFaza } from '../MainMapStyle';
 import { styleSetFazaNull } from '../MainMapStyle';
 
-import { TfLink } from '../../interfaceBindings.d';
+import { TfLink } from '../../interfaceBindings';
 
 let oldIdx = -1;
 let kluchGl = '';

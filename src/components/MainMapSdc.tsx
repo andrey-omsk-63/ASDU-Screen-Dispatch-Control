@@ -10,23 +10,23 @@ import { GeolocationControl, YMapsApi } from 'react-yandex-maps';
 import { RulerControl, SearchControl } from 'react-yandex-maps';
 import { TrafficControl, TypeSelector, ZoomControl } from 'react-yandex-maps';
 
-import GsErrorMessage from './RgsComponents/RgsErrorMessage';
-import GsDoPlacemarkDo from './RgsComponents/RgsDoPlacemarkDo';
-import RgsCreateObject from './RgsComponents/RgsCreateObject';
-import RgsProcessObject from './RgsComponents/RgsProcessObject';
-import RgsAppointVertex from './RgsComponents/RgsAppointVertex';
-import RgsToDoMode from './RgsComponents/RgsToDoMode';
+import GsErrorMessage from './SdcComponents/RgsErrorMessage';
+import GsDoPlacemarkDo from './SdcComponents/RgsDoPlacemarkDo';
+import RgsCreateObject from './SdcComponents/RgsCreateObject';
+import RgsProcessObject from './SdcComponents/RgsProcessObject';
+import RgsAppointVertex from './SdcComponents/RgsAppointVertex';
+import RgsToDoMode from './SdcComponents/RgsToDoMode';
 
-import { getMultiRouteOptions, StrokaHelp } from './RgsServiceFunctions';
-import { getMassMultiRouteOptions } from './RgsServiceFunctions';
-import { getReferencePoints, CenterCoord } from './RgsServiceFunctions';
-import { getReferenceLine, MakeMassRouteFirst } from './RgsServiceFunctions';
-import { StrokaMenuGlob, MakingKey } from './RgsServiceFunctions';
-import { MakeSoobErr, MakeMassRoute } from './RgsServiceFunctions';
-import { CheckHaveLink, MakeFazer } from './RgsServiceFunctions';
+import { getMultiRouteOptions, StrokaHelp } from './SdcServiceFunctions';
+import { getMassMultiRouteOptions } from './SdcServiceFunctions';
+import { getReferencePoints, CenterCoord } from './SdcServiceFunctions';
+import { getReferenceLine, MakeMassRouteFirst } from './SdcServiceFunctions';
+import { StrokaMenuGlob, MakingKey } from './SdcServiceFunctions';
+import { MakeSoobErr, MakeMassRoute } from './SdcServiceFunctions';
+import { CheckHaveLink, MakeFazer } from './SdcServiceFunctions';
 
-import { SendSocketGetPhases } from './RgsSocketFunctions';
-import { SendSocketGetSvg } from './RgsSocketFunctions';
+import { SendSocketGetPhases } from './SdcSocketFunctions';
+import { SendSocketGetSvg } from './SdcSocketFunctions';
 
 import { searchControl } from './MainMapStyle';
 
@@ -57,7 +57,7 @@ let helper = true;
 let funcContex: any = null;
 let funcBound: any = null;
 
-const MainMapRgs = (props: { trigger: boolean }) => {
+const MainMapSdc = (props: { trigger: boolean }) => {
   //== Piece of Redux =======================================
   const map = useSelector((state: any) => {
     const { mapReducer } = state;
@@ -527,4 +527,4 @@ const MainMapRgs = (props: { trigger: boolean }) => {
   );
 };
 
-export default MainMapRgs;
+export default MainMapSdc;

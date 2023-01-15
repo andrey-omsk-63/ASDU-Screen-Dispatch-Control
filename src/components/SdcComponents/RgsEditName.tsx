@@ -1,20 +1,20 @@
-import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { addobjCreate } from "../../redux/actions";
+import * as React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addobjCreate } from '../../redux/actions';
 
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Modal from "@mui/material/Modal";
-import TextField from "@mui/material/TextField";
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Modal from '@mui/material/Modal';
+import TextField from '@mui/material/TextField';
 
-import { SendSocketСreateAddObj } from "../RgsSocketFunctions";
-import { SendSocketDeleteAddObj } from "../RgsSocketFunctions";
+import { SendSocketСreateAddObj } from '../SdcSocketFunctions';
+import { SendSocketDeleteAddObj } from '../SdcSocketFunctions';
 
-import { styleBoxForm, styleInpKnop } from "../MainMapStyle";
-import { styleSet, styleEditName } from "../MainMapStyle";
+import { styleBoxForm, styleInpKnop } from '../MainMapStyle';
+import { styleSet, styleEditName } from '../MainMapStyle';
 
-let valueName = "";
+let valueName = '';
 
 const RgsEditName = (props: { setOpen: Function; idx: number }) => {
   //== Piece of Redux ======================================
@@ -38,7 +38,7 @@ const RgsEditName = (props: { setOpen: Function; idx: number }) => {
   let idxObj = props.idx - map.tflight.length;
 
   const handleKey = (event: any) => {
-    if (event.key === "Enter") event.preventDefault();
+    if (event.key === 'Enter') event.preventDefault();
   };
 
   const handleCloseSet = () => {
@@ -58,9 +58,7 @@ const RgsEditName = (props: { setOpen: Function; idx: number }) => {
   };
 
   const InputName = () => {
-    const [value, setValue] = React.useState(
-      addobj.addObjects[idxObj].description
-    );
+    const [value, setValue] = React.useState(addobj.addObjects[idxObj].description);
     valueName = value;
 
     const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -98,7 +96,7 @@ const RgsEditName = (props: { setOpen: Function; idx: number }) => {
           <InputName />
         </Grid>
         <Grid item xs={2.3}>
-          <Box sx={{ border: 1, borderColor: "#FFDB4D" }}>
+          <Box sx={{ border: 1, borderColor: '#FFDB4D' }}>
             <Button sx={styleInpKnop} onClick={handleClose}>
               Ввод
             </Button>

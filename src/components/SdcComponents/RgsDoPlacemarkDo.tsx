@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { Placemark, YMapsApi } from 'react-yandex-maps';
 
-import { GetPointData } from '../RgsServiceFunctions';
+import { GetPointData } from '../SdcServiceFunctions';
 
 const RgsDoPlacemarkDo = (props: {
   ymaps: YMapsApi | null;

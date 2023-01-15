@@ -8,10 +8,10 @@ import Button from '@mui/material/Button';
 
 import { Fazer } from '../../App';
 
-import { OutputFazaImg, OutputVertexImg } from '../RgsServiceFunctions';
-import { CircleObj } from '../RgsServiceFunctions';
+import { OutputFazaImg, OutputVertexImg } from '../SdcServiceFunctions';
+import { CircleObj } from '../SdcServiceFunctions';
 
-import { SendSocketRoute, SendSocketDispatch } from '../RgsSocketFunctions';
+import { SendSocketRoute, SendSocketDispatch } from '../SdcSocketFunctions';
 
 //import { styleModalEnd } from "../MainMapStyle";
 import { styleModalMenu, styleStrokaTablImg } from './GsComponentsStyle';
