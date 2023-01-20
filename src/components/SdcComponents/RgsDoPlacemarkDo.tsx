@@ -17,7 +17,7 @@ const RgsDoPlacemarkDo = (props: {
     const { mapReducer } = state;
     return mapReducer.map.dateMap;
   });
-  console.log('map',map)
+  //console.log('map',map)
   //map.tflight
   let addobj = useSelector((state: any) => {
     const { addobjReducer } = state;
@@ -198,12 +198,12 @@ const RgsDoPlacemarkDo = (props: {
       : GetPointOptions0(fazaImg);
   }, [createChipsLayout, mappp.tlsost.num, fazaImg, pC]);
 
-  const getPointOptions2 = () => {
-    let colorBalloon = 'islands#violetCircleIcon';
-    return {
-      preset: colorBalloon,
-    };
-  };
+  // const getPointOptions2 = () => {
+  //   let colorBalloon = 'islands#violetCircleIcon';
+  //   return {
+  //     preset: colorBalloon,
+  //   };
+  // };
 
   const MemoPlacemarkDo = React.useMemo(
     () => (
@@ -215,7 +215,8 @@ const RgsDoPlacemarkDo = (props: {
         //   iconLayout: createChipsLayout(calculate, mappp.tlsost.num),
         // }}
 
-        options={idx < map.tflight.length ? getPointOptions1() : getPointOptions2()}
+        // options={idx < map.tflight.length ? getPointOptions1() : getPointOptions2()}
+        options={getPointOptions1()}
         modules={['geoObject.addon.balloon', 'geoObject.addon.hint']}
         onClick={() => props.OnPlacemarkClickPoint(idx)}
       />
