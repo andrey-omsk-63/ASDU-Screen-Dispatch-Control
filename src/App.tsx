@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { mapCreate, statsaveCreate } from './redux/actions';
-import { coordinatesCreate, bindingsCreate } from './redux/actions';
-import { addobjCreate, massfazCreate } from './redux/actions';
+import { coordinatesCreate, massfazCreate } from './redux/actions';
+import { addobjCreate, bindingsCreate } from './redux/actions';
 
 import Grid from '@mui/material/Grid';
 
@@ -19,8 +19,8 @@ import { SendSocketGetAddObjects } from './components/SdcSocketFunctions';
 
 import { dataMap } from './otladkaMaps';
 import { imgFaza } from './otladkaPicFaza';
-import { dataBindings } from './otladkaBindings';
-import { dataAddObjects } from './otladkaAddObjects';
+ import { dataBindings } from './otladkaBindings';
+ import { dataAddObjects } from './otladkaAddObjects';
 
 export let dateMapGl: any;
 export let dateBindingsGl: any;
@@ -119,8 +119,8 @@ const App = () => {
   const Initialisation = () => {
     //let deb = dateStat.debug;
     console.log('dateMapGl:', dateMapGl);
-    console.log('dateBindingsGl:', dateBindingsGl);
-    console.log('dateAddObjectsGl:', dateAddObjectsGl);
+    // console.log('dateBindingsGl:', dateBindingsGl);
+    // console.log('dateAddObjectsGl:', dateAddObjectsGl);
     for (let i = 0; i < dateMapGl.tflight.length; i++) {
       let coord = [];
       coord[0] = dateMapGl.tflight[i].points.Y;
@@ -195,18 +195,18 @@ const App = () => {
           flagMap = true;
           setTrigger(!trigger);
           break;
-        case 'getBindings':
-          dateBindingsGl = JSON.parse(JSON.stringify(data));
-          dispatch(bindingsCreate(dateBindingsGl));
-          flagBindings = true;
-          setTrigger(!trigger);
-          break;
-        case 'getAddObjects':
-          dateAddObjectsGl = JSON.parse(JSON.stringify(data));
-          dispatch(addobjCreate(dateAddObjectsGl));
-          flagAddObjects = true;
-          setTrigger(!trigger);
-          break;
+        // case 'getBindings':
+        //   dateBindingsGl = JSON.parse(JSON.stringify(data));
+        //   dispatch(bindingsCreate(dateBindingsGl));
+        //   flagBindings = true;
+        //   setTrigger(!trigger);
+        //   break;
+        // case 'getAddObjects':
+        //   dateAddObjectsGl = JSON.parse(JSON.stringify(data));
+        //   dispatch(addobjCreate(dateAddObjectsGl));
+        //   flagAddObjects = true;
+        //   setTrigger(!trigger);
+        //   break;
         case 'getPhases':
           dateStat.area = data.pos.area;
           dateStat.id = data.pos.id.toString();

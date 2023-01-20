@@ -359,11 +359,11 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     setFlagPusk(!flagPusk);
   };
 
-  const ModeToDo = (mod: number) => {
-    modeToDo = mod;
-    if (!modeToDo) setChangeFaz(0);
-    SetHelper();
-  };
+  // const ModeToDo = (mod: number) => {
+  //   modeToDo = mod;
+  //   if (!modeToDo) setChangeFaz(0);
+  //   SetHelper();
+  // };
 
   const PressButton = (mode: number) => {
     switch (mode) {
@@ -398,10 +398,10 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   // };
   //=== инициализация ======================================
   if (!flagOpen && Object.keys(map.tflight).length) {
-    for (let i = 0; i < addobj.addObjects.length; i++) {
-      coordinates.push(addobj.addObjects[i].dgis);
-    }
-    dispatch(coordinatesCreate(coordinates));
+    // for (let i = 0; i < addobj.addObjects.length; i++) {
+    //   coordinates.push(addobj.addObjects[i].dgis);
+    // }
+    // dispatch(coordinatesCreate(coordinates));
 
     pointCenter = CenterCoord(
       map.boxPoint.point0.Y,

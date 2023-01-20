@@ -17,6 +17,8 @@ const RgsDoPlacemarkDo = (props: {
     const { mapReducer } = state;
     return mapReducer.map.dateMap;
   });
+  console.log('map',map)
+  //map.tflight
   let addobj = useSelector((state: any) => {
     const { addobjReducer } = state;
     return addobjReducer.addobj.dateAdd;
