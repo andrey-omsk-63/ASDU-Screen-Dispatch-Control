@@ -173,22 +173,22 @@ export const MakeFazer = (klu: string, bind: any) => {
 };
 
 //=== Placemark =====================================
-export const GetPointData = (index: number, map: any, addobjects: any) => {
+export const GetPointData = (index: number, map: any) => {
   let cont1 = '';
   let cont2 = '';
   let cont3 = '';
-  if (index < map.tflight.length) {
-    cont1 = map.tflight[index].description + '<br/>';
-    cont3 = map.tflight[index].tlsost.description + '<br/>';
-    cont2 = '[' + map.tflight[index].region.num + ', ';
-    cont2 += map.tflight[index].area.num;
-    cont2 += ', ' + map.tflight[index].ID + ', ' + map.tflight[index].idevice + ']';
-  } else {
-    let idx = index - map.tflight.length;
-    cont1 = addobjects[idx].description + '<br/>';
-    cont2 = '[' + addobjects[idx].region + ', ' + addobjects[idx].area;
-    cont2 += ', ' + addobjects[idx].id + ']';
-  }
+  // if (index < map.tflight.length) {
+  cont1 = map.tflight[index].description + '<br/>';
+  cont3 = map.tflight[index].tlsost.description + '<br/>';
+  cont2 = '[' + map.tflight[index].region.num + ', ';
+  cont2 += map.tflight[index].area.num;
+  cont2 += ', ' + map.tflight[index].ID + ', ' + map.tflight[index].idevice + ']';
+  // } else {
+  //   let idx = index - map.tflight.length;
+  //   cont1 = addobjects[idx].description + '<br/>';
+  //   cont2 = '[' + addobjects[idx].region + ', ' + addobjects[idx].area;
+  //   cont2 += ', ' + addobjects[idx].id + ']';
+  // }
 
   return {
     hintContent: cont1 + cont3 + cont2,

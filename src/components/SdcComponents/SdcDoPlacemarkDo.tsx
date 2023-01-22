@@ -5,11 +5,10 @@ import { Placemark, YMapsApi } from 'react-yandex-maps';
 
 import { GetPointData } from '../SdcServiceFunctions';
 
-const RgsDoPlacemarkDo = (props: {
+const SdcDoPlacemarkDo = (props: {
   ymaps: YMapsApi | null;
   coordinate: any;
   idx: number;
-  massMem: Array<number>;
   OnPlacemarkClickPoint: Function;
 }) => {
   //== Piece of Redux =======================================
@@ -17,22 +16,20 @@ const RgsDoPlacemarkDo = (props: {
     const { mapReducer } = state;
     return mapReducer.map.dateMap;
   });
-  //console.log('map',map)
-  //map.tflight
-  let addobj = useSelector((state: any) => {
-    const { addobjReducer } = state;
-    return addobjReducer.addobj.dateAdd;
-    //return addobjReducer.addobj.addObjects;
-  });
+  // let addobj = useSelector((state: any) => {
+  //   const { addobjReducer } = state;
+  //   return addobjReducer.addobj.dateAdd;
+  //   //return addobjReducer.addobj.addObjects;
+  // });
   //console.log('DoPlacemarkDo', addobj);
   // let massdk = useSelector((state: any) => {
   //   const { massdkReducer } = state;
   //   return massdkReducer.massdk;
   // });
-  let massfaz = useSelector((state: any) => {
-    const { massfazReducer } = state;
-    return massfazReducer.massfaz;
-  });
+  // let massfaz = useSelector((state: any) => {
+  //   const { massfazReducer } = state;
+  //   return massfazReducer.massfaz;
+  // });
   let datestat = useSelector((state: any) => {
     const { statsaveReducer } = state;
     return statsaveReducer.datestat;
@@ -44,40 +41,40 @@ const RgsDoPlacemarkDo = (props: {
   let mappp = map.tflight[0];
   // let pA = -1;
   // let pB = -1;
-  let pC = -1;
+  //let pC = -1;
   let nomSvg = -1;
   if (idx < map.tflight.length) {
     mapp = map.tflight[idx].tlsost.num.toString();
     mappp = map.tflight[idx];
   }
-  if (props.massMem.length >= 1) {
-    // pA = props.massMem[0];
-    // pB = props.massMem[props.massMem.length - 1];
-    //if (datestat.toDoMode) pC = props.massMem.indexOf(props.idx);
-    pC = props.massMem.indexOf(props.idx);
-  }
-  let fazaImg: null | string = null;
-  if (!debug && pC >= 0) {
-    for (let i = 0; i < massfaz.length; i++) {
-      if (mappp.idevice === massfaz[i].idevice) {
-        if (massfaz[i].fazaSist === 11 || massfaz[i].fazaSist === 15) {
-          nomSvg = 12; // ОС
-          pC = -1;
-        } else {
-          if (massfaz[i].fazaSist === 10 || massfaz[i].fazaSist === 14) {
-            nomSvg = 7; // ЖМ
-            pC = -1;
-          } else {
-            if (massfaz[i].fazaSist > 0 && massfaz[i].img) {
-              if (massfaz[i].fazaSist <= massfaz[i].img.length)
-                fazaImg = massfaz[i].img[massfaz[i].fazaSist - 1];
-            }
-          }
-        }
-      }
-    }
-  }
-  debug && (fazaImg = datestat.phSvg[0]); // для отладки
+  //if (props.massMem.length >= 1) {
+  // pA = props.massMem[0];
+  // pB = props.massMem[props.massMem.length - 1];
+  //if (datestat.toDoMode) pC = props.massMem.indexOf(props.idx);
+  //pC = props.massMem.indexOf(props.idx);
+  //}
+  // let fazaImg: null | string = null;
+  // if (!debug && pC >= 0) {
+  //   for (let i = 0; i < massfaz.length; i++) {
+  //     if (mappp.idevice === massfaz[i].idevice) {
+  //       if (massfaz[i].fazaSist === 11 || massfaz[i].fazaSist === 15) {
+  //         nomSvg = 12; // ОС
+  //         pC = -1;
+  //       } else {
+  //         if (massfaz[i].fazaSist === 10 || massfaz[i].fazaSist === 14) {
+  //           nomSvg = 7; // ЖМ
+  //           pC = -1;
+  //         } else {
+  //           if (massfaz[i].fazaSist > 0 && massfaz[i].img) {
+  //             if (massfaz[i].fazaSist <= massfaz[i].img.length)
+  //               fazaImg = massfaz[i].img[massfaz[i].fazaSist - 1];
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+  // debug && (fazaImg = datestat.phSvg[0]); // для отладки
 
   const Hoster = React.useCallback(() => {
     let host = 'https://localhost:3000/18.svg';
@@ -172,31 +169,32 @@ const RgsDoPlacemarkDo = (props: {
   //   };
   // }, [createChipsLayout, mappp.tlsost.num]);
 
-  const GetPointOptions0 = (Hoster: any) => {
-    let imger = window.location.origin + '/free/img/notImage.png';
-    if (Hoster) imger = 'data:image/png;base64,' + Hoster;
+  // const GetPointOptions0 = (Hoster: any) => {
+  //   let imger = window.location.origin + '/free/img/notImage.png';
+  //   if (Hoster) imger = 'data:image/png;base64,' + Hoster;
 
-    return {
-      // данный тип макета
-      iconLayout: 'default#image',
-      // изображение иконки метки
-      //iconImageHref: '/faza.png',
-      // iconImageHref: 'data:image/png;base64,' + Hoster,
-      iconImageHref: imger,
-      // размеры метки
-      iconImageSize: [50, 50],
-      // её "ножки" (точки привязки)
-      iconImageOffset: [-15, -38],
-    };
-  };
+  //   return {
+  //     // данный тип макета
+  //     iconLayout: 'default#image',
+  //     // изображение иконки метки
+  //     //iconImageHref: '/faza.png',
+  //     // iconImageHref: 'data:image/png;base64,' + Hoster,
+  //     iconImageHref: imger,
+  //     // размеры метки
+  //     iconImageSize: [50, 50],
+  //     // её "ножки" (точки привязки)
+  //     iconImageOffset: [-15, -38],
+  //   };
+  // };
 
   const getPointOptions1 = React.useCallback(() => {
-    return pC < 0
-      ? {
-          iconLayout: createChipsLayout(calculate, mappp.tlsost.num),
-        }
-      : GetPointOptions0(fazaImg);
-  }, [createChipsLayout, mappp.tlsost.num, fazaImg, pC]);
+    return { iconLayout: createChipsLayout(calculate, mappp.tlsost.num) };
+    //  pC < 0
+    //   ? {
+    // iconLayout: createChipsLayout(calculate, mappp.tlsost.num),
+    //   }
+    // : GetPointOptions0(fazaImg);
+  }, [createChipsLayout, mappp.tlsost.num]);
 
   // const getPointOptions2 = () => {
   //   let colorBalloon = 'islands#violetCircleIcon';
@@ -210,7 +208,7 @@ const RgsDoPlacemarkDo = (props: {
       <Placemark
         key={idx}
         geometry={props.coordinate}
-        properties={GetPointData(idx, map, addobj.addObjects)}
+        properties={GetPointData(idx, map)}
         // options={{
         //   iconLayout: createChipsLayout(calculate, mappp.tlsost.num),
         // }}
@@ -221,9 +219,9 @@ const RgsDoPlacemarkDo = (props: {
         onClick={() => props.OnPlacemarkClickPoint(idx)}
       />
     ),
-    [idx, map, addobj, getPointOptions1, props],
+    [idx, map, getPointOptions1, props],
   );
   return MemoPlacemarkDo;
 };
 
-export default RgsDoPlacemarkDo;
+export default SdcDoPlacemarkDo;
