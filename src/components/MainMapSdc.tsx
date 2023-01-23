@@ -10,7 +10,8 @@ import { RulerControl, SearchControl } from 'react-yandex-maps';
 import { TrafficControl, TypeSelector, ZoomControl } from 'react-yandex-maps';
 
 import SdcDoPlacemarkDo from './SdcComponents/SdcDoPlacemarkDo';
-import RgsAppointVertex from './SdcComponents/RgsAppointVertex';
+import SdcControltVertex from './SdcComponents/SdcControltVertex';
+//import RgsAppointVertex from './SdcComponents/RgsAppointVertex';
 
 import { CenterCoord } from './SdcServiceFunctions';
 
@@ -120,7 +121,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
 
   return (
     <Grid container sx={{ height: '99.9vh' }}>
-      <Grid item xs>
+      <Grid item xs={12}>
         {Object.keys(map.tflight).length && (
           <YMaps
             query={{
@@ -146,11 +147,16 @@ const MainMapSdc = (props: { trigger: boolean }) => {
               <ZoomControl options={{ float: 'right' }} />
               {/* служебные компоненты */}
               <PlacemarkDo />
-              {appoint && datestat.readyPict && datestat.readyFaza && (
-                <RgsAppointVertex setOpen={setAppoint} idx={idxObj} />
-              )}
+              {/* {appoint && datestat.readyPict && datestat.readyFaza && (
+                <SdcControltVertex setOpen={setAppoint} idx={idxObj} />
+              )} */}
             </Map>
           </YMaps>
+        )}
+      </Grid>
+      <Grid item xs>
+        {appoint && datestat.readyPict && datestat.readyFaza && (
+          <SdcControltVertex setOpen={setAppoint} idx={idxObj} />
         )}
       </Grid>
     </Grid>
