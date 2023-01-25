@@ -1,26 +1,26 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { mapCreate, statsaveCreate } from './redux/actions';
-import { coordinatesCreate, massfazCreate } from './redux/actions';
-import { addobjCreate, bindingsCreate } from './redux/actions';
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { mapCreate, statsaveCreate } from "./redux/actions";
+import { coordinatesCreate, massfazCreate } from "./redux/actions";
+import { addobjCreate, bindingsCreate } from "./redux/actions";
 
-import Grid from '@mui/material/Grid';
+import Grid from "@mui/material/Grid";
 
-import axios from 'axios';
+import axios from "axios";
 
-import MainMapSdc from './components/MainMapSdc';
-import AppSocketError from './AppSocketError';
+import MainMapSdc from "./components/MainMapSdc";
+import AppSocketError from "./AppSocketError";
 
 //import { MasskPoint } from "./components/MapServiceFunctions";
 
-import { SendSocketGetBindings } from './components/SdcSocketFunctions';
-import { SendSocketGetAddObjects } from './components/SdcSocketFunctions';
+import { SendSocketGetBindings } from "./components/SdcSocketFunctions";
+import { SendSocketGetAddObjects } from "./components/SdcSocketFunctions";
 //import { SendSocketGetPhases } from "./components/MapSocketFunctions";
 
-import { dataMap } from './otladkaMaps';
-import { imgFaza } from './otladkaPicFaza';
- import { dataBindings } from './otladkaBindings';
- import { dataAddObjects } from './otladkaAddObjects';
+import { dataMap } from "./otladkaMaps";
+import { imgFaza } from "./otladkaPicFaza";
+import { dataBindings } from "./otladkaBindings";
+import { dataAddObjects } from "./otladkaAddObjects";
 
 export let dateMapGl: any;
 export let dateBindingsGl: any;
@@ -45,9 +45,9 @@ export let dateStat: Stater = {
   finish: false,
   readyPict: true,
   readyFaza: true,
-  region: '0',
-  area: '0',
-  id: '0',
+  region: "0",
+  area: "0",
+  id: "0",
   phSvg: [null, null, null, null, null, null, null, null],
   pictSvg: null,
 };
@@ -89,8 +89,8 @@ export let Coordinates: Array<Array<number>> = []; // массив коорди�
 let flagOpenDebug = true;
 let flagOpenWS = true;
 let WS: any = null;
-let homeRegion: string = '0';
-let soob = '';
+let homeRegion: string = "0";
+let soob = "";
 let flagMap = false;
 let flagBindings = false;
 let flagAddObjects = false;
@@ -118,7 +118,7 @@ const App = () => {
   //========================================================
   const Initialisation = () => {
     //let deb = dateStat.debug;
-    console.log('dateMapGl:', dateMapGl);
+    console.log("dateMapGl:", dateMapGl);
     // console.log('dateBindingsGl:', dateBindingsGl);
     // console.log('dateAddObjectsGl:', dateAddObjectsGl);
     for (let i = 0; i < dateMapGl.tflight.length; i++) {
@@ -131,7 +131,11 @@ const App = () => {
   };
 
   const host =
-    'wss://' + window.location.host + window.location.pathname + 'W' + window.location.search;
+    "wss://" +
+    window.location.host +
+    window.location.pathname +
+    "W" +
+    window.location.search;
 
   const [openSetErr, setOpenSetErr] = React.useState(false);
   const [openMapInfo, setOpenMapInfo] = React.useState(false);
@@ -140,7 +144,7 @@ const App = () => {
   if (flagOpenWS) {
     WS = new WebSocket(host);
     dateStat.ws = WS;
-    if (WS.url === 'wss://localhost:3000/W') dateStat.debug = true;
+    if (WS.url === "wss://localhost:3000/W") dateStat.debug = true;
     dispatch(statsaveCreate(dateStat));
     flagOpenWS = false;
     SendSocketGetBindings(dateStat.debug, WS);
@@ -149,15 +153,15 @@ const App = () => {
 
   React.useEffect(() => {
     WS.onopen = function (event: any) {
-      console.log('WS.current.onopen:', event);
+      console.log("WS.current.onopen:", event);
     };
 
     WS.onclose = function (event: any) {
-      console.log('WS.current.onclose:', event);
+      console.log("WS.current.onclose:", event);
     };
 
     WS.onerror = function (event: any) {
-      console.log('WS.current.onerror:', event);
+      console.log("WS.current.onerror:", event);
     };
 
     WS.onmessage = function (event: any) {
@@ -165,7 +169,7 @@ const App = () => {
       let data = allData.data;
       //console.log("пришло:", data.error, allData.type, data);
       switch (allData.type) {
-        case 'phases':
+        case "phases":
           let flagChange = false;
           for (let i = 0; i < data.phases.length; i++) {
             for (let j = 0; j < massfaz.length; j++) {
@@ -182,7 +186,7 @@ const App = () => {
             setTrigger(!trigger);
           }
           break;
-        case 'mapInfo':
+        case "mapInfo":
           dateMapGl = JSON.parse(JSON.stringify(data));
           dispatch(mapCreate(dateMapGl));
           let massRegion = [];
@@ -207,7 +211,7 @@ const App = () => {
         //   flagAddObjects = true;
         //   setTrigger(!trigger);
         //   break;
-        case 'getPhases':
+        case "getPhases":
           dateStat.area = data.pos.area;
           dateStat.id = data.pos.id.toString();
           dateStat.phSvg = Array(8).fill(null);
@@ -220,7 +224,7 @@ const App = () => {
           dispatch(statsaveCreate(dateStat));
           setTrigger(!trigger);
           break;
-        case 'getSvg':
+        case "getSvg":
           //console.log("getSvg:", data.status, data.svg, data);
           dateStat.pictSvg = data.svg;
           dateStat.readyPict = true;
@@ -228,13 +232,13 @@ const App = () => {
           setTrigger(!trigger);
           break;
         default:
-          console.log('data_default:', data);
+          console.log("data_default:", data);
       }
     };
   }, [dispatch, massfaz, trigger]);
 
-  if (WS.url === 'wss://localhost:3000/W' && flagOpenDebug) {
-    console.log('РЕЖИМ ОТЛАДКИ!!!');
+  if (WS.url === "wss://localhost:3000/W" && flagOpenDebug) {
+    console.log("РЕЖИМ ОТЛАДКИ!!!");
     dateMapGl = JSON.parse(JSON.stringify(dataMap));
     dispatch(mapCreate(dateMapGl));
     dateAddObjectsGl = JSON.parse(JSON.stringify(dataAddObjects.data));
@@ -252,7 +256,7 @@ const App = () => {
     dateStat.phSvg[2] = imgFaza;
     dateStat.phSvg[3] = null;
     dateStat.phSvg[4] = imgFaza;
-    const ipAdress: string = 'https://localhost:3000/cross.svg';
+    const ipAdress: string = "https://localhost:3000/cross.svg";
     axios.get(ipAdress).then(({ data }) => {
       dateStat.pictSvg = data;
     });
@@ -272,7 +276,7 @@ const App = () => {
   }
 
   return (
-    <Grid container sx={{ height: '100vh', width: '100%', bgcolor: '#E9F5D8' }}>
+    <Grid container sx={{ height: "100vh", width: "100%", bgcolor: "#E9F5D8" }}>
       <Grid item xs>
         {openSetErr && <AppSocketError sErr={soob} setOpen={setOpenSetErr} />}
         {openMapInfo && <MainMapSdc trigger={trigger} />}
