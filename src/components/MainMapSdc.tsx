@@ -16,7 +16,7 @@ import SdcControlVertex from "./SdcComponents/SdcControlVertex";
 import { CenterCoord } from "./SdcServiceFunctions";
 
 import { SendSocketGetPhases } from "./SdcSocketFunctions";
-import { SendSocketGetSvg } from "./SdcSocketFunctions";
+//import { SendSocketGetSvg } from "./SdcSocketFunctions";
 
 import { searchControl } from "./MainMapStyle";
 
@@ -46,7 +46,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   let homeRegion = datestat.region;
   const dispatch = useDispatch();
   //===========================================================
-  const [appoint, setAppoint] = React.useState(false);
+  const [control, setControl] = React.useState(false);
   const [idxObj, setIdxObj] = React.useState(-1);
   const [flagCenter, setFlagCenter] = React.useState(false);
   const [ymaps, setYmaps] = React.useState<YMapsApi | null>(null);
@@ -60,14 +60,14 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     datestat.id = id;
     if (!debug) {
       datestat.phSvg = Array(8).fill(null);
-      datestat.pictSvg = null;
-      datestat.readyPict = false;
+      // datestat.pictSvg = null;
+      // datestat.readyPict = false;
       datestat.readyFaza = false;
     }
     SendSocketGetPhases(debug, ws, homeRegion, area, id);
-    SendSocketGetSvg(debug, ws, homeRegion, area, id);
+    //SendSocketGetSvg(debug, ws, homeRegion, area, id);
     dispatch(statsaveCreate(datestat));
-    setAppoint(true);
+    setControl(true);
   };
   //=== вывод светофоров ===================================
   const PlacemarkDo = () => {
@@ -153,8 +153,8 @@ const MainMapSdc = (props: { trigger: boolean }) => {
               <ZoomControl options={{ float: "right" }} />
               {/* служебные компоненты */}
               <PlacemarkDo />
-              {appoint && datestat.readyPict && datestat.readyFaza && (
-                <SdcControlVertex setOpen={setAppoint} idx={idxObj} />
+              {control && datestat.readyFaza && (
+                <SdcControlVertex setOpen={setControl} idx={idxObj} />
               )}
             </Map>
           </YMaps>

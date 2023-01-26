@@ -2,11 +2,11 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { mapCreate, statsaveCreate } from "./redux/actions";
 import { coordinatesCreate, massfazCreate } from "./redux/actions";
-import { addobjCreate, bindingsCreate } from "./redux/actions";
+//import { addobjCreate, bindingsCreate } from "./redux/actions";
 
 import Grid from "@mui/material/Grid";
 
-import axios from "axios";
+//import axios from "axios";
 
 import MainMapSdc from "./components/MainMapSdc";
 import AppSocketError from "./AppSocketError";
@@ -19,8 +19,6 @@ import { SendSocketGetAddObjects } from "./components/SdcSocketFunctions";
 
 import { dataMap } from "./otladkaMaps";
 import { imgFaza } from "./otladkaPicFaza";
-import { dataBindings } from "./otladkaBindings";
-import { dataAddObjects } from "./otladkaAddObjects";
 
 export let dateMapGl: any;
 export let dateBindingsGl: any;
@@ -30,26 +28,26 @@ export interface Stater {
   ws: any;
   debug: boolean;
   finish: boolean;
-  readyPict: boolean;
+  //readyPict: boolean;
   readyFaza: boolean;
   region: string;
   area: string;
   id: string;
   phSvg: Array<any>;
-  pictSvg: string | null;
+  //pictSvg: string | null;
 }
 
 export let dateStat: Stater = {
   ws: null,
   debug: false,
   finish: false,
-  readyPict: true,
+  //readyPict: true,
   readyFaza: true,
   region: "0",
   area: "0",
   id: "0",
   phSvg: [null, null, null, null, null, null, null, null],
-  pictSvg: null,
+  //pictSvg: null,
 };
 
 export interface Pointer {
@@ -76,7 +74,20 @@ export interface Fazer {
   runRec: number;
   img: Array<string | null>;
 }
-export let massFaz: Fazer[] = [];
+//export let massFaz: Fazer[] = [];
+export let massFaz: Fazer = {
+  idx: 0,
+  area: 0,
+  id: 0,
+  faza: 0,
+  fazaSist: -1,
+  phases: [],
+  idevice: 0,
+  name: "",
+  starRec: false,
+  runRec: 0,
+  img: [],
+};
 
 export interface NameMode {
   name: string;
@@ -92,15 +103,11 @@ let WS: any = null;
 let homeRegion: string = "0";
 let soob = "";
 let flagMap = false;
-let flagBindings = false;
-let flagAddObjects = false;
+// let flagBindings = false;
+// let flagAddObjects = false;
 
 const App = () => {
   // //== Piece of Redux ======================================
-  // let massdk = useSelector((state: any) => {
-  //   const { massdkReducer } = state;
-  //   return massdkReducer.massdk;
-  // });
   let massfaz = useSelector((state: any) => {
     const { massfazReducer } = state;
     return massfazReducer.massfaz;
@@ -171,16 +178,20 @@ const App = () => {
       switch (allData.type) {
         case "phases":
           let flagChange = false;
-          for (let i = 0; i < data.phases.length; i++) {
-            for (let j = 0; j < massfaz.length; j++) {
-              if (massfaz[j].idevice === data.phases[i].device) {
-                if (massfaz[j].fazaSist !== data.phases[i].phase) {
-                  massfaz[j].fazaSist = data.phases[i].phase;
-                  flagChange = true;
-                }
-              }
-            }
+          if (massfaz.idevice === data.phases.device) {
+            massfaz.fazaSist = data.phases.phase;
           }
+          // for (let i = 0; i < data.phases.length; i++) {
+          //   for (let j = 0; j < massfaz.length; j++) {
+          //     if (massfaz[j].idevice === data.phases[i].device) {
+
+          //       if (massfaz[j].fazaSist !== data.phases[i].phase) {
+          //         massfaz[j].fazaSist = data.phases[i].phase;
+          //         flagChange = true;
+          //       }
+          //     }
+          //   }
+          // }
           if (flagChange) {
             dispatch(massfazCreate(massfaz));
             setTrigger(!trigger);
@@ -199,18 +210,6 @@ const App = () => {
           flagMap = true;
           setTrigger(!trigger);
           break;
-        // case 'getBindings':
-        //   dateBindingsGl = JSON.parse(JSON.stringify(data));
-        //   dispatch(bindingsCreate(dateBindingsGl));
-        //   flagBindings = true;
-        //   setTrigger(!trigger);
-        //   break;
-        // case 'getAddObjects':
-        //   dateAddObjectsGl = JSON.parse(JSON.stringify(data));
-        //   dispatch(addobjCreate(dateAddObjectsGl));
-        //   flagAddObjects = true;
-        //   setTrigger(!trigger);
-        //   break;
         case "getPhases":
           dateStat.area = data.pos.area;
           dateStat.id = data.pos.id.toString();
@@ -224,13 +223,6 @@ const App = () => {
           dispatch(statsaveCreate(dateStat));
           setTrigger(!trigger);
           break;
-        case "getSvg":
-          //console.log("getSvg:", data.status, data.svg, data);
-          dateStat.pictSvg = data.svg;
-          dateStat.readyPict = true;
-          dispatch(statsaveCreate(dateStat));
-          setTrigger(!trigger);
-          break;
         default:
           console.log("data_default:", data);
       }
@@ -241,10 +233,10 @@ const App = () => {
     console.log("РЕЖИМ ОТЛАДКИ!!!");
     dateMapGl = JSON.parse(JSON.stringify(dataMap));
     dispatch(mapCreate(dateMapGl));
-    dateAddObjectsGl = JSON.parse(JSON.stringify(dataAddObjects.data));
-    dispatch(addobjCreate(dateAddObjectsGl));
-    dateBindingsGl = JSON.parse(JSON.stringify(dataBindings.data));
-    dispatch(bindingsCreate(dateBindingsGl));
+    // dateAddObjectsGl = JSON.parse(JSON.stringify(dataAddObjects.data));
+    // dispatch(addobjCreate(dateAddObjectsGl));
+    // dateBindingsGl = JSON.parse(JSON.stringify(dataBindings.data));
+    // dispatch(bindingsCreate(dateBindingsGl));
     let massRegion = [];
     for (let key in dateMapGl.regionInfo) {
       if (!isNaN(Number(key))) massRegion.push(Number(key));
@@ -256,22 +248,22 @@ const App = () => {
     dateStat.phSvg[2] = imgFaza;
     dateStat.phSvg[3] = null;
     dateStat.phSvg[4] = imgFaza;
-    const ipAdress: string = "https://localhost:3000/cross.svg";
-    axios.get(ipAdress).then(({ data }) => {
-      dateStat.pictSvg = data;
-    });
+    // const ipAdress: string = "https://localhost:3000/cross.svg";
+    // axios.get(ipAdress).then(({ data }) => {
+    //   dateStat.pictSvg = data;
+    // });
     dispatch(statsaveCreate(dateStat));
     flagMap = true;
-    flagBindings = true;
-    flagAddObjects = true;
+    // flagBindings = true;
+    // flagAddObjects = true;
     flagOpenDebug = false;
   }
 
-  if (flagMap && flagBindings && flagAddObjects && !flagOpenWS) {
+  if (flagMap && !flagOpenWS) {
     Initialisation();
     flagMap = false;
-    flagBindings = false;
-    flagAddObjects = false;
+    // flagBindings = false;
+    // flagAddObjects = false;
     setOpenMapInfo(true);
   }
 

@@ -113,7 +113,7 @@ export const SendSocketDispatch = (
   cmdd: number,
   faza: number
 ) => {
-  //console.log('Dispatch:', idevice, cmdd, faza);
+  console.log('Dispatch:', idevice, cmdd, faza);
   const handleSendOpen = () => {
     if (!debug) {
       if (ws.readyState === WebSocket.OPEN) {
@@ -175,32 +175,33 @@ export const SendSocketGetAddObjects = (debug: boolean, ws: WebSocket) => {
   handleSendOpen();
 };
 //=== MainMapRgs ====-----==========================
-export const SendSocketGetSvg = (
-  debug: boolean,
-  ws: WebSocket,
-  region: string,
-  area: string,
-  id: number
-) => {
-  console.log("getSvg:", region, area, id);
-  const handleSendOpen = () => {
-    if (!debug) {
-      if (ws.readyState === WebSocket.OPEN) {
-        ws.send(
-          JSON.stringify({
-            type: "getSvg",
-            pos: { region, area, id },
-          })
-        );
-      } else {
-        setTimeout(() => {
-          handleSendOpen();
-        }, 1000);
-      }
-    }
-  };
-  handleSendOpen();
-};
+// export const SendSocketGetSvg = (
+//   debug: boolean,
+//   ws: WebSocket,
+//   region: string,
+//   area: string,
+//   id: number
+// ) => {
+//   console.log("getSvg:", region, area, id);
+//   const handleSendOpen = () => {
+//     if (!debug) {
+//       if (ws.readyState === WebSocket.OPEN) {
+//         ws.send(
+//           JSON.stringify({
+//             type: "getSvg",
+//             pos: { region, area, id },
+//           })
+//         );
+//       } else {
+//         setTimeout(() => {
+//           handleSendOpen();
+//         }, 1000);
+//       }
+//     }
+//   };
+//   handleSendOpen();
+// };
+
 export const SendSocketGetPhases = (
   debug: boolean,
   ws: WebSocket,
@@ -328,3 +329,4 @@ export const SendSocketUpdateBindings = (
   handleSendOpen();
 };
 //==================================================
+//dispatch
