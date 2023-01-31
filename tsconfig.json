@@ -22,5 +22,5 @@
   },
   "include": [
     "src"
-, "basket/GsSelectMD.tsx", "basket/GsSetPhase.tsx"  ]
+, "basket/GsSelectMD.tsx", "basket/GsSetPhase.tsx", "build/RgsToDoMode.tsx", "basket/RgsProcessObject.tsx", "basket/RgsErrorMessage.tsx", "basket/RgsEditName.tsx", "basket/GsComponentsStyle.tsx", "basket/RgsCreateObject.tsx", "basket/RgsAppointVertex.tsx"  ]
 }

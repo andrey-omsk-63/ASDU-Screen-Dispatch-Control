@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addobjCreate, coordinatesCreate } from '../../redux/actions';
+import { addobjCreate, coordinatesCreate } from '../src/redux/actions';
 
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -11,15 +11,15 @@ import MenuItem from '@mui/material/MenuItem';
 
 import GsErrorMessage from './RgsErrorMessage';
 
-import { NameMode } from '../SdcServiceFunctions';
+import { NameMode } from '../src/components/SdcServiceFunctions';
 
-import { SendSocketСreateAddObj } from '../SdcSocketFunctions';
+import { SendSocketСreateAddObj } from '../src/components/SdcSocketFunctions';
 
-import { styleSetAdress, styleBoxForm, styleInpKnop } from '../MainMapStyle';
-import { styleSet } from '../MainMapStyle';
-import { styleSetAdrArea, styleSetAdrID } from '../MainMapStyle';
-import { styleSetArea, styleSetID } from '../MainMapStyle';
-import { styleBoxFormArea, styleBoxFormID } from '../MainMapStyle';
+import { styleSetAdress, styleBoxForm, styleInpKnop } from '../src/components/MainMapStyle';
+import { styleSet } from '../src/components/MainMapStyle';
+import { styleSetAdrArea, styleSetAdrID } from '../src/components/MainMapStyle';
+import { styleSetArea, styleSetID } from '../src/components/MainMapStyle';
+import { styleBoxFormArea, styleBoxFormID } from '../src/components/MainMapStyle';
 
 //let chNewCoord = 1;
 let soobErr = '';

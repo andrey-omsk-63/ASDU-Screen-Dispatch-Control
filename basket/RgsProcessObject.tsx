@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addobjCreate, coordinatesCreate } from '../../redux/actions';
+import { addobjCreate, coordinatesCreate } from '../src/redux/actions';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -8,10 +8,10 @@ import Modal from '@mui/material/Modal';
 
 import RgsEditName from './RgsEditName';
 
-import { SendSocketDeleteAddObj } from '../SdcSocketFunctions';
+import { SendSocketDeleteAddObj } from '../src/components/SdcSocketFunctions';
 
-import { styleModalEnd } from '../MainMapStyle';
-import { styleModalMenu, styleSetProcess } from '../MainMapStyle';
+import { styleModalEnd } from '../src/components/MainMapStyle';
+import { styleModalMenu, styleSetProcess } from '../src/components/MainMapStyle';
 
 const RgsProcessObject = (props: { setOpen: Function; idx: number }) => {
   //== Piece of Redux ======================================

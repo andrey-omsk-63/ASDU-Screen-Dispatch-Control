@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { bindingsCreate } from '../../redux/actions';
+import { bindingsCreate } from '../src/redux/actions';
 
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -12,20 +12,20 @@ import MenuItem from '@mui/material/MenuItem';
 import GsErrorMessage from './RgsErrorMessage';
 
 //import { SendSocketСreateBindings } from "../RgsSocketFunctions";
-import { SendSocketUpdateBindings } from '../SdcSocketFunctions';
+import { SendSocketUpdateBindings } from '../src/components/SdcSocketFunctions';
 
-import { TakeAreaId, CheckKey, MakeTflink } from '../SdcServiceFunctions';
-import { MakingKey, OutputKey, MakingKluch } from '../SdcServiceFunctions';
-import { AppointDirect, AppointHeader } from '../SdcServiceFunctions';
-import { OutputNumFaza, ReplaceInSvg } from '../SdcServiceFunctions';
+import { TakeAreaId, CheckKey, MakeTflink } from '../src/components/SdcServiceFunctions';
+import { MakingKey, OutputKey, MakingKluch } from '../src/components/SdcServiceFunctions';
+import { AppointDirect, AppointHeader } from '../src/components/SdcServiceFunctions';
+import { OutputNumFaza, ReplaceInSvg } from '../src/components/SdcServiceFunctions';
 
-import { styleModalEnd, styleModalMenu } from '../MainMapStyle';
-import { styleSetAppoint, styleAppSt02 } from '../MainMapStyle';
-import { styleSetAV, styleBoxFormAV } from '../MainMapStyle';
-import { styleSetFaza, styleBoxFormFaza } from '../MainMapStyle';
-import { styleSetFazaNull } from '../MainMapStyle';
+import { styleModalEnd, styleModalMenu } from '../src/components/MainMapStyle';
+import { styleSetAppoint, styleAppSt02 } from '../src/components/MainMapStyle';
+import { styleSetAV, styleBoxFormAV } from '../src/components/MainMapStyle';
+import { styleSetFaza, styleBoxFormFaza } from '../src/components/MainMapStyle';
+import { styleSetFazaNull } from '../src/components/MainMapStyle';
 
-import { TfLink } from '../../interfaceBindings';
+import { TfLink } from '../src/interfaceBindings';
 
 let oldIdx = -1;
 let kluchGl = '';

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addobjCreate } from '../../redux/actions';
+import { addobjCreate } from '../src/redux/actions';
 
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -8,11 +8,11 @@ import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 
-import { SendSocketСreateAddObj } from '../SdcSocketFunctions';
-import { SendSocketDeleteAddObj } from '../SdcSocketFunctions';
+import { SendSocketСreateAddObj } from '../src/components/SdcSocketFunctions';
+import { SendSocketDeleteAddObj } from '../src/components/SdcSocketFunctions';
 
-import { styleBoxForm, styleInpKnop } from '../MainMapStyle';
-import { styleSet, styleEditName } from '../MainMapStyle';
+import { styleBoxForm, styleInpKnop } from '../src/components/MainMapStyle';
+import { styleSet, styleEditName } from '../src/components/MainMapStyle';
 
 let valueName = '';
 

@@ -154,7 +154,11 @@ const MainMapSdc = (props: { trigger: boolean }) => {
               {/* служебные компоненты */}
               <PlacemarkDo />
               {control && datestat.readyFaza && (
-                <SdcControlVertex setOpen={setControl} idx={idxObj} />
+                <SdcControlVertex
+                  setOpen={setControl}
+                  idx={idxObj}
+                  trigger={props.trigger}
+                />
               )}
             </Map>
           </YMaps>

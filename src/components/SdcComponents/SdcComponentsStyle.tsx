@@ -7,8 +7,8 @@ export const styleSetControl = {
   // marginRight: 'auto',
   //======
   position: 'absolute',
-  left: '45%',
-  top: '46%',
+  left: '50%',
+  top: '50%',
   transform: 'translate(-50%, -50%)',
   //======
   //width: "33%",
@@ -42,6 +42,12 @@ export const styleConstKnop = {
   //backgroundColor: "#E3EBF2",  // светло-серый
   backgroundColor: '#EFF3F8', // светло-серый
   textAlign: 'center',
+};
+
+export const styleVarKnopNum = {
+  marginTop: 4,
+  paddingLeft: 0.1,
+  fontSize: 12,
 };
 
 export const styleOutputFaza = {

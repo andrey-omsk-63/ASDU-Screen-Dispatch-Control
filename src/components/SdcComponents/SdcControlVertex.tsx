@@ -10,14 +10,11 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 
-//import GsErrorMessage from "./RgsErrorMessage";
-
 import { SendSocketDispatch } from "../SdcSocketFunctions";
-
-// import { TakeAreaId, CheckKey, MakeTflink } from '../SdcServiceFunctions';
 
 import { styleModalEnd } from "../MainMapStyle";
 import { styleSetControl, styleVarKnop } from "./SdcComponentsStyle";
+import { styleVarKnopNum } from "./SdcComponentsStyle";
 import { styleConstKnop, styleOutputFaza } from "./SdcComponentsStyle";
 
 let oldIdx = -1;
@@ -32,7 +29,11 @@ const colorNormal = "#E9F5D8"; // светло-салатовый
 const colorExtra = "#96CD8F"; // тёмно-салатовый
 const colorSent = "#AFDAF3"; // светло-голубой
 
-const SdcControlVertex = (props: { setOpen: Function; idx: number }) => {
+const SdcControlVertex = (props: {
+  setOpen: Function;
+  idx: number;
+  trigger: boolean;
+}) => {
   //== Piece of Redux ======================================
   const map = useSelector((state: any) => {
     const { mapReducer } = state;
@@ -42,7 +43,7 @@ const SdcControlVertex = (props: { setOpen: Function; idx: number }) => {
     const { massfazReducer } = state;
     return massfazReducer.massfaz;
   });
-  //console.log('massfaz:', massfaz);
+  //console.log("massfaz:", massfaz, map.tflight[props.idx]);
   let datestat = useSelector((state: any) => {
     const { statsaveReducer } = state;
     return statsaveReducer.datestat;
@@ -62,23 +63,20 @@ const SdcControlVertex = (props: { setOpen: Function; idx: number }) => {
   if (oldIdx !== props.idx) {
     kluchGl = homeRegion + "-" + map.tflight[props.idx].area.num + "-";
     kluchGl += map.tflight[props.idx].ID + " ";
-
-    massfaz.fazaSist = 3; // отладка
-
     massfaz.idevice = map.tflight[props.idx].idevice;
     dispatch(massfazCreate(massfaz));
     oldSistFaza = -1;
-
     timerId = null;
     massInt = [];
-
     SendSocketDispatch(debug, ws, massfaz.idevice, 4, 1);
     setSentParam(-1);
     oldIdx = props.idx;
   } else {
-    if (oldSistFaza !== massfaz.fazaSist) {
-      setSentParam(-1);
-      oldSistFaza = massfaz.fazaSist;
+    if (massfaz.fazaSist !== 9 && massfaz.fazaSist !== 12) {
+      if (oldSistFaza !== massfaz.fazaSist) {
+        setSentParam(-1);
+        oldSistFaza = massfaz.fazaSist;
+      }
     }
   }
   //========================================================
@@ -121,7 +119,7 @@ const SdcControlVertex = (props: { setOpen: Function; idx: number }) => {
     dispatch(massfazCreate(massfaz));
     SendSocketDispatch(debug, ws, massfaz.idevice, 9, mode);
     if (mode < 9 && mode > 0) {
-      timerId = setInterval(() => DoTimerId(), 5000);
+      timerId = setInterval(() => DoTimerId(), 60000);
       massInt.push(timerId);
     } else {
       CloseInterval();
@@ -142,23 +140,28 @@ const SdcControlVertex = (props: { setOpen: Function; idx: number }) => {
         const styleModalMenuVar = {
           maxHeight: "9.2vh",
           minHeight: "9.2vh",
-          width: "212px",
+          width: "208px",
           backgroundColor: colorKnop,
           color: "black",
           textTransform: "unset !important",
         };
 
         resStr.push(
-          <Grid key={i} item xs={12} sx={styleVarKnop}>
-            <Box sx={styleOutputFaza}>
-              <Button
-                sx={styleModalMenuVar}
-                variant="contained"
-                onClick={() => handleClick(i + 1)}
-              >
-                {OutputFaza(datestat.phSvg[i])}
-              </Button>
-            </Box>
+          <Grid container key={i}>
+            <Grid item xs={0.5} sx={styleVarKnopNum}>
+              <b>{i + 1}</b>
+            </Grid>
+            <Grid item xs={11.5} sx={styleVarKnop}>
+              <Box sx={styleOutputFaza}>
+                <Button
+                  sx={styleModalMenuVar}
+                  variant="contained"
+                  onClick={() => handleClick(i + 1)}
+                >
+                  {OutputFaza(datestat.phSvg[i])}
+                </Button>
+              </Box>
+            </Grid>
           </Grid>
         );
       }
@@ -242,7 +245,7 @@ const SdcControlVertex = (props: { setOpen: Function; idx: number }) => {
           <b>Перекрёсток {kluchGl}</b>[<b>{massfaz.idevice}</b>]
         </Box>
         <Grid container sx={{ marginTop: 1.5 }}>
-          <Grid item xs={8} sx={{ paddingLeft: 1, paddingRight: 0.5 }}>
+          <Grid item xs={8} sx={{ paddingLeft: 0.1, paddingRight: 0.5 }}>
             <Grid container>{StrokaFazaKnop()} </Grid>
           </Grid>
           <Grid item xs sx={{ paddingRight: 1 }}>
