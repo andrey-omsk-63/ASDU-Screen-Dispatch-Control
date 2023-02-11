@@ -1,21 +1,21 @@
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { mapCreate, statsaveCreate } from "./redux/actions";
-import { coordinatesCreate, massfazCreate } from "./redux/actions";
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { mapCreate, statsaveCreate } from './redux/actions';
+import { coordinatesCreate, massfazCreate } from './redux/actions';
 
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/Grid';
 
 //import axios from "axios";
 
-import MainMapSdc from "./components/MainMapSdc";
-import AppSocketError from "./AppSocketError";
+import MainMapSdc from './components/MainMapSdc';
+import AppSocketError from './AppSocketError';
 
 //import { MasskPoint } from "./components/MapServiceFunctions";
 
 //import { SendSocketGetPhases } from "./components/MapSocketFunctions";
 
-import { dataMap } from "./otladkaMaps";
-import { imgFaza } from "./otladkaPicFaza";
+import { dataMap } from './otladkaMaps';
+import { imgFaza } from './otladkaPicFaza';
 
 export let dateMapGl: any;
 export let dateBindingsGl: any;
@@ -37,9 +37,9 @@ export let dateStat: Stater = {
   debug: false,
   finish: false,
   readyFaza: true,
-  region: "0",
-  area: "0",
-  id: "0",
+  region: '0',
+  area: '0',
+  id: '0',
   phSvg: [null, null, null, null, null, null, null, null],
 };
 
@@ -85,8 +85,8 @@ export let Coordinates: Array<Array<number>> = []; // массив коорди�
 let flagOpenDebug = true;
 let flagOpenWS = true;
 let WS: any = null;
-let homeRegion: string = "0";
-let soob = "";
+let homeRegion: string = '0';
+let soob = '';
 let flagMap = false;
 
 const App = () => {
@@ -103,7 +103,7 @@ const App = () => {
   const dispatch = useDispatch();
   //========================================================
   const Initialisation = () => {
-    console.log("dateMapGl:", dateMapGl);
+    console.log('dateMapGl:', dateMapGl);
     for (let i = 0; i < dateMapGl.tflight.length; i++) {
       let coord = [];
       coord[0] = dateMapGl.tflight[i].points.Y;
@@ -114,11 +114,7 @@ const App = () => {
   };
 
   const host =
-    "wss://" +
-    window.location.host +
-    window.location.pathname +
-    "W" +
-    window.location.search;
+    'wss://' + window.location.host + window.location.pathname + 'W' + window.location.search;
 
   const [openSetErr, setOpenSetErr] = React.useState(false);
   const [openMapInfo, setOpenMapInfo] = React.useState(false);
@@ -127,34 +123,34 @@ const App = () => {
   if (flagOpenWS) {
     WS = new WebSocket(host);
     dateStat.ws = WS;
-    if (WS.url === "wss://localhost:3000/W") dateStat.debug = true;
+    if (WS.url === 'wss://localhost:3000/W') dateStat.debug = true;
     dispatch(statsaveCreate(dateStat));
     flagOpenWS = false;
   }
 
   React.useEffect(() => {
     WS.onopen = function (event: any) {
-      console.log("WS.current.onopen:", event);
+      console.log('WS.current.onopen:', event);
     };
     WS.onclose = function (event: any) {
-      console.log("WS.current.onclose:", event);
+      console.log('WS.current.onclose:', event);
     };
     WS.onerror = function (event: any) {
-      console.log("WS.current.onerror:", event);
+      console.log('WS.current.onerror:', event);
     };
     WS.onmessage = function (event: any) {
       let allData = JSON.parse(event.data);
       let data = allData.data;
       //console.log("пришло:", data.error, allData.type, data);
       switch (allData.type) {
-        case "phases":
+        case 'phases':
           if (massfaz.idevice === data.phases[0].device) {
             massfaz.fazaSist = data.phases[0].phase;
             dispatch(massfazCreate(massfaz));
             setTrigger(!trigger);
           }
           break;
-        case "mapInfo":
+        case 'mapInfo':
           dateMapGl = JSON.parse(JSON.stringify(data));
           dispatch(mapCreate(dateMapGl));
           let massRegion = [];
@@ -167,8 +163,8 @@ const App = () => {
           flagMap = true;
           setTrigger(!trigger);
           break;
-        case "getPhases":
-          console.log("getPhases:", data);
+        case 'getPhases':
+          console.log('getPhases:', data);
           dateStat.area = data.pos.area;
           dateStat.id = data.pos.id.toString();
           dateStat.phSvg = Array(8).fill(null);
@@ -182,13 +178,13 @@ const App = () => {
           setTrigger(!trigger);
           break;
         default:
-          console.log("data_default:", data);
+          console.log('data_default:', data);
       }
     };
   }, [dispatch, massfaz, trigger]);
 
-  if (WS.url === "wss://localhost:3000/W" && flagOpenDebug) {
-    console.log("РЕЖИМ ОТЛАДКИ!!!");
+  if (WS.url === 'wss://localhost:3000/W' && flagOpenDebug) {
+    console.log('РЕЖИМ ОТЛАДКИ!!!');
     dateMapGl = JSON.parse(JSON.stringify(dataMap));
     dispatch(mapCreate(dateMapGl));
     let massRegion = [];
@@ -214,7 +210,7 @@ const App = () => {
   }
 
   return (
-    <Grid container sx={{ height: "100vh", width: "100%", bgcolor: "#E9F5D8" }}>
+    <Grid container sx={{ height: '100vh', width: '100%', bgcolor: '#E9F5D8' }}>
       <Grid item xs>
         {openSetErr && <AppSocketError sErr={soob} setOpen={setOpenSetErr} />}
         {openMapInfo && <MainMapSdc trigger={trigger} />}

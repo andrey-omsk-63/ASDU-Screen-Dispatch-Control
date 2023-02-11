@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { statsaveCreate } from '../redux/actions';
+import { statsaveCreate } from '../src/redux/actions';
 
 import Grid from '@mui/material/Grid';
 
@@ -9,15 +9,16 @@ import { GeolocationControl, YMapsApi } from 'react-yandex-maps';
 import { RulerControl, SearchControl } from 'react-yandex-maps';
 import { TrafficControl, TypeSelector, ZoomControl } from 'react-yandex-maps';
 
-import SdcDoPlacemarkDo from './SdcComponents/SdcDoPlacemarkDo';
-import SdcControlVertex from './SdcComponents/SdcControlVertex';
+import SdcDoPlacemarkDo from '../src/components/SdcComponents/SdcDoPlacemarkDo';
+import SdcControlVertex from '../src/components/SdcComponents/SdcControlVertex';
+//import RgsAppointVertex from './SdcComponents/RgsAppointVertex';
 
-import { CenterCoord } from './SdcServiceFunctions';
+import { CenterCoord } from '../src/components/SdcServiceFunctions';
 
-import { SendSocketGetPhases } from './SdcSocketFunctions';
+import { SendSocketGetPhases } from '../src/components/SdcSocketFunctions';
 //import { SendSocketGetSvg } from "./SdcSocketFunctions";
 
-import { searchControl } from './MainMapStyle';
+import { searchControl } from '../src/components/MainMapStyle';
 
 let flagOpen = false;
 const zoomStart = 10;
@@ -102,6 +103,16 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     }
   };
 
+  const OldSizeWind = (size: number) => {
+    // xsMap = size;
+    // xsTab = 0.01;
+    // widthMap = '99.9%';
+    // modeToDo = 0;
+    // setToDoMode(false);
+    // StatusQuo();
+    // setFlagPusk(!flagPusk);
+  };
+
   //=== инициализация ======================================
   if (!flagOpen && Object.keys(map.tflight).length) {
     pointCenter = CenterCoord(
@@ -147,7 +158,12 @@ const MainMapSdc = (props: { trigger: boolean }) => {
               {/* служебные компоненты */}
               <PlacemarkDo />
               {control && datestat.readyFaza && (
-                <SdcControlVertex setOpen={setControl} idx={idxObj} trigger={props.trigger} />
+                <SdcControlVertex
+                  setOpen={setControl}
+                  idx={idxObj}
+                  funcSize={OldSizeWind}
+                  trigger={props.trigger}
+                />
               )}
             </Map>
           </YMaps>

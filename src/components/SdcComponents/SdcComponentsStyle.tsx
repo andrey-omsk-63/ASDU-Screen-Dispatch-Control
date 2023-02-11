@@ -8,10 +8,9 @@ export const styleSetControl = {
   //======
   position: 'absolute',
   left: '50%',
+  //left: '83%',
   top: '50%',
   transform: 'translate(-50%, -50%)',
-  //======
-  //width: "33%",
   width: '340px',
   bgcolor: 'background.paper',
   border: '3px solid #000',
@@ -58,4 +57,3 @@ export const styleOutputFaza = {
   left: '50%',
 };
 //========================================================
-

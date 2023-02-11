@@ -1,39 +1,32 @@
-import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  massfazCreate,
-  //statsaveCreate
-} from "../../redux/actions";
+import * as React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { massfazCreate } from '../../redux/actions';
 
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Modal from "@mui/material/Modal";
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+//import Modal from '@mui/material/Modal';
 
-import { SendSocketDispatch } from "../SdcSocketFunctions";
+import { SendSocketDispatch } from '../SdcSocketFunctions';
 
-import { styleModalEnd } from "../MainMapStyle";
-import { styleSetControl, styleVarKnop } from "./SdcComponentsStyle";
-import { styleVarKnopNum } from "./SdcComponentsStyle";
-import { styleConstKnop, styleOutputFaza } from "./SdcComponentsStyle";
+import { styleModalEnd } from '../MainMapStyle';
+import { styleSetControl, styleVarKnop } from './SdcComponentsStyle';
+import { styleVarKnopNum } from './SdcComponentsStyle';
+import { styleConstKnop, styleOutputFaza } from './SdcComponentsStyle';
 
 let oldIdx = -1;
 let oldSistFaza = -1;
 let timerId: any = null;
 let massInt: any[] = [];
 
-let kluchGl = "";
+let kluchGl = '';
 //let soobErr = "";
 
-const colorNormal = "#E9F5D8"; // светло-салатовый
-const colorExtra = "#96CD8F"; // тёмно-салатовый
-const colorSent = "#AFDAF3"; // светло-голубой
+const colorNormal = '#E9F5D8'; // светло-салатовый
+const colorExtra = '#96CD8F'; // тёмно-салатовый
+const colorSent = '#AFDAF3'; // светло-голубой
 
-const SdcControlVertex = (props: {
-  setOpen: Function;
-  idx: number;
-  trigger: boolean;
-}) => {
+const SdcControlVertex = (props: { setOpen: Function; idx: number; trigger: boolean }) => {
   //== Piece of Redux ======================================
   const map = useSelector((state: any) => {
     const { mapReducer } = state;
@@ -55,14 +48,14 @@ const SdcControlVertex = (props: {
   //let imgFaza = datestat.phSvg;
   const dispatch = useDispatch();
   //========================================================
-  const [openSet, setOpenSet] = React.useState(true);
+  //const [openSet, setOpenSet] = React.useState(true);
   //const [openSetErr, setOpenSetErr] = React.useState(false);
   const [sentParam, setSentParam] = React.useState(-1);
 
   //=== инициализация ======================================
   if (oldIdx !== props.idx) {
-    kluchGl = homeRegion + "-" + map.tflight[props.idx].area.num + "-";
-    kluchGl += map.tflight[props.idx].ID + " ";
+    kluchGl = homeRegion + '-' + map.tflight[props.idx].area.num + '-';
+    kluchGl += map.tflight[props.idx].ID + ' ';
     massfaz.idevice = map.tflight[props.idx].idevice;
     dispatch(massfazCreate(massfaz));
     oldSistFaza = -1;
@@ -91,7 +84,7 @@ const SdcControlVertex = (props: {
   };
 
   const DoTimerId = () => {
-    console.log("Отправка ", massfaz.faza, timerId, massInt);
+    console.log('Отправка ', massfaz.faza, timerId, massInt);
     SendSocketDispatch(debug, ws, massfaz.idevice, 9, massfaz.faza);
     for (let i = 0; i < massInt.length - 1; i++) {
       if (massInt[i]) {
@@ -106,15 +99,15 @@ const SdcControlVertex = (props: {
 
   const handleCloseSet = () => {
     if (timerId) CloseInterval(); // принудительное закрытие
-    console.log("Финиш", timerId, massInt);
+    console.log('Финиш', timerId, massInt);
     oldIdx = -1;
     props.setOpen(false);
-    setOpenSet(false);
+    //setOpenSet(false);
     SendSocketDispatch(debug, ws, massfaz.idevice, 4, 0);
   };
 
   const handleClick = (mode: number) => {
-    console.log("New_Отправка ", mode, timerId, massInt);
+    console.log('New_Отправка ', mode, timerId, massInt);
     massfaz.faza = mode;
     dispatch(massfazCreate(massfaz));
     SendSocketDispatch(debug, ws, massfaz.idevice, 9, mode);
@@ -138,12 +131,12 @@ const SdcControlVertex = (props: {
         if (massfaz.fazaSist === i + 1) colorKnop = colorExtra;
 
         const styleModalMenuVar = {
-          maxHeight: "9.2vh",
-          minHeight: "9.2vh",
-          width: "208px",
+          maxHeight: '9.2vh',
+          minHeight: '9.2vh',
+          width: '208px',
           backgroundColor: colorKnop,
-          color: "black",
-          textTransform: "unset !important",
+          color: 'black',
+          textTransform: 'unset !important',
         };
 
         resStr.push(
@@ -156,13 +149,12 @@ const SdcControlVertex = (props: {
                 <Button
                   sx={styleModalMenuVar}
                   variant="contained"
-                  onClick={() => handleClick(i + 1)}
-                >
+                  onClick={() => handleClick(i + 1)}>
                   {OutputFaza(datestat.phSvg[i])}
                 </Button>
               </Box>
             </Grid>
-          </Grid>
+          </Grid>,
         );
       }
     }
@@ -176,13 +168,8 @@ const SdcControlVertex = (props: {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
-        style={{ width: window.innerHeight / 5.5, height: widthHeight }}
-      >
-        <image
-          width={"95%"}
-          height={"100%"}
-          xlinkHref={"data:image/png;base64," + img}
-        />
+        style={{ width: window.innerHeight / 5.5, height: widthHeight }}>
+        <image width={'95%'} height={'100%'} xlinkHref={'data:image/png;base64,' + img} />
       </svg>
     );
   };
@@ -191,33 +178,31 @@ const SdcControlVertex = (props: {
     let colorKnop = colorNormal;
     let handleMode = 0;
     switch (mode) {
-      case "ЖМ":
+      case 'ЖМ':
         handleMode = 10;
         if (sentParam === 10) colorKnop = colorSent;
-        if (massfaz.fazaSist === 10 || massfaz.fazaSist === 14)
-          colorKnop = colorExtra;
+        if (massfaz.fazaSist === 10 || massfaz.fazaSist === 14) colorKnop = colorExtra;
         break;
-      case "ОС":
+      case 'ОС':
         handleMode = 11;
         if (sentParam === 11) colorKnop = colorSent;
-        if (massfaz.fazaSist === 11 || massfaz.fazaSist === 15)
-          colorKnop = colorExtra;
+        if (massfaz.fazaSist === 11 || massfaz.fazaSist === 15) colorKnop = colorExtra;
         break;
-      case "ЛР":
+      case 'ЛР':
         handleMode = 0;
         break;
-      case "КУ":
+      case 'КУ':
         handleMode = 9;
     }
 
     const styleModalMenuConst = {
       fontSize: 40,
-      maxHeight: "9.2vh",
-      minHeight: "9.2vh",
-      width: "100px",
+      maxHeight: '9.2vh',
+      minHeight: '9.2vh',
+      width: '100px',
       backgroundColor: colorKnop,
-      color: "black",
-      textTransform: "unset !important",
+      color: 'black',
+      textTransform: 'unset !important',
     };
 
     return (
@@ -226,8 +211,7 @@ const SdcControlVertex = (props: {
           <Button
             sx={styleModalMenuConst}
             variant="contained"
-            onClick={() => handleClick(handleMode)}
-          >
+            onClick={() => handleClick(handleMode)}>
             <b>{mode}</b>
           </Button>
         </Box>
@@ -236,32 +220,32 @@ const SdcControlVertex = (props: {
   };
 
   return (
-    <Modal open={openSet} onClose={handleCloseSet} hideBackdrop>
-      <Box sx={styleSetControl}>
-        <Button sx={styleModalEnd} onClick={handleCloseSet}>
-          &#10006;
-        </Button>
-        <Box sx={{ fontSize: 17, marginTop: 1, textAlign: "center" }}>
-          <b>Перекрёсток {kluchGl}</b>[<b>{massfaz.idevice}</b>]
-        </Box>
-        <Grid container sx={{ marginTop: 1.5 }}>
-          <Grid item xs={8} sx={{ paddingLeft: 0.1, paddingRight: 0.5 }}>
-            <Grid container>{StrokaFazaKnop()} </Grid>
-          </Grid>
-          <Grid item xs sx={{ paddingRight: 1 }}>
-            <Grid container>
-              {OutputConstFaza("ЖМ")}
-              {OutputConstFaza("ОС")}
-              {OutputConstFaza("ЛР")}
-              {OutputConstFaza("КУ")}
-            </Grid>
+    // <Modal open={openSet} onClose={handleCloseSet} hideBackdrop>
+    <Box sx={styleSetControl}>
+      <Button sx={styleModalEnd} onClick={handleCloseSet}>
+        &#10006;
+      </Button>
+      <Box sx={{ fontSize: 17, marginTop: 1, textAlign: 'center' }}>
+        <b>Перекрёсток {kluchGl}</b>[<b>{massfaz.idevice}</b>]
+      </Box>
+      <Grid container sx={{ marginTop: 1.5 }}>
+        <Grid item xs={8} sx={{ paddingLeft: 0.1, paddingRight: 0.5 }}>
+          <Grid container>{StrokaFazaKnop()} </Grid>
+        </Grid>
+        <Grid item xs sx={{ paddingRight: 1 }}>
+          <Grid container>
+            {OutputConstFaza('ЖМ')}
+            {OutputConstFaza('ОС')}
+            {OutputConstFaza('ЛР')}
+            {OutputConstFaza('КУ')}
           </Grid>
         </Grid>
-        {/* {openSetErr && (
+      </Grid>
+      {/* {openSetErr && (
           <GsErrorMessage setOpen={setOpenSetErr} sErr={soobErr} />
         )} */}
-      </Box>
-    </Modal>
+    </Box>
+    // </Modal>
   );
 };
 
