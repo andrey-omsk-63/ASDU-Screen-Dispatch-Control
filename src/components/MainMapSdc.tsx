@@ -11,6 +11,7 @@ import { TrafficControl, TypeSelector, ZoomControl } from 'react-yandex-maps';
 
 import SdcDoPlacemarkDo from './SdcComponents/SdcDoPlacemarkDo';
 import SdcControlVertex from './SdcComponents/SdcControlVertex';
+import SdcErrorMessage from './SdcComponents/SdcErrorMessage';
 
 import { CenterCoord } from './SdcServiceFunctions';
 
@@ -25,6 +26,8 @@ let zoom = zoomStart;
 let pointCenter: any = 0;
 let newCenter: any = [];
 let funcBound: any = null;
+
+let soobErr = '';
 
 const MainMapSdc = (props: { trigger: boolean }) => {
   //== Piece of Redux =======================================
@@ -48,25 +51,31 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   const [control, setControl] = React.useState(false);
   const [idxObj, setIdxObj] = React.useState(-1);
   const [flagCenter, setFlagCenter] = React.useState(false);
+  const [openSetErr, setOpenSetErr] = React.useState(false);
   const [ymaps, setYmaps] = React.useState<YMapsApi | null>(null);
   const mapp = React.useRef<any>(null);
 
   const OnPlacemarkClickPoint = (index: number) => {
-    setIdxObj(index);
-    let area = map.tflight[index].area.num;
-    let id = map.tflight[index].ID;
-    datestat.area = area;
-    datestat.id = id;
-    if (!debug) {
-      datestat.phSvg = Array(8).fill(null);
-      // datestat.pictSvg = null;
-      // datestat.readyPict = false;
-      datestat.readyFaza = false;
+    if (!datestat.working) {
+      setIdxObj(index);
+      let area = map.tflight[index].area.num;
+      let id = map.tflight[index].ID;
+      datestat.area = area;
+      datestat.id = id;
+      if (!debug) {
+        datestat.phSvg = Array(8).fill(null);
+        // datestat.pictSvg = null;
+        // datestat.readyPict = false;
+        datestat.readyFaza = false;
+      }
+      SendSocketGetPhases(debug, ws, homeRegion, area, id);
+      //SendSocketGetSvg(debug, ws, homeRegion, area, id);
+      dispatch(statsaveCreate(datestat));
+      setControl(true);
+    } else {
+      soobErr = 'В данный момент происходит управление другим перекрёстком';
+      setOpenSetErr(true);
     }
-    SendSocketGetPhases(debug, ws, homeRegion, area, id);
-    //SendSocketGetSvg(debug, ws, homeRegion, area, id);
-    dispatch(statsaveCreate(datestat));
-    setControl(true);
   };
   //=== вывод светофоров ===================================
   const PlacemarkDo = () => {
@@ -149,6 +158,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
               {control && datestat.readyFaza && (
                 <SdcControlVertex setOpen={setControl} idx={idxObj} trigger={props.trigger} />
               )}
+              {openSetErr && <SdcErrorMessage setOpen={setOpenSetErr} sErr={soobErr} />}
             </Map>
           </YMaps>
         )}

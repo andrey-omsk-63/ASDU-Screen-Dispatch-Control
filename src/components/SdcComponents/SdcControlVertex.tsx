@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { massfazCreate } from '../../redux/actions';
+import { massfazCreate, statsaveCreate } from '../../redux/actions';
 
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -54,6 +54,8 @@ const SdcControlVertex = (props: { setOpen: Function; idx: number; trigger: bool
 
   //=== инициализация ======================================
   if (oldIdx !== props.idx) {
+    datestat.working = true; // занато
+    dispatch(statsaveCreate(datestat));
     kluchGl = homeRegion + '-' + map.tflight[props.idx].area.num + '-';
     kluchGl += map.tflight[props.idx].ID + ' ';
     massfaz.idevice = map.tflight[props.idx].idevice;
@@ -104,6 +106,8 @@ const SdcControlVertex = (props: { setOpen: Function; idx: number; trigger: bool
     props.setOpen(false);
     //setOpenSet(false);
     SendSocketDispatch(debug, ws, massfaz.idevice, 4, 0);
+    datestat.working = false; // свободно
+    dispatch(statsaveCreate(datestat));
   };
 
   const handleClick = (mode: number) => {

@@ -30,6 +30,7 @@ export interface Stater {
   area: string;
   id: string;
   phSvg: Array<any>;
+  working: boolean;
 }
 
 export let dateStat: Stater = {
@@ -41,6 +42,7 @@ export let dateStat: Stater = {
   area: '0',
   id: '0',
   phSvg: [null, null, null, null, null, null, null, null],
+  working: false,
 };
 
 export interface Pointer {
