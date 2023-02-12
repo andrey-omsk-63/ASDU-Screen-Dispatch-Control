@@ -7,8 +7,10 @@ export const styleSetControl = {
   // marginRight: 'auto',
   //======
   position: 'absolute',
-  left: '50%',
-  top: '50%',
+  // left: '50%',
+  // top: '50%',
+  left: '221px',
+  top: '193px',
   transform: 'translate(-50%, -50%)',
   //======
   width: '340px',
@@ -17,6 +19,7 @@ export const styleSetControl = {
   borderColor: 'primary.main',
   borderRadius: 2,
   boxShadow: 24,
+  paddingBottom: 0.5,
 };
 
 export const styleVarKnop = {
@@ -24,7 +27,8 @@ export const styleVarKnop = {
   border: '1px solid #000',
   borderColor: 'primary.main',
   borderRadius: 2,
-  height: '10vh',
+  // height: '10vh',
+  height: '75px',
   marginBottom: 0.5,
   //backgroundColor: "#E3EBF2",  // светло-серый
   backgroundColor: '#EFF3F8', // светло-серый
@@ -36,7 +40,8 @@ export const styleConstKnop = {
   border: '1px solid #000',
   borderColor: 'primary.main',
   borderRadius: 2,
-  height: '10vh',
+  // height: '10vh',
+  height: '75px',
   marginBottom: 0.5,
   //backgroundColor: "#E3EBF2",  // светло-серый
   backgroundColor: '#EFF3F8', // светло-серый

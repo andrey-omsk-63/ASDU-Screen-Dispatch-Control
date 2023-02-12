@@ -135,8 +135,10 @@ const SdcControlVertex = (props: { setOpen: Function; idx: number; trigger: bool
         if (massfaz.fazaSist === i + 1) colorKnop = colorExtra;
 
         const styleModalMenuVar = {
-          maxHeight: '9.2vh',
-          minHeight: '9.2vh',
+          // maxHeight: '9.2vh',
+          // minHeight: '9.2vh',
+          maxHeight: '69px',
+          minHeight: '69px',
           width: '208px',
           backgroundColor: colorKnop,
           color: 'black',
@@ -166,8 +168,10 @@ const SdcControlVertex = (props: { setOpen: Function; idx: number; trigger: bool
   };
 
   const OutputFaza = (img: any) => {
-    let widthHeight = window.innerHeight / 10;
-    if (!img) widthHeight = window.innerHeight / 20;
+    // let widthHeight = window.innerHeight / 10.5;
+    // if (!img) widthHeight = window.innerHeight / 21;
+    let widthHeight = 70;
+    if (!img) widthHeight = 35;
     return (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -201,8 +205,10 @@ const SdcControlVertex = (props: { setOpen: Function; idx: number; trigger: bool
 
     const styleModalMenuConst = {
       fontSize: 40,
-      maxHeight: '9.2vh',
-      minHeight: '9.2vh',
+      // maxHeight: '9.2vh',
+      // minHeight: '9.2vh',
+      maxHeight: '69px',
+      minHeight: '69px',
       width: '100px',
       backgroundColor: colorKnop,
       color: 'black',
