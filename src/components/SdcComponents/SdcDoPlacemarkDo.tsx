@@ -16,21 +16,7 @@ const SdcDoPlacemarkDo = (props: {
     const { mapReducer } = state;
     return mapReducer.map.dateMap;
   });
-  // let addobj = useSelector((state: any) => {
-  //   const { addobjReducer } = state;
-  //   return addobjReducer.addobj.dateAdd;
-  //   //return addobjReducer.addobj.addObjects;
-  // });
-  //console.log('DoPlacemarkDo', addobj);
-  // let massdk = useSelector((state: any) => {
-  //   const { massdkReducer } = state;
-  //   return massdkReducer.massdk;
-  // });
-  // let massfaz = useSelector((state: any) => {
-  //   const { massfazReducer } = state;
-  //   return massfazReducer.massfaz;
-  // });
-  let datestat = useSelector((state: any) => {
+    let datestat = useSelector((state: any) => {
     const { statsaveReducer } = state;
     return statsaveReducer.datestat;
   });
@@ -78,9 +64,11 @@ const SdcDoPlacemarkDo = (props: {
 
   const Hoster = React.useCallback(() => {
     let host = 'https://localhost:3000/18.svg';
+    //console.log('mapp:',mapp)
     if (!debug) {
       let mpp = mapp;
       if (nomSvg > 0) mpp = nomSvg.toString();
+      //console.log('mpp:',mpp)
       host = window.location.origin + '/free/img/trafficLights/' + mpp + '.svg';
     }
     return host;

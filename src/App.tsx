@@ -145,6 +145,18 @@ const App = () => {
       let data = allData.data;
       //console.log("пришло:", data.error, allData.type, data);
       switch (allData.type) {
+        case "tflight":
+          console.log("Tflight:", data, data.tflight);
+          for (let j = 0; j < data.tflight.length; j++) {
+            for (let i = 0; i < dateMapGl.tflight.length; i++) {
+              if (data.tflight[j].idevice === dateMapGl.tflight[i].idevice) {
+                dateMapGl.tflight[i].tlsost = data.tflight[j].tlsost;
+              }
+            }
+          }
+          dispatch(mapCreate(dateMapGl));
+          setTrigger(!trigger);
+          break;
         case 'phases':
           if (massfaz.idevice === data.phases[0].device) {
             massfaz.fazaSist = data.phases[0].phase;
