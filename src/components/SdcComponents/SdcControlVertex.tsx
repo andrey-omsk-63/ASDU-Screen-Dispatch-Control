@@ -93,15 +93,16 @@ const SdcControlVertex = (props: {
     return result;
   }
 
-  let theCSSprop = window
-    .getComputedStyle(document.body, null)
-    .getPropertyValue("font-family");
-  console.log("theCSSprop", theCSSprop); // output: serif
-  let bb = "bold 13px " + theCSSprop;
+  // let theCSSprop = window
+  //   .getComputedStyle(document.body, null)
+  //   .getPropertyValue("font-family");
 
-  let aa = textWidth("🐷 🐷", "bold 13px Segoe UI");
+  // console.log("theCSSprop", theCSSprop); // output: serif
+  // let bb = "bold 13px " + theCSSprop;
 
-  console.log("AA:", aa);
+  // let aa = textWidth("🐷 🐷", "bold 13px Segoe UI");
+
+  // console.log("AA:", aa);
 
   //========================================================
   const CloseInterval = () => {
