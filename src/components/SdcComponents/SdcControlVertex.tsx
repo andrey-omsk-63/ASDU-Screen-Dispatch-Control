@@ -48,7 +48,7 @@ const SdcControlVertex = (props: {
   //console.log("datestat", datestat);
   const debug = datestat.debug;
   const ws = datestat.ws;
-  const homeRegion = datestat.region;
+  //const homeRegion = datestat.region;
   //let imgFaza = datestat.phSvg;
   const dispatch = useDispatch();
   //========================================================
@@ -60,7 +60,8 @@ const SdcControlVertex = (props: {
   if (oldIdx !== props.idx) {
     datestat.working = true; // занато
     dispatch(statsaveCreate(datestat));
-    kluchGl = homeRegion + "-" + map.tflight[props.idx].area.num + "-";
+    // kluchGl = homeRegion + "-" + map.tflight[props.idx].area.num + "-";
+    kluchGl = map.tflight[props.idx].area.num + "-";
     kluchGl += map.tflight[props.idx].ID + " ";
     massfaz.idevice = map.tflight[props.idx].idevice;
     dispatch(massfazCreate(massfaz));
@@ -78,31 +79,6 @@ const SdcControlVertex = (props: {
       }
     }
   }
-
-  function textWidth(text: string, fontProp: any) {
-    let tag = document.createElement("div");
-    tag.style.position = "absolute";
-    tag.style.left = "-999em";
-    tag.style.whiteSpace = "nowrap";
-    tag.style.font = fontProp;
-    tag.innerHTML = text;
-
-    document.body.appendChild(tag);
-    let result = tag.clientWidth;
-    document.body.removeChild(tag);
-    return result;
-  }
-
-  // let theCSSprop = window
-  //   .getComputedStyle(document.body, null)
-  //   .getPropertyValue("font-family");
-
-  // console.log("theCSSprop", theCSSprop); // output: serif
-  // let bb = "bold 13px " + theCSSprop;
-
-  // let aa = textWidth("🐷 🐷", "bold 13px Segoe UI");
-
-  // console.log("AA:", aa);
 
   //========================================================
   const CloseInterval = () => {
