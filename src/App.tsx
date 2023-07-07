@@ -25,6 +25,7 @@ export interface Stater {
   ws: any;
   debug: boolean;
   finish: boolean;
+  demo: boolean;
   readyFaza: boolean;
   region: string;
   area: string;
@@ -37,6 +38,7 @@ export let dateStat: Stater = {
   ws: null,
   debug: false,
   finish: false,
+  demo: false,
   readyFaza: true,
   region: '0',
   area: '0',

@@ -21,6 +21,8 @@ const SdcDoPlacemarkDo = (props: {
     return statsaveReducer.datestat;
   });
   const debug = datestat.debug;
+  const DEMO = datestat.demo;
+  console.log('DEMO',DEMO)
   //===========================================================
   let idx = props.idx;
   let mapp = map.tflight[0].tlsost.num.toString();
@@ -65,14 +67,24 @@ const SdcDoPlacemarkDo = (props: {
   const Hoster = React.useCallback(() => {
     let host = 'https://localhost:3000/18.svg';
     //console.log('mapp:',mapp)
+    // if (!debug) {
+    //   let mpp = mapp;
+    //   if (nomSvg > 0) mpp = nomSvg.toString();
+    //   host = window.location.origin + '/free/img/trafficLights/' + mpp + '.svg';
+    // }
     if (!debug) {
       let mpp = mapp;
-      if (nomSvg > 0) mpp = nomSvg.toString();
-      //console.log('mpp:',mpp)
-      host = window.location.origin + '/free/img/trafficLights/' + mpp + '.svg';
+      if (DEMO) {
+        mpp = "1"; // режим Демо
+      } else {
+        if (nomSvg > 0) mpp = nomSvg.toString();
+      }
+      host = window.location.origin + "/free/img/trafficLights/" + mpp + ".svg";
+    } else {
+      if (DEMO) host = "https://localhost:3000/1.svg";
     }
     return host;
-  }, [mapp, nomSvg, debug]);
+  }, [mapp, nomSvg, debug, DEMO]);
 
   const createChipsLayout = React.useCallback(
     (calcFunc: Function, currnum: number, rotateDeg?: number) => {

@@ -10,17 +10,16 @@ import Button from "@mui/material/Button";
 import { SendSocketDispatch } from "../SdcSocketFunctions";
 
 import { styleModalEnd } from "../MainMapStyle";
-import { styleSetControl, styleVarKnop } from "./SdcComponentsStyle";
-import { styleVarKnopNum } from "./SdcComponentsStyle";
+import { styleVarKnopNum, styleVarKnop } from "./SdcComponentsStyle";
 import { styleConstKnop, styleOutputFaza } from "./SdcComponentsStyle";
+import { styleTitleDEMO } from "./SdcComponentsStyle";
 
 let oldIdx = -1;
 let oldSistFaza = -1;
 let timerId: any = null;
 let massInt: any[] = [];
-
+let needRend = false;
 let kluchGl = "";
-//let soobErr = "";
 
 const colorNormal = "#E9F5D8"; // светло-салатовый
 const colorExtra = "#96CD8F"; // тёмно-салатовый
@@ -40,7 +39,7 @@ const SdcControlVertex = (props: {
     const { massfazReducer } = state;
     return massfazReducer.massfaz;
   });
-  //console.log("massfaz:", massfaz, map.tflight[props.idx]);
+  console.log("1massfaz:", JSON.parse(JSON.stringify(massfaz)));
   let datestat = useSelector((state: any) => {
     const { statsaveReducer } = state;
     return statsaveReducer.datestat;
@@ -48,27 +47,41 @@ const SdcControlVertex = (props: {
   //console.log("datestat", datestat);
   const debug = datestat.debug;
   const ws = datestat.ws;
-  //const homeRegion = datestat.region;
+  const DEMO = datestat.demo;
   //let imgFaza = datestat.phSvg;
   const dispatch = useDispatch();
+  let timer = debug ? 15000 : 60000;
   //========================================================
   //const [openSet, setOpenSet] = React.useState(true);
   //const [openSetErr, setOpenSetErr] = React.useState(false);
   const [sentParam, setSentParam] = React.useState(-1);
+  const [flagPusk, setFlagPusk] = React.useState(false);
 
   //=== инициализация ======================================
+  console.log("№№№:", oldIdx , props.idx);
   if (oldIdx !== props.idx) {
     datestat.working = true; // занато
     dispatch(statsaveCreate(datestat));
-    // kluchGl = homeRegion + "-" + map.tflight[props.idx].area.num + "-";
     kluchGl = map.tflight[props.idx].area.num + "-";
     kluchGl += map.tflight[props.idx].ID + " ";
-    massfaz.idevice = map.tflight[props.idx].idevice;
+    let massFaz = {
+      idx: 0,
+      area: 0,
+      id: 0,
+      faza: 0,
+      fazaSist: -1,
+      phases: [],
+      idevice: map.tflight[props.idx].idevice,
+    };
+    massfaz = massFaz
+
+    console.log("2massfaz:", JSON.parse(JSON.stringify(massfaz)));
+
     dispatch(massfazCreate(massfaz));
     oldSistFaza = -1;
     timerId = null;
     massInt = [];
-    SendSocketDispatch(debug, ws, massfaz.idevice, 4, 1);
+    !DEMO && SendSocketDispatch(debug, ws, massfaz.idevice, 4, 1);
     setSentParam(-1);
     oldIdx = props.idx;
   } else {
@@ -79,6 +92,7 @@ const SdcControlVertex = (props: {
       }
     }
   }
+  //console.log('MASSFAZ:',massfaz)
 
   //========================================================
   const CloseInterval = () => {
@@ -93,7 +107,14 @@ const SdcControlVertex = (props: {
 
   const DoTimerId = () => {
     console.log("Отправка ", massfaz.faza, timerId, massInt);
-    SendSocketDispatch(debug, ws, massfaz.idevice, 9, massfaz.faza);
+    if (!DEMO) {
+      SendSocketDispatch(debug, ws, massfaz.idevice, 9, massfaz.faza);
+    } else {
+      massfaz.fazaSist = massfaz.fazaSist === 2 ? 1 : 2;
+      dispatch(massfazCreate(massfaz));
+      needRend = true;
+      setFlagPusk(!flagPusk);
+    }
     for (let i = 0; i < massInt.length - 1; i++) {
       if (massInt[i]) {
         clearInterval(massInt[i]);
@@ -110,8 +131,7 @@ const SdcControlVertex = (props: {
     console.log("Финиш", timerId, massInt);
     oldIdx = -1;
     props.setOpen(false);
-    //setOpenSet(false);
-    SendSocketDispatch(debug, ws, massfaz.idevice, 4, 0);
+    !DEMO && SendSocketDispatch(debug, ws, massfaz.idevice, 4, 0);
     datestat.working = false; // свободно
     dispatch(statsaveCreate(datestat));
   };
@@ -120,10 +140,16 @@ const SdcControlVertex = (props: {
     console.log("New_Отправка ", mode, timerId, massInt);
     massfaz.faza = mode;
     dispatch(massfazCreate(massfaz));
-    SendSocketDispatch(debug, ws, massfaz.idevice, 9, mode);
+    !DEMO && SendSocketDispatch(debug, ws, massfaz.idevice, 9, mode);
     if (mode < 9 && mode > 0) {
-      timerId = setInterval(() => DoTimerId(), 60000);
+      timerId = setInterval(() => DoTimerId(), timer);
       massInt.push(timerId);
+      if (DEMO) {
+        massfaz.faza = massfaz.faza === 2 ? 1 : 2;
+        dispatch(massfazCreate(massfaz));
+        needRend = true;
+        setFlagPusk(!flagPusk);
+      }
     } else {
       CloseInterval();
     }
@@ -135,14 +161,11 @@ const SdcControlVertex = (props: {
 
     if (map.tflight[props.idx].phases.length > 0) {
       for (let i = 0; i < map.tflight[props.idx].phases.length; i++) {
-        //for (let i = 0; i < 8; i++) {
         let colorKnop = colorNormal;
         if (sentParam === i + 1) colorKnop = colorSent;
         if (massfaz.fazaSist === i + 1) colorKnop = colorExtra;
 
         const styleModalMenuVar = {
-          // maxHeight: '9.2vh',
-          // minHeight: '9.2vh',
           maxHeight: "69px",
           minHeight: "69px",
           width: "208px",
@@ -175,8 +198,6 @@ const SdcControlVertex = (props: {
   };
 
   const OutputFaza = (img: any) => {
-    // let widthHeight = window.innerHeight / 10.5;
-    // if (!img) widthHeight = window.innerHeight / 21;
     let widthHeight = 70;
     if (!img) widthHeight = 35;
     return (
@@ -219,8 +240,6 @@ const SdcControlVertex = (props: {
 
     const styleModalMenuConst = {
       fontSize: 40,
-      // maxHeight: '9.2vh',
-      // minHeight: '9.2vh',
       maxHeight: "69px",
       minHeight: "69px",
       width: "100px",
@@ -244,12 +263,36 @@ const SdcControlVertex = (props: {
     );
   };
 
+  const styleSetControl = {
+    outline: "none",
+    position: "absolute",
+    left: "50%",
+    top: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "340px",
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    borderColor: DEMO ? "red" : "primary.main",
+    borderRadius: 2,
+    boxShadow: 24,
+    paddingBottom: 0.5,
+  };
+
+  if (needRend) {
+    needRend = false;
+    setFlagPusk(!flagPusk);
+  }
+
+  let titleDEMO = DEMO ? "( Демонстрационный )" : "";
+
+  console.log('Перерисовка',massfaz.idevice,massfaz)
+
   return (
-    // <Modal open={openSet} onClose={handleCloseSet} hideBackdrop>
     <Box sx={styleSetControl}>
       <Button sx={styleModalEnd} onClick={handleCloseSet}>
         &#10006;
       </Button>
+      <Box sx={styleTitleDEMO}>{titleDEMO}</Box>
       <Box sx={{ fontSize: 17, marginTop: 1, textAlign: "center" }}>
         <b>Перекрёсток {kluchGl}</b>[<b>{massfaz.idevice}</b>]
       </Box>
@@ -270,7 +313,6 @@ const SdcControlVertex = (props: {
           <GsErrorMessage setOpen={setOpenSetErr} sErr={soobErr} />
         )} */}
     </Box>
-    // </Modal>
   );
 };
 
