@@ -695,7 +695,7 @@ export const CircleObj = () => {
   return <Box sx={circle}></Box>;
 };
 //=== Разное =======================================
-export const InputDirect = (func: any) => {
+export const InputDirect = (func: any, otherWork: boolean) => {
   const styleSetNapr = {
     //border: 1,
     width: "165px",
@@ -721,14 +721,16 @@ export const InputDirect = (func: any) => {
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCurrency(Number(event.target.value));
+    if (!otherWork) {
+      setCurrency(Number(event.target.value));
 
-    switch (Number(event.target.value)) {
-      case 0: // режим управления
-        func(61);
-        break;
-      case 1: // режим Demo
-        func(62);
+      switch (Number(event.target.value)) {
+        case 0: // режим управления
+          func(61);
+          break;
+        case 1: // режим Demo
+          func(62);
+      }
     }
   };
 
@@ -791,7 +793,7 @@ export const InputDirect = (func: any) => {
   );
 };
 
-export const StrokaMenuGlob = (func: any) => {
+export const StrokaMenuGlob = (func: any, otherWork: boolean) => {
   const styleApp01 = {
     //border: 1,
     fontSize: 14,
@@ -804,5 +806,5 @@ export const StrokaMenuGlob = (func: any) => {
     color: "black",
   };
 
-  return <Box sx={styleApp01}>{InputDirect(func)}</Box>;
+  return <Box sx={styleApp01}>{InputDirect(func, otherWork)}</Box>;
 };

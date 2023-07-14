@@ -22,7 +22,6 @@ const SdcDoPlacemarkDo = (props: {
   });
   const debug = datestat.debug;
   const DEMO = datestat.demo;
-  console.log('DEMO',DEMO)
   //===========================================================
   let idx = props.idx;
   let mapp = map.tflight[0].tlsost.num.toString();

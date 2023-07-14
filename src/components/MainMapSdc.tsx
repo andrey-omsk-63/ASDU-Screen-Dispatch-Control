@@ -142,14 +142,15 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     zoom,
   };
 
-  const MenuGl = () => {
-    return <Box>{StrokaMenuGlob(PressButton)}</Box>;
+  const MenuGl = (otherWork: boolean) => {
+    console.log("###", otherWork);
+    return  <Box>{StrokaMenuGlob(PressButton,otherWork)}</Box>;
   };
 
   return (
     <Grid container sx={{ height: "99.9vh" }}>
       <Grid item xs={12}>
-        {MenuGl()}
+        {MenuGl(datestat.working)}
         <Grid container sx={{ border: 0, height: "96.9vh" }}>
           <Grid item xs sx={{ border: 0 }}>
             {Object.keys(map.tflight).length && (
