@@ -21,7 +21,6 @@ let massInt: any[] = [];
 let needRend = false;
 let kluchGl = "";
 let stopSwitch = false;
-//let superMode = false;
 
 const colorNormal = "#E9F5D8"; // светло-салатовый
 const colorExtra = "#96CD8F"; // тёмно-салатовый
@@ -50,7 +49,6 @@ const SdcControlVertex = (props: {
   const debug = datestat.debug;
   const ws = datestat.ws;
   const DEMO = datestat.demo;
-  //let imgFaza = datestat.phSvg;
   const dispatch = useDispatch();
   let timer = debug ? 10000 : 60000;
   //========================================================
@@ -85,13 +83,11 @@ const SdcControlVertex = (props: {
     setSentParam(-1);
     oldIdx = props.idx;
     stopSwitch = false;
-    //superMode = false;
     if (DEMO) {
       massfaz.fazaSist = 1;
       timerId = setInterval(() => DoTimerId(), timer);
       massInt.push(timerId);
     }
-
     console.log("2massfaz:", timer, JSON.parse(JSON.stringify(massfaz)));
   } else {
     if (massfaz.fazaSist !== 9 && massfaz.fazaSist !== 12) {
@@ -129,7 +125,10 @@ const SdcControlVertex = (props: {
     }
 
     if (DEMO) {
-      if (!massfaz.fazaSist && !massfaz.faza) {
+      if (
+        (!massfaz.fazaSist && !massfaz.faza) ||
+        (massfaz.fazaSist === 9 && massfaz.faza === 9)
+      ) {
         console.log("ЛР или КУ");
         massfaz.fazaSist = 1;
         dispatch(massfazCreate(massfaz));
@@ -146,17 +145,19 @@ const SdcControlVertex = (props: {
       (DEMO && massfaz.fazaSist === 11)
     ) {
       //CloseInterval();
-      console.log("Сюпер Режим!!!");
+      console.log("ЖМ или ОС");
     } else {
-      for (let i = 0; i < massInt.length - 1; i++) {
-        if (massInt[i]) {
-          clearInterval(massInt[i]);
-          massInt[i] = null;
+      if (!DEMO && massfaz.faza && massfaz.faza !== 9) {
+        for (let i = 0; i < massInt.length - 1; i++) {
+          if (massInt[i]) {
+            clearInterval(massInt[i]);
+            massInt[i] = null;
+          }
         }
+        massInt = massInt.filter(function (el: any) {
+          return el !== null;
+        });
       }
-      massInt = massInt.filter(function (el: any) {
-        return el !== null;
-      });
     }
   };
 
@@ -271,10 +272,12 @@ const SdcControlVertex = (props: {
           colorKnop = colorExtra;
         break;
       case "ЛР":
+        if (sentParam === 0) colorKnop = colorSent;
         handleMode = 0;
         //if (DEMO) stopSwitch = false;
         break;
       case "КУ":
+        if (sentParam === 9) colorKnop = colorSent;
         handleMode = 9;
       //if (DEMO) stopSwitch = false;
     }
