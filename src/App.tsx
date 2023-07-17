@@ -32,6 +32,9 @@ export interface Stater {
   id: string;
   phSvg: Array<any>;
   working: boolean;
+  demoIdx: number;
+  demoTlsost: number;
+  demoLR: boolean;
 }
 
 export let dateStat: Stater = {
@@ -45,6 +48,9 @@ export let dateStat: Stater = {
   id: '0',
   phSvg: [null, null, null, null, null, null, null, null],
   working: false,
+  demoIdx: -1,
+  demoTlsost: -1,
+  demoLR: false,
 };
 
 export interface Pointer {

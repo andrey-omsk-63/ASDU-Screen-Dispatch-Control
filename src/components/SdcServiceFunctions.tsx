@@ -731,6 +731,8 @@ export const InputDirect = (func: any, otherWork: boolean) => {
         case 1: // режим Demo
           func(62);
       }
+    } else {
+      alert ("Завершите предыдущий режим нормальным образом!")
     }
   };
 

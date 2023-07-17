@@ -46,12 +46,14 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   });
   const debug = datestat.debug;
   const ws = datestat.ws;
-  let homeRegion = datestat.region;
+  const homeRegion = datestat.region;
+  const DEMO = datestat.demo;
   const dispatch = useDispatch();
   //===========================================================
   const [control, setControl] = React.useState(false);
   const [idxObj, setIdxObj] = React.useState(-1);
   const [flagCenter, setFlagCenter] = React.useState(false);
+  const [demoSost, setDemoSost] = React.useState(0);
   const [openSetErr, setOpenSetErr] = React.useState(false);
   const [ymaps, setYmaps] = React.useState<YMapsApi | null>(null);
   const mapp = React.useRef<any>(null);
@@ -65,11 +67,9 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       datestat.id = id;
       if (!debug) {
         datestat.phSvg = Array(8).fill(null);
-        // datestat.pictSvg = null;
-        // datestat.readyPict = false;
-        datestat.readyFaza = false;
+        if (!DEMO) datestat.readyFaza = false;
       }
-      SendSocketGetPhases(debug, ws, homeRegion, area, id);
+      !DEMO && SendSocketGetPhases(debug, ws, homeRegion, area, id);
       dispatch(statsaveCreate(datestat));
       setControl(true);
     } else {
@@ -112,7 +112,6 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   };
 
   const PressButton = (mode: number) => {
-    console.log("MODE:", mode);
     switch (mode) {
       case 61: // режим управления
         datestat.finish = false;
@@ -142,9 +141,13 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     zoom,
   };
 
+  const ChangeDemoSost = (mode: number) => {
+    setDemoSost(mode);
+    console.log("ChangeDemoSost:", mode, demoSost);
+  };
+
   const MenuGl = (otherWork: boolean) => {
-    console.log("###", otherWork);
-    return  <Box>{StrokaMenuGlob(PressButton,otherWork)}</Box>;
+    return <Box>{StrokaMenuGlob(PressButton, otherWork)}</Box>;
   };
 
   return (
@@ -189,6 +192,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
                       setOpen={setControl}
                       idx={idxObj}
                       trigger={props.trigger}
+                      change={ChangeDemoSost}
                     />
                   )}
                   {openSetErr && (
