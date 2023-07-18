@@ -154,7 +154,7 @@ const App = () => {
       //console.log("пришло:", data.error, allData.type, data);
       switch (allData.type) {
         case "tflight":
-          console.log("Tflight:", data, data.tflight);
+          //console.log("Tflight:", data, data.tflight);
           for (let j = 0; j < data.tflight.length; j++) {
             for (let i = 0; i < dateMapGl.tflight.length; i++) {
               if (data.tflight[j].idevice === dateMapGl.tflight[i].idevice) {

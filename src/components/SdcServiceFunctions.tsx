@@ -723,7 +723,6 @@ export const InputDirect = (func: any, otherWork: boolean) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!otherWork) {
       setCurrency(Number(event.target.value));
-
       switch (Number(event.target.value)) {
         case 0: // режим управления
           func(61);
@@ -732,7 +731,7 @@ export const InputDirect = (func: any, otherWork: boolean) => {
           func(62);
       }
     } else {
-      alert ("Завершите предыдущий режим нормальным образом!")
+      func(63); // Косяк при работе с меню
     }
   };
 

@@ -122,6 +122,10 @@ const MainMapSdc = (props: { trigger: boolean }) => {
         datestat.finish = false;
         datestat.demo = true;
         dispatch(statsaveCreate(datestat));
+        break;
+      case 63: // Косяк при работе с меню
+        soobErr = "Завершите предыдущий режим нормальным образом";
+        setOpenSetErr(true);
     }
   };
 

@@ -21,6 +21,7 @@ let needRend = false;
 let kluchGl = "";
 let stopSwitch = false;
 let tekDemoTlsost = -1;
+let shippedKU = false;
 
 const colorNormal = "#E9F5D8"; // светло-салатовый
 const colorExtra = "#96CD8F"; // тёмно-салатовый
@@ -53,16 +54,12 @@ const SdcControlVertex = (props: {
   const dispatch = useDispatch();
   let timer = debug || DEMO ? 10000 : 60000;
   //========================================================
-  //const [openSet, setOpenSet] = React.useState(true);
-  //const [openSetErr, setOpenSetErr] = React.useState(false);
   const [sentParam, setSentParam] = React.useState(-1);
   const [flagPusk, setFlagPusk] = React.useState(false);
 
   //=== инициализация ======================================
-  //console.log("№№№:", oldIdx, props.idx);
   if (oldIdx !== props.idx) {
     datestat.working = true; // занато
-    // dispatch(statsaveCreate(datestat));
     kluchGl = map.tflight[props.idx].area.num + "-";
     kluchGl += map.tflight[props.idx].ID + " ";
     let massFaz = {
@@ -79,6 +76,7 @@ const SdcControlVertex = (props: {
     oldSistFaza = -1;
     timerId = null;
     massInt = [];
+    shippedKU = false;
     !DEMO && SendSocketDispatch(debug, ws, massfaz.idevice, 4, 1);
     setSentParam(-1);
     oldIdx = props.idx;
@@ -100,7 +98,6 @@ const SdcControlVertex = (props: {
       }
     }
   }
-  //console.log('MASSFAZ:',massfaz)
 
   //========================================================
   const CloseInterval = () => {
@@ -114,6 +111,7 @@ const SdcControlVertex = (props: {
   };
 
   const DoTimerId = () => {
+    console.log("DoTimerId:", massfaz);
     if (!DEMO) {
       SendSocketDispatch(debug, ws, massfaz.idevice, 9, massfaz.faza);
     } else {
@@ -127,26 +125,24 @@ const SdcControlVertex = (props: {
       needRend = true;
       setFlagPusk(!flagPusk);
     }
-
+    if (DEMO && massfaz.faza < 9 && massfaz.faza > 0) datestat.demoTlsost = 2; // Передана фаза
     if (DEMO) {
       if (
         (!massfaz.fazaSist && !massfaz.faza) ||
         (massfaz.fazaSist === 9 && massfaz.faza === 9)
       ) {
         console.log("DEMO ЛР или КУ");
-        if (!massfaz.fazaSist && !massfaz.faza) {
-          datestat.demoTlsost = 5; // ЛР
-        }
+        if (!massfaz.fazaSist && !massfaz.faza) datestat.demoTlsost = 5; // ЛР
         if (massfaz.fazaSist === 9 && massfaz.faza === 9)
           datestat.demoTlsost = 1; // КУ
         massfaz.fazaSist = 1;
         dispatch(massfazCreate(massfaz));
         stopSwitch = false;
-        if (!massInt.length) {
-          timerId = setInterval(() => DoTimerId(), timer);
-          massInt.push(timerId);
-        }
       }
+    }
+    if (timerId === null) {
+      timerId = setInterval(() => DoTimerId(), timer);
+      massInt.push(timerId);
     }
     if (
       (DEMO && massfaz.fazaSist === 10) ||
@@ -184,10 +180,11 @@ const SdcControlVertex = (props: {
 
   const handleCloseSet = () => {
     if (timerId) CloseInterval(); // принудительное закрытие
-    console.log("Финиш", timerId, massInt);
+    console.log("Финиш", shippedKU, timerId, massInt);
     oldIdx = -1;
     props.setOpen(false);
-    !DEMO && SendSocketDispatch(debug, ws, massfaz.idevice, 4, 0);
+    if (!DEMO && shippedKU)
+      SendSocketDispatch(debug, ws, massfaz.idevice, 4, 0);
     datestat.working = false; // свободно
     if (DEMO) {
       datestat.demoTlsost = 1;
@@ -197,16 +194,16 @@ const SdcControlVertex = (props: {
   };
 
   const handleClick = (mode: number) => {
-    console.log("MODE:", mode);
     massfaz.faza = mode;
     stopSwitch = true;
     dispatch(massfazCreate(massfaz));
+    shippedKU = mode === 9 ? true : false;
 
-    console.log("New_Отправка ", stopSwitch, mode, timerId, massInt);
+    console.log("New_Отправка ", shippedKU, mode, massfaz);
 
     !DEMO && SendSocketDispatch(debug, ws, massfaz.idevice, 9, mode);
     if (mode < 9 && mode > 0) {
-      if (!massInt.length) {
+      if (timerId === null) {
         timerId = setInterval(() => DoTimerId(), timer);
         massInt.push(timerId);
       }
@@ -232,10 +229,34 @@ const SdcControlVertex = (props: {
     setSentParam(mode);
   };
 
+  const OutputFaza = (img: any, i: number) => {
+    let widthHeight = 70;
+    //if (!img) widthHeight = 35;
+    return (
+      <>
+        {img && (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            xmlnsXlink="http://www.w3.org/1999/xlink"
+            style={{ width: window.innerHeight / 5.5, height: widthHeight }}
+          >
+            <image
+              width={"95%"}
+              height={"100%"}
+              xlinkHref={"data:image/png;base64," + img}
+            />
+          </svg>
+        )}
+        {!img && <Box sx={{ fontSize: 41 }}>{i + 1}</Box>}
+      </>
+    );
+  };
+
   const StrokaFazaKnop = () => {
     let resStr = [];
     if (map.tflight[props.idx].phases.length > 0) {
-      for (let i = 0; i < map.tflight[props.idx].phases.length; i++) {
+      // for (let i = 0; i < map.tflight[props.idx].phases.length; i++) {
+      for (let i = 0; i < 8; i++) {
         let colorKnop = colorNormal;
         if (sentParam === i + 1) colorKnop = colorSent;
         if (massfaz.fazaSist === i + 1) colorKnop = colorExtra;
@@ -261,7 +282,7 @@ const SdcControlVertex = (props: {
                   variant="contained"
                   onClick={() => handleClick(i + 1)}
                 >
-                  {OutputFaza(datestat.phSvg[i])}
+                  {OutputFaza(datestat.phSvg[i], i)}
                 </Button>
               </Box>
             </Grid>
@@ -270,24 +291,6 @@ const SdcControlVertex = (props: {
       }
     }
     return resStr;
-  };
-
-  const OutputFaza = (img: any) => {
-    let widthHeight = 70;
-    if (!img) widthHeight = 35;
-    return (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        xmlnsXlink="http://www.w3.org/1999/xlink"
-        style={{ width: window.innerHeight / 5.5, height: widthHeight }}
-      >
-        <image
-          width={"95%"}
-          height={"100%"}
-          xlinkHref={"data:image/png;base64," + img}
-        />
-      </svg>
-    );
   };
 
   const OutputConstFaza = (mode: string) => {
@@ -325,6 +328,8 @@ const SdcControlVertex = (props: {
       textTransform: "unset !important",
     };
 
+    console.log('shippedKU:',shippedKU)
+
     return (
       <Grid item xs={12} sx={styleConstKnop}>
         <Box sx={styleOutputFaza}>
@@ -360,7 +365,7 @@ const SdcControlVertex = (props: {
     setFlagPusk(!flagPusk);
   }
 
-  let titleDEMO = DEMO ? "( Демонстрационный )" : "";
+  let titleDEMO = DEMO ? "( Демонстрационный режим )" : "";
 
   return (
     <Box sx={styleSetControl}>
