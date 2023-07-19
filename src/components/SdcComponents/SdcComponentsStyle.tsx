@@ -1,28 +1,4 @@
 //=== SdcControlVertex ===================================
-// export const styleSetControl = {
-//   outline: 'none',
-//   // position: 'relative',
-//   // marginTop: '6vh',
-//   // marginLeft: '40vh',
-//   // marginRight: 'auto',
-//   //======
-//   position: 'absolute',
-//   left: '50%',
-//   top: '50%',
-//   //left: '221px',
-//   //top: '193px',
-//   transform: 'translate(-50%, -50%)',
-//   //======
-//   width: '340px',
-//   bgcolor: 'background.paper',
-//   border: '2px solid #000',
-//   //borderColor: 'primary.main',
-//   borderColor: 'red',
-//   borderRadius: 2,
-//   boxShadow: 24,
-//   paddingBottom: 0.5,
-// };
-
 export const styleTitleDEMO = {
   fontSize: 17,
   marginTop: 1,

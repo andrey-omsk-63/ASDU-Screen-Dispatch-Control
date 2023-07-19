@@ -26,51 +26,14 @@ const SdcDoPlacemarkDo = (props: {
   let idx = props.idx;
   let mapp = map.tflight[0].tlsost.num.toString();
   let mappp = map.tflight[0];
-  // let pA = -1;
-  // let pB = -1;
-  //let pC = -1;
   let nomSvg = -1;
   if (idx < map.tflight.length) {
     mapp = map.tflight[idx].tlsost.num.toString();
     mappp = map.tflight[idx];
   }
-  //if (props.massMem.length >= 1) {
-  // pA = props.massMem[0];
-  // pB = props.massMem[props.massMem.length - 1];
-  //if (datestat.toDoMode) pC = props.massMem.indexOf(props.idx);
-  //pC = props.massMem.indexOf(props.idx);
-  //}
-  // let fazaImg: null | string = null;
-  // if (!debug && pC >= 0) {
-  //   for (let i = 0; i < massfaz.length; i++) {
-  //     if (mappp.idevice === massfaz[i].idevice) {
-  //       if (massfaz[i].fazaSist === 11 || massfaz[i].fazaSist === 15) {
-  //         nomSvg = 12; // ОС
-  //         pC = -1;
-  //       } else {
-  //         if (massfaz[i].fazaSist === 10 || massfaz[i].fazaSist === 14) {
-  //           nomSvg = 7; // ЖМ
-  //           pC = -1;
-  //         } else {
-  //           if (massfaz[i].fazaSist > 0 && massfaz[i].img) {
-  //             if (massfaz[i].fazaSist <= massfaz[i].img.length)
-  //               fazaImg = massfaz[i].img[massfaz[i].fazaSist - 1];
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-  // debug && (fazaImg = datestat.phSvg[0]); // для отладки
 
   const Hoster = React.useCallback(() => {
     let host = "https://localhost:3000/18.svg";
-    //console.log('mapp:',mapp)
-    // if (!debug) {
-    //   let mpp = mapp;
-    //   if (nomSvg > 0) mpp = nomSvg.toString();
-    //   host = window.location.origin + '/free/img/trafficLights/' + mpp + '.svg';
-    // }
     if (!debug) {
       let mpp = mapp;
       if (DEMO) {
@@ -89,7 +52,7 @@ const SdcDoPlacemarkDo = (props: {
         if (props.idx === datestat.demoIdx) {
           let mpp = datestat.demoTlsost.toString();
           host = "https://localhost:3000/" + mpp + ".svg";
-          console.log("HOST:", host);
+          //console.log("HOST:", host);
         }
       }
     }
@@ -184,45 +147,9 @@ const SdcDoPlacemarkDo = (props: {
     }
   };
 
-  // const getPointOptions1 = React.useCallback(() => {
-  //   return {
-  //     iconLayout: createChipsLayout(calculate, mappp.tlsost.num),
-  //   };
-  // }, [createChipsLayout, mappp.tlsost.num]);
-
-  // const GetPointOptions0 = (Hoster: any) => {
-  //   let imger = window.location.origin + '/free/img/notImage.png';
-  //   if (Hoster) imger = 'data:image/png;base64,' + Hoster;
-
-  //   return {
-  //     // данный тип макета
-  //     iconLayout: 'default#image',
-  //     // изображение иконки метки
-  //     //iconImageHref: '/faza.png',
-  //     // iconImageHref: 'data:image/png;base64,' + Hoster,
-  //     iconImageHref: imger,
-  //     // размеры метки
-  //     iconImageSize: [50, 50],
-  //     // её "ножки" (точки привязки)
-  //     iconImageOffset: [-15, -38],
-  //   };
-  // };
-
   const getPointOptions1 = React.useCallback(() => {
     return { iconLayout: createChipsLayout(calculate, mappp.tlsost.num) };
-    //  pC < 0
-    //   ? {
-    // iconLayout: createChipsLayout(calculate, mappp.tlsost.num),
-    //   }
-    // : GetPointOptions0(fazaImg);
   }, [createChipsLayout, mappp.tlsost.num]);
-
-  // const getPointOptions2 = () => {
-  //   let colorBalloon = 'islands#violetCircleIcon';
-  //   return {
-  //     preset: colorBalloon,
-  //   };
-  // };
 
   const MemoPlacemarkDo = React.useMemo(
     () => (
@@ -230,11 +157,6 @@ const SdcDoPlacemarkDo = (props: {
         key={idx}
         geometry={props.coordinate}
         properties={GetPointData(idx, map)}
-        // options={{
-        //   iconLayout: createChipsLayout(calculate, mappp.tlsost.num),
-        // }}
-
-        // options={idx < map.tflight.length ? getPointOptions1() : getPointOptions2()}
         options={getPointOptions1()}
         modules={["geoObject.addon.balloon", "geoObject.addon.hint"]}
         onClick={() => props.OnPlacemarkClickPoint(idx)}

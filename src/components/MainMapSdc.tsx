@@ -53,7 +53,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   const [control, setControl] = React.useState(false);
   const [idxObj, setIdxObj] = React.useState(-1);
   const [flagCenter, setFlagCenter] = React.useState(false);
-  const [demoSost, setDemoSost] = React.useState(0);
+  const [demoSost, setDemoSost] = React.useState(-1);
   const [openSetErr, setOpenSetErr] = React.useState(false);
   const [ymaps, setYmaps] = React.useState<YMapsApi | null>(null);
   const mapp = React.useRef<any>(null);
@@ -146,20 +146,17 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   };
 
   const ChangeDemoSost = (mode: number) => {
-    setDemoSost(mode);
-    console.log("ChangeDemoSost:", mode, demoSost);
-  };
-
-  const MenuGl = (otherWork: boolean) => {
-    return <Box>{StrokaMenuGlob(PressButton, otherWork)}</Box>;
+    setDemoSost(mode + demoSost); // костыль
   };
 
   return (
     <Grid container sx={{ height: "99.9vh" }}>
       <Grid item xs={12}>
-        {MenuGl(datestat.working)}
-        <Grid container sx={{ border: 0, height: "96.9vh" }}>
-          <Grid item xs sx={{ border: 0 }}>
+        {/* главное меню */}
+        <Box>{StrokaMenuGlob(PressButton, datestat.working)}</Box>
+        {/* Яндекс карта */}
+        <Grid container sx={{ height: "96.9vh" }}>
+          <Grid item xs>
             {Object.keys(map.tflight).length && (
               <YMaps
                 query={{
@@ -168,11 +165,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
                 }}
               >
                 <Map
-                  modules={[
-                    "multiRouter.MultiRoute",
-                    "Polyline",
-                    "templateLayoutFactory",
-                  ]}
+                  modules={["templateLayoutFactory"]}
                   state={mapState}
                   instanceRef={(ref) => InstanceRefDo(ref)}
                   onLoad={(ref) => {

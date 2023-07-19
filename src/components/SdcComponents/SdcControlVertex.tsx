@@ -42,12 +42,10 @@ const SdcControlVertex = (props: {
     const { massfazReducer } = state;
     return massfazReducer.massfaz;
   });
-  //console.log("1massfaz:", JSON.parse(JSON.stringify(massfaz)));
   let datestat = useSelector((state: any) => {
     const { statsaveReducer } = state;
     return statsaveReducer.datestat;
   });
-  //console.log("datestat", datestat);
   const debug = datestat.debug;
   const ws = datestat.ws;
   const DEMO = datestat.demo;
@@ -83,6 +81,7 @@ const SdcControlVertex = (props: {
     stopSwitch = false;
     if (DEMO) {
       datestat.demoIdx = props.idx;
+      datestat.demoLR = false;
       datestat.demoTlsost = 1;
       massfaz.fazaSist = 1;
       timerId = setInterval(() => DoTimerId(), timer);
@@ -328,8 +327,6 @@ const SdcControlVertex = (props: {
       textTransform: "unset !important",
     };
 
-    console.log('shippedKU:',shippedKU)
-
     return (
       <Grid item xs={12} sx={styleConstKnop}>
         <Box sx={styleOutputFaza}>
@@ -389,9 +386,6 @@ const SdcControlVertex = (props: {
           </Grid>
         </Grid>
       </Grid>
-      {/* {openSetErr && (
-          <GsErrorMessage setOpen={setOpenSetErr} sErr={soobErr} />
-        )} */}
     </Box>
   );
 };

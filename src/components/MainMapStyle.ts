@@ -4,18 +4,6 @@ export const searchControl = {
   size: "large",
 };
 
-// export const styleInfoSoob = {
-//   fontSize: 14,
-//   border: 1,
-//   marginRight: 0.1,
-//   width: 360,
-//   maxHeight: "21px",
-//   minHeight: "21px",
-//   backgroundColor: "#E9F5D8",
-//   color: "#E6761B",
-//   textTransform: "unset !important",
-// };
-
 export const styleModalEnd = {
   position: "absolute",
   top: "0%",
