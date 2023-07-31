@@ -166,7 +166,7 @@ const App = () => {
           setTrigger(!trigger);
           break;
         case 'phases':
-          if (massfaz.idevice === data.phases[0].device) {
+          if (massfaz.idevice === data.phases[0].device  && !dateStat.demo) {
             massfaz.fazaSist = data.phases[0].phase;
             dispatch(massfazCreate(massfaz));
             setTrigger(!trigger);

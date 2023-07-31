@@ -38,6 +38,7 @@ const SdcControlVertex = (props: {
     const { mapReducer } = state;
     return mapReducer.map.dateMap;
   });
+  console.log('MAP:',map)
   let massfaz = useSelector((state: any) => {
     const { massfazReducer } = state;
     return massfazReducer.massfaz;
@@ -371,7 +372,7 @@ const SdcControlVertex = (props: {
       </Button>
       <Box sx={styleTitleDEMO}>{titleDEMO}</Box>
       <Box sx={{ fontSize: 17, marginTop: 1, textAlign: "center" }}>
-        <b>Перекрёсток {kluchGl}</b>[<b>{massfaz.idevice}</b>]
+        <b>Перекрёсток {kluchGl} ({map.tflight[props.idx].description})</b>
       </Box>
       <Grid container sx={{ marginTop: 1.5 }}>
         <Grid item xs={8} sx={{ paddingLeft: 0.1, paddingRight: 0.5 }}>

@@ -17,7 +17,6 @@ import SdcErrorMessage from "./SdcComponents/SdcErrorMessage";
 import { StrokaMenuGlob, CenterCoord } from "./SdcServiceFunctions";
 
 import { SendSocketGetPhases } from "./SdcSocketFunctions";
-//import { SendSocketGetSvg } from "./SdcSocketFunctions";
 
 import { searchControl } from "./MainMapStyle";
 
@@ -47,7 +46,6 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   const debug = datestat.debug;
   const ws = datestat.ws;
   const homeRegion = datestat.region;
-  const DEMO = datestat.demo;
   const dispatch = useDispatch();
   //===========================================================
   const [control, setControl] = React.useState(false);
@@ -65,11 +63,8 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       let id = map.tflight[index].ID;
       datestat.area = area;
       datestat.id = id;
-      if (!debug) {
-        datestat.phSvg = Array(8).fill(null);
-        if (!DEMO) datestat.readyFaza = false;
-      }
-      !DEMO && SendSocketGetPhases(debug, ws, homeRegion, area, id);
+      if (!debug) datestat.phSvg = Array(8).fill(null);
+      SendSocketGetPhases(debug, ws, homeRegion, area, id);
       dispatch(statsaveCreate(datestat));
       setControl(true);
     } else {
