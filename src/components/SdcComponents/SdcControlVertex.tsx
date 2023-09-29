@@ -9,9 +9,12 @@ import Button from "@mui/material/Button";
 import { SendSocketDispatch } from "../SdcSocketFunctions";
 
 import { styleModalEnd } from "../MainMapStyle";
+
 import { styleVarKnopNum, styleVarKnop } from "./SdcComponentsStyle";
 import { styleConstKnop, styleOutputFaza } from "./SdcComponentsStyle";
-import { styleTitleDEMO } from "./SdcComponentsStyle";
+import { StyleSetControl } from "./SdcComponentsStyle";
+import { styleTitle, styleTitleDEMO } from "./SdcComponentsStyle";
+import { StyleModalMenuVar, StyleModalMenuConst } from "./SdcComponentsStyle";
 
 let oldIdx = -1;
 let oldSistFaza = -1;
@@ -38,7 +41,7 @@ const SdcControlVertex = (props: {
     const { mapReducer } = state;
     return mapReducer.map.dateMap;
   });
-  console.log('MAP:',map)
+  console.log("MAP:", map);
   let massfaz = useSelector((state: any) => {
     const { massfazReducer } = state;
     return massfazReducer.massfaz;
@@ -89,7 +92,6 @@ const SdcControlVertex = (props: {
       massInt.push(timerId);
     }
     dispatch(statsaveCreate(datestat));
-    //console.log("2massfaz:", timer, JSON.parse(JSON.stringify(massfaz)));
   } else {
     if (massfaz.fazaSist !== 9 && massfaz.fazaSist !== 12) {
       if (oldSistFaza !== massfaz.fazaSist) {
@@ -258,17 +260,13 @@ const SdcControlVertex = (props: {
       // for (let i = 0; i < map.tflight[props.idx].phases.length; i++) {
       for (let i = 0; i < 8; i++) {
         let colorKnop = colorNormal;
+        let bShadow = 4;
         if (sentParam === i + 1) colorKnop = colorSent;
-        if (massfaz.fazaSist === i + 1) colorKnop = colorExtra;
-
-        const styleModalMenuVar = {
-          maxHeight: "69px",
-          minHeight: "69px",
-          width: "208px",
-          backgroundColor: colorKnop,
-          color: "black",
-          textTransform: "unset !important",
-        };
+        if (massfaz.fazaSist === i + 1) {
+          colorKnop = colorExtra;
+          bShadow = 12;
+        }
+        let styleMenuVar = StyleModalMenuVar(colorKnop, bShadow);
 
         resStr.push(
           <Grid container key={i}>
@@ -277,11 +275,7 @@ const SdcControlVertex = (props: {
             </Grid>
             <Grid item xs={11.5} sx={styleVarKnop}>
               <Box sx={styleOutputFaza}>
-                <Button
-                  sx={styleModalMenuVar}
-                  variant="contained"
-                  onClick={() => handleClick(i + 1)}
-                >
+                <Button sx={styleMenuVar} onClick={() => handleClick(i + 1)}>
                   {OutputFaza(datestat.phSvg[i], i)}
                 </Button>
               </Box>
@@ -295,19 +289,24 @@ const SdcControlVertex = (props: {
 
   const OutputConstFaza = (mode: string) => {
     let colorKnop = colorNormal;
+    let bShadow = 4;
     let handleMode = 0;
     switch (mode) {
       case "ЖМ":
         handleMode = 10;
         if (sentParam === 10) colorKnop = colorSent;
-        if (massfaz.fazaSist === 10 || massfaz.fazaSist === 14)
+        if (massfaz.fazaSist === 10 || massfaz.fazaSist === 14) {
           colorKnop = colorExtra;
+          bShadow = 12;
+        }
         break;
       case "ОС":
         handleMode = 11;
         if (sentParam === 11) colorKnop = colorSent;
-        if (massfaz.fazaSist === 11 || massfaz.fazaSist === 15)
+        if (massfaz.fazaSist === 11 || massfaz.fazaSist === 15) {
           colorKnop = colorExtra;
+          bShadow = 12;
+        }
         break;
       case "ЛР":
         if (DEMO && sentParam === 0) colorKnop = colorSent;
@@ -317,25 +316,12 @@ const SdcControlVertex = (props: {
         if (DEMO && sentParam === 9) colorKnop = colorSent;
         handleMode = 9;
     }
-
-    const styleModalMenuConst = {
-      fontSize: 40,
-      maxHeight: "69px",
-      minHeight: "69px",
-      width: "100px",
-      backgroundColor: colorKnop,
-      color: "black",
-      textTransform: "unset !important",
-    };
+    let styleMenuConst = StyleModalMenuConst(colorKnop, bShadow);
 
     return (
       <Grid item xs={12} sx={styleConstKnop}>
         <Box sx={styleOutputFaza}>
-          <Button
-            sx={styleModalMenuConst}
-            variant="contained"
-            onClick={() => handleClick(handleMode)}
-          >
+          <Button sx={styleMenuConst} onClick={() => handleClick(handleMode)}>
             <b>{mode}</b>
           </Button>
         </Box>
@@ -343,20 +329,7 @@ const SdcControlVertex = (props: {
     );
   };
 
-  const styleSetControl = {
-    outline: "none",
-    position: "absolute",
-    left: "50%",
-    top: "50%",
-    transform: "translate(-50%, -50%)",
-    width: "340px",
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    borderColor: DEMO ? "red" : "primary.main",
-    borderRadius: 2,
-    boxShadow: 24,
-    paddingBottom: 0.5,
-  };
+  let styleSetControl = StyleSetControl(DEMO);
 
   if (needRend) {
     needRend = false;
@@ -371,8 +344,10 @@ const SdcControlVertex = (props: {
         &#10006;
       </Button>
       <Box sx={styleTitleDEMO}>{titleDEMO}</Box>
-      <Box sx={{ fontSize: 17, marginTop: 1, textAlign: "center" }}>
-        <b>Перекрёсток {kluchGl} ({map.tflight[props.idx].description})</b>
+      <Box sx={styleTitle}>
+        <b>
+          Перекрёсток {kluchGl} ({map.tflight[props.idx].description})
+        </b>
       </Box>
       <Grid container sx={{ marginTop: 1.5 }}>
         <Grid item xs={8} sx={{ paddingLeft: 0.1, paddingRight: 0.5 }}>

@@ -1,21 +1,21 @@
 import * as React from "react";
 
-import Grid from "@mui/material/Grid";
+//import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 //import Button from "@mui/material/Button";
-import CardMedia from "@mui/material/CardMedia";
+//import CardMedia from "@mui/material/CardMedia";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 
 import { Pointer } from "../App";
 //import { DateMAP } from "./../interfaceMAP.d";
-import { Tflink, WayPointsArray } from "../interfaceBindings";
+// import { Tflink, WayPointsArray } from "../interfaceBindings";
 
-import {
-  styleAppSt02,
-  styleAppSt03,
-  //styleAppSt021
-} from "./MainMapStyle";
+// import {
+//   styleAppSt02,
+//   styleAppSt03,
+//   //styleAppSt021
+// } from "./MainMapStyle";
 
 export const MasskPoint = (debug: boolean, rec: any, imgFaza: string) => {
   let masskPoint: Pointer = {
@@ -102,76 +102,76 @@ export const CheckHaveLink = (klu: string, kluLast: string, bindings: any) => {
   return haveLink;
 };
 
-export const MakeMassRoute = (
-  bindings: any,
-  nom: number,
-  map: any,
-  addobj: any
-) => {
-  let massRoute = [];
-  let mass = bindings.tfLinks[nom].tflink;
-  let massKlu = [];
-  if (mass.west.id) massKlu.push(mass.west.id);
-  if (mass.north.id) massKlu.push(mass.north.id);
-  if (mass.east.id) massKlu.push(mass.east.id);
-  if (mass.south.id) massKlu.push(mass.south.id);
+// export const MakeMassRoute = (
+//   bindings: any,
+//   nom: number,
+//   map: any,
+//   addobj: any
+// ) => {
+//   let massRoute = [];
+//   let mass = bindings.tfLinks[nom].tflink;
+//   let massKlu = [];
+//   if (mass.west.id) massKlu.push(mass.west.id);
+//   if (mass.north.id) massKlu.push(mass.north.id);
+//   if (mass.east.id) massKlu.push(mass.east.id);
+//   if (mass.south.id) massKlu.push(mass.south.id);
 
-  for (let j = 0; j < massKlu.length; j++) {
-    let area = TakeAreaId(massKlu[j])[0];
-    let id = TakeAreaId(massKlu[j])[1];
-    if (massKlu[j].length < 9) {
-      for (let i = 0; i < map.tflight.length; i++) {
-        if (
-          Number(map.tflight[i].area.num) === area &&
-          map.tflight[i].ID === id
-        ) {
-          massRoute.push([
-            [map.tflight[i].points.Y],
-            [map.tflight[i].points.X],
-          ]);
-          break;
-        }
-      }
-    } else {
-      for (let i = 0; i < addobj.addObjects.length; i++) {
-        if (
-          addobj.addObjects[i].area === area &&
-          addobj.addObjects[i].id === id
-        ) {
-          massRoute.push(addobj.addObjects[i].dgis);
-          break;
-        }
-      }
-    }
-  }
-  return massRoute;
-};
+//   for (let j = 0; j < massKlu.length; j++) {
+//     let area = TakeAreaId(massKlu[j])[0];
+//     let id = TakeAreaId(massKlu[j])[1];
+//     if (massKlu[j].length < 9) {
+//       for (let i = 0; i < map.tflight.length; i++) {
+//         if (
+//           Number(map.tflight[i].area.num) === area &&
+//           map.tflight[i].ID === id
+//         ) {
+//           massRoute.push([
+//             [map.tflight[i].points.Y],
+//             [map.tflight[i].points.X],
+//           ]);
+//           break;
+//         }
+//       }
+//     } else {
+//       for (let i = 0; i < addobj.addObjects.length; i++) {
+//         if (
+//           addobj.addObjects[i].area === area &&
+//           addobj.addObjects[i].id === id
+//         ) {
+//           massRoute.push(addobj.addObjects[i].dgis);
+//           break;
+//         }
+//       }
+//     }
+//   }
+//   return massRoute;
+// };
 
-export const MakeMassRouteFirst = (klu: string, bindings: any, map: any) => {
-  let massRoute = [];
-  let massklu = [];
-  for (let i = 0; i < bindings.tfLinks.length; i++) {
-    let mass = bindings.tfLinks[i].tflink;
-    if (mass.west.id === klu) massklu.push(bindings.tfLinks[i].id);
-    if (mass.north.id === klu) massklu.push(bindings.tfLinks[i].id);
-    if (mass.east.id === klu) massklu.push(bindings.tfLinks[i].id);
-    if (mass.south.id === klu) massklu.push(bindings.tfLinks[i].id);
-  }
-  for (let j = 0; j < massklu.length; j++) {
-    let area = TakeAreaId(massklu[j])[0];
-    let id = TakeAreaId(massklu[j])[1];
-    for (let i = 0; i < map.tflight.length; i++) {
-      if (
-        Number(map.tflight[i].area.num) === area &&
-        map.tflight[i].ID === id
-      ) {
-        massRoute.push([[map.tflight[i].points.Y], [map.tflight[i].points.X]]);
-        break;
-      }
-    }
-  }
-  return massRoute;
-};
+// export const MakeMassRouteFirst = (klu: string, bindings: any, map: any) => {
+//   let massRoute = [];
+//   let massklu = [];
+//   for (let i = 0; i < bindings.tfLinks.length; i++) {
+//     let mass = bindings.tfLinks[i].tflink;
+//     if (mass.west.id === klu) massklu.push(bindings.tfLinks[i].id);
+//     if (mass.north.id === klu) massklu.push(bindings.tfLinks[i].id);
+//     if (mass.east.id === klu) massklu.push(bindings.tfLinks[i].id);
+//     if (mass.south.id === klu) massklu.push(bindings.tfLinks[i].id);
+//   }
+//   for (let j = 0; j < massklu.length; j++) {
+//     let area = TakeAreaId(massklu[j])[0];
+//     let id = TakeAreaId(massklu[j])[1];
+//     for (let i = 0; i < map.tflight.length; i++) {
+//       if (
+//         Number(map.tflight[i].area.num) === area &&
+//         map.tflight[i].ID === id
+//       ) {
+//         massRoute.push([[map.tflight[i].points.Y], [map.tflight[i].points.X]]);
+//         break;
+//       }
+//     }
+//   }
+//   return massRoute;
+// };
 
 export const MakeFazer = (klu: string, bind: any) => {
   let mass = bind.tflink;
@@ -248,40 +248,40 @@ export const GetPointOptions1 = (Hoster: any) => {
 //   };
 // };
 
-export const MakeSoobErr = (mode: number, klu: string, klu2: string) => {
-  let soobErr = "";
-  let vert = ";";
-  switch (mode) {
-    case 1:
-      soobErr = "Перекрёсток [";
-      if (klu.length > 8) soobErr = "Объект [";
-      vert = "перекрёстком [";
-      //if (massKlu[lastMem].length > 8) vert = "объектом [";
-      if (klu2.length > 8) vert = "объектом [";
-      soobErr += klu + "] не связан с " + vert;
-      //soobErr += massKlu[lastMem] + "]";
-      soobErr += klu2 + "]";
-      break;
-    case 2:
-      soobErr = "Перекрёсток";
-      if (klu.length > 8) soobErr = "Объект";
-      soobErr += " уже используется";
-      break;
-    case 3:
-      vert = "перекрёстка [";
-      if (klu.length > 8) vert = "объекта [";
-      soobErr = "Нет массива связности " + vert + klu + "]";
-      break;
-    case 4:
-      soobErr =
-        "В радиусе 100м от указанной точки управляемые перекрёстки отсутствуют";
-      break;
-    case 5:
-      soobErr = "Нет связи с [" + klu + "] в массиве сязности перекрёстка [";
-      soobErr += klu2 + "]";
-  }
-  return soobErr;
-};
+// export const MakeSoobErr = (mode: number, klu: string, klu2: string) => {
+//   let soobErr = "";
+//   let vert = ";";
+//   switch (mode) {
+//     case 1:
+//       soobErr = "Перекрёсток [";
+//       if (klu.length > 8) soobErr = "Объект [";
+//       vert = "перекрёстком [";
+//       //if (massKlu[lastMem].length > 8) vert = "объектом [";
+//       if (klu2.length > 8) vert = "объектом [";
+//       soobErr += klu + "] не связан с " + vert;
+//       //soobErr += massKlu[lastMem] + "]";
+//       soobErr += klu2 + "]";
+//       break;
+//     case 2:
+//       soobErr = "Перекрёсток";
+//       if (klu.length > 8) soobErr = "Объект";
+//       soobErr += " уже используется";
+//       break;
+//     case 3:
+//       vert = "перекрёстка [";
+//       if (klu.length > 8) vert = "объекта [";
+//       soobErr = "Нет массива связности " + vert + klu + "]";
+//       break;
+//     case 4:
+//       soobErr =
+//         "В радиусе 100м от указанной точки управляемые перекрёстки отсутствуют";
+//       break;
+//     case 5:
+//       soobErr = "Нет связи с [" + klu + "] в массиве сязности перекрёстка [";
+//       soobErr += klu2 + "]";
+//   }
+//   return soobErr;
+// };
 
 //=== addRoute =====================================
 export const getReferencePoints = (pointA: any, pointB: any) => {
@@ -338,381 +338,381 @@ export const NameMode = () => {
   return nameMode;
 };
 //=== GsToDoMode ===================================
-export const OutputFazaImg = (img: any) => {
-  let widthHeight = 60;
-  if (!img) widthHeight = 30;
+// export const OutputFazaImg = (img: any) => {
+//   let widthHeight = 60;
+//   if (!img) widthHeight = 30;
 
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      xmlnsXlink="http://www.w3.org/1999/xlink"
-      style={{ width: widthHeight, height: widthHeight }}
-    >
-      <image
-        width={"100%"}
-        height={"100%"}
-        xlinkHref={"data:image/png;base64," + img}
-      />
-    </svg>
-  );
-};
+//   return (
+//     <svg
+//       xmlns="http://www.w3.org/2000/svg"
+//       xmlnsXlink="http://www.w3.org/1999/xlink"
+//       style={{ width: widthHeight, height: widthHeight }}
+//     >
+//       <image
+//         width={"100%"}
+//         height={"100%"}
+//         xlinkHref={"data:image/png;base64," + img}
+//       />
+//     </svg>
+//   );
+// };
 
-export const OutputVertexImg = (host: string) => {
-  return (
-    <CardMedia
-      component="img"
-      sx={{ textAlign: "center", height: 40, width: 30 }}
-      image={host}
-    />
-  );
-};
-//=== AppointVertex ================================
-export const AppointHeader = (hBlock: number) => {
-  return (
-    <Grid container sx={{ bgcolor: "#C0E2C3" }}>
-      <Grid item xs={1}></Grid>
-      <Grid item xs={5.5} sx={{ height: hBlock / 10, paddingTop: 3 }}>
-        <Box sx={styleAppSt03}>
-          <b>Откуда</b>
-        </Box>
-      </Grid>
-      <Grid item xs={4} sx={{ height: hBlock / 10, paddingTop: 3 }}>
-        <Box sx={styleAppSt03}>
-          <b>Куда</b>
-        </Box>
-      </Grid>
-      <Grid item xs sx={{ height: hBlock / 10, paddingTop: 3 }}>
-        <Box sx={styleAppSt03}>
-          <b>Фаза</b>
-        </Box>
-      </Grid>
-    </Grid>
-  );
-};
+// export const OutputVertexImg = (host: string) => {
+//   return (
+//     <CardMedia
+//       component="img"
+//       sx={{ textAlign: "center", height: 40, width: 30 }}
+//       image={host}
+//     />
+//   );
+// };
+// //=== AppointVertex ================================
+// export const AppointHeader = (hBlock: number) => {
+//   return (
+//     <Grid container sx={{ bgcolor: "#C0E2C3" }}>
+//       <Grid item xs={1}></Grid>
+//       <Grid item xs={5.5} sx={{ height: hBlock / 10, paddingTop: 3 }}>
+//         <Box sx={styleAppSt03}>
+//           <b>Откуда</b>
+//         </Box>
+//       </Grid>
+//       <Grid item xs={4} sx={{ height: hBlock / 10, paddingTop: 3 }}>
+//         <Box sx={styleAppSt03}>
+//           <b>Куда</b>
+//         </Box>
+//       </Grid>
+//       <Grid item xs sx={{ height: hBlock / 10, paddingTop: 3 }}>
+//         <Box sx={styleAppSt03}>
+//           <b>Фаза</b>
+//         </Box>
+//       </Grid>
+//     </Grid>
+//   );
+// };
 
-export const AppointDirect = (rec1: string, hBlock: number) => {
-  let hB = hBlock / 15;
-  return (
-    <Grid container>
-      <Grid item xs={12} sx={{ height: hBlock / 15 }}></Grid>
-      <Grid item xs={12} sx={{ fontSize: 21, textAlign: "center", height: hB }}>
-        <Box sx={styleAppSt02}>
-          <b>{rec1}</b>
-        </Box>
-      </Grid>
-    </Grid>
-  );
-};
+// export const AppointDirect = (rec1: string, hBlock: number) => {
+//   let hB = hBlock / 15;
+//   return (
+//     <Grid container>
+//       <Grid item xs={12} sx={{ height: hBlock / 15 }}></Grid>
+//       <Grid item xs={12} sx={{ fontSize: 21, textAlign: "center", height: hB }}>
+//         <Box sx={styleAppSt02}>
+//           <b>{rec1}</b>
+//         </Box>
+//       </Grid>
+//     </Grid>
+//   );
+// };
 
-export const OutputKey = (klush: string, hBlock: number) => {
-  return (
-    <Grid container>
-      <Grid item xs={12} sx={{ textAlign: "center", height: hBlock / 15 }}>
-        <Box sx={styleAppSt02}>{klush}</Box>
-      </Grid>
-    </Grid>
-  );
-};
+// export const OutputKey = (klush: string, hBlock: number) => {
+//   return (
+//     <Grid container>
+//       <Grid item xs={12} sx={{ textAlign: "center", height: hBlock / 15 }}>
+//         <Box sx={styleAppSt02}>{klush}</Box>
+//       </Grid>
+//     </Grid>
+//   );
+// };
 
-export const TakeAreaId = (kluch: string) => {
-  let aa = kluch.indexOf("-");
-  let aaa = kluch.indexOf("-", aa + 1);
-  let bb = kluch.slice(aa + 1, aaa);
-  let bbb = kluch.slice(aaa + 1);
-  return [Number(bb), Number(bbb)];
-};
+// export const TakeAreaId = (kluch: string) => {
+//   let aa = kluch.indexOf("-");
+//   let aaa = kluch.indexOf("-", aa + 1);
+//   let bb = kluch.slice(aa + 1, aaa);
+//   let bbb = kluch.slice(aaa + 1);
+//   return [Number(bb), Number(bbb)];
+// };
 
-export const MakingKey = (homeRegion: any, valueAr: any, valueId: any) => {
-  let klushFrom = "";
-  if (valueAr && valueId)
-    klushFrom = homeRegion + "-" + valueAr + "-" + valueId;
-  return klushFrom;
-};
+// export const MakingKey = (homeRegion: any, valueAr: any, valueId: any) => {
+//   let klushFrom = "";
+//   if (valueAr && valueId)
+//     klushFrom = homeRegion + "-" + valueAr + "-" + valueId;
+//   return klushFrom;
+// };
 
-export const CheckKey = (kluch: string, map: any, addobj: any) => {
-  let klArea = TakeAreaId(kluch)[0];
-  // ====
-  let klId = TakeAreaId(kluch)[1];
-  // ====
-  let have = false;
-  if (klId < 10000) {
-    for (let i = 0; i < map.tflight.length; i++) {
-      if (
-        klArea === Number(map.tflight[i].area.num) &&
-        klId === map.tflight[i].ID
-      )
-        have = true;
-    }
-  } else {
-    for (let i = 0; i < addobj.addObjects.length; i++) {
-      if (
-        klArea === addobj.addObjects[i].area &&
-        klId === addobj.addObjects[i].id
-      )
-        have = true;
-    }
-  }
-  return have;
-};
+// export const CheckKey = (kluch: string, map: any, addobj: any) => {
+//   let klArea = TakeAreaId(kluch)[0];
+//   // ====
+//   let klId = TakeAreaId(kluch)[1];
+//   // ====
+//   let have = false;
+//   if (klId < 10000) {
+//     for (let i = 0; i < map.tflight.length; i++) {
+//       if (
+//         klArea === Number(map.tflight[i].area.num) &&
+//         klId === map.tflight[i].ID
+//       )
+//         have = true;
+//     }
+//   } else {
+//     for (let i = 0; i < addobj.addObjects.length; i++) {
+//       if (
+//         klArea === addobj.addObjects[i].area &&
+//         klId === addobj.addObjects[i].id
+//       )
+//         have = true;
+//     }
+//   }
+//   return have;
+// };
 
-export const MakeTflink = (
-  homeRegion: any,
-  massAreaId: Array<number>,
-  massFaz: Array<number>
-) => {
-  let valAreaZ = massAreaId[0];
-  let valIdZ = massAreaId[1];
-  let valAreaS = massAreaId[2];
-  let valIdS = massAreaId[3];
-  let valAreaV = massAreaId[4];
-  let valIdV = massAreaId[5];
-  let valAreaU = massAreaId[6];
-  let valIdU = massAreaId[7];
-  let maskPoints: WayPointsArray = {
-    id: "",
-    phase: "",
-  };
-  let maskTflink: Tflink = {
-    add1: { id: "", wayPointsArray: [] },
-    add2: { id: "", wayPointsArray: [] },
-    east: { id: "", wayPointsArray: [] },
-    north: { id: "", wayPointsArray: [] },
-    south: { id: "", wayPointsArray: [] },
-    west: { id: "", wayPointsArray: [] },
-  };
-  // запад
-  if (valAreaZ && valIdZ) {
-    maskTflink.west.id = homeRegion + "-" + valAreaZ + "-" + valIdZ;
-    if (valAreaU && valIdU) {
-      let maskPoint = JSON.parse(JSON.stringify(maskPoints));
-      maskPoint.id = homeRegion + "-" + valAreaU + "-" + valIdU;
-      maskPoint.phase = massFaz[0].toString();
-      maskTflink.west.wayPointsArray.push(maskPoint);
-    }
-    if (valAreaV && valIdV) {
-      let maskPoint = JSON.parse(JSON.stringify(maskPoints));
-      maskPoint.id = homeRegion + "-" + valAreaV + "-" + valIdV;
-      maskPoint.phase = massFaz[1].toString();
-      maskTflink.west.wayPointsArray.push(maskPoint);
-    }
-    if (valAreaS && valIdS) {
-      let maskPoint = JSON.parse(JSON.stringify(maskPoints));
-      maskPoint.id = homeRegion + "-" + valAreaS + "-" + valIdS;
-      maskPoint.phase = massFaz[2].toString();
-      maskTflink.west.wayPointsArray.push(maskPoint);
-    }
-  }
-  // север
-  if (valAreaS && valIdS) {
-    maskTflink.north.id = homeRegion + "-" + valAreaS + "-" + valIdS;
-    if (valAreaZ && valIdZ) {
-      let maskPoint = JSON.parse(JSON.stringify(maskPoints));
-      maskPoint.id = homeRegion + "-" + valAreaZ + "-" + valIdZ;
-      maskPoint.phase = massFaz[3].toString();
-      maskTflink.north.wayPointsArray.push(maskPoint);
-    }
-    if (valAreaU && valIdU) {
-      let maskPoint = JSON.parse(JSON.stringify(maskPoints));
-      maskPoint.id = homeRegion + "-" + valAreaU + "-" + valIdU;
-      maskPoint.phase = massFaz[4].toString();
-      maskTflink.north.wayPointsArray.push(maskPoint);
-    }
-    if (valAreaV && valIdV) {
-      let maskPoint = JSON.parse(JSON.stringify(maskPoints));
-      maskPoint.id = homeRegion + "-" + valAreaV + "-" + valIdV;
-      maskPoint.phase = massFaz[5].toString();
-      maskTflink.north.wayPointsArray.push(maskPoint);
-    }
-  }
-  // восток
-  if (valAreaV && valIdV) {
-    let maskPoint = JSON.parse(JSON.stringify(maskPoints));
-    maskTflink.east.id = homeRegion + "-" + valAreaV + "-" + valIdV;
-    if (valAreaS && valIdS) {
-      maskPoint.id = homeRegion + "-" + valAreaS + "-" + valIdS;
-      maskPoint.phase = massFaz[6].toString();
-      maskTflink.east.wayPointsArray.push(maskPoint);
-    }
-    if (valAreaZ && valIdZ) {
-      let maskPoint = JSON.parse(JSON.stringify(maskPoints));
-      maskPoint.id = homeRegion + "-" + valAreaZ + "-" + valIdZ;
-      maskPoint.phase = massFaz[7].toString();
-      maskTflink.east.wayPointsArray.push(maskPoint);
-    }
-    if (valAreaU && valIdU) {
-      let maskPoint = JSON.parse(JSON.stringify(maskPoints));
-      maskPoint.id = homeRegion + "-" + valAreaU + "-" + valIdU;
-      maskPoint.phase = massFaz[8].toString();
-      maskTflink.east.wayPointsArray.push(maskPoint);
-    }
-  }
-  // юг
-  if (valAreaU && valIdU) {
-    maskTflink.south.id = homeRegion + "-" + valAreaU + "-" + valIdU;
-    if (valAreaV && valIdV) {
-      let maskPoint = JSON.parse(JSON.stringify(maskPoints));
-      maskPoint.id = homeRegion + "-" + valAreaV + "-" + valIdV;
-      maskPoint.phase = massFaz[9].toString();
-      maskTflink.south.wayPointsArray.push(maskPoint);
-    }
-    if (valAreaS && valIdS) {
-      let maskPoint = JSON.parse(JSON.stringify(maskPoints));
-      maskPoint.id = homeRegion + "-" + valAreaS + "-" + valIdS;
-      maskPoint.phase = massFaz[10].toString();
-      maskTflink.south.wayPointsArray.push(maskPoint);
-    }
-    if (valAreaZ && valIdZ) {
-      let maskPoint = JSON.parse(JSON.stringify(maskPoints));
-      maskPoint.id = homeRegion + "-" + valAreaZ + "-" + valIdZ;
-      maskPoint.phase = massFaz[11].toString();
-      maskTflink.south.wayPointsArray.push(maskPoint);
-    }
-  }
-  return maskTflink;
-};
+// export const MakeTflink = (
+//   homeRegion: any,
+//   massAreaId: Array<number>,
+//   massFaz: Array<number>
+// ) => {
+//   let valAreaZ = massAreaId[0];
+//   let valIdZ = massAreaId[1];
+//   let valAreaS = massAreaId[2];
+//   let valIdS = massAreaId[3];
+//   let valAreaV = massAreaId[4];
+//   let valIdV = massAreaId[5];
+//   let valAreaU = massAreaId[6];
+//   let valIdU = massAreaId[7];
+//   let maskPoints: WayPointsArray = {
+//     id: "",
+//     phase: "",
+//   };
+//   let maskTflink: Tflink = {
+//     add1: { id: "", wayPointsArray: [] },
+//     add2: { id: "", wayPointsArray: [] },
+//     east: { id: "", wayPointsArray: [] },
+//     north: { id: "", wayPointsArray: [] },
+//     south: { id: "", wayPointsArray: [] },
+//     west: { id: "", wayPointsArray: [] },
+//   };
+//   // запад
+//   if (valAreaZ && valIdZ) {
+//     maskTflink.west.id = homeRegion + "-" + valAreaZ + "-" + valIdZ;
+//     if (valAreaU && valIdU) {
+//       let maskPoint = JSON.parse(JSON.stringify(maskPoints));
+//       maskPoint.id = homeRegion + "-" + valAreaU + "-" + valIdU;
+//       maskPoint.phase = massFaz[0].toString();
+//       maskTflink.west.wayPointsArray.push(maskPoint);
+//     }
+//     if (valAreaV && valIdV) {
+//       let maskPoint = JSON.parse(JSON.stringify(maskPoints));
+//       maskPoint.id = homeRegion + "-" + valAreaV + "-" + valIdV;
+//       maskPoint.phase = massFaz[1].toString();
+//       maskTflink.west.wayPointsArray.push(maskPoint);
+//     }
+//     if (valAreaS && valIdS) {
+//       let maskPoint = JSON.parse(JSON.stringify(maskPoints));
+//       maskPoint.id = homeRegion + "-" + valAreaS + "-" + valIdS;
+//       maskPoint.phase = massFaz[2].toString();
+//       maskTflink.west.wayPointsArray.push(maskPoint);
+//     }
+//   }
+//   // север
+//   if (valAreaS && valIdS) {
+//     maskTflink.north.id = homeRegion + "-" + valAreaS + "-" + valIdS;
+//     if (valAreaZ && valIdZ) {
+//       let maskPoint = JSON.parse(JSON.stringify(maskPoints));
+//       maskPoint.id = homeRegion + "-" + valAreaZ + "-" + valIdZ;
+//       maskPoint.phase = massFaz[3].toString();
+//       maskTflink.north.wayPointsArray.push(maskPoint);
+//     }
+//     if (valAreaU && valIdU) {
+//       let maskPoint = JSON.parse(JSON.stringify(maskPoints));
+//       maskPoint.id = homeRegion + "-" + valAreaU + "-" + valIdU;
+//       maskPoint.phase = massFaz[4].toString();
+//       maskTflink.north.wayPointsArray.push(maskPoint);
+//     }
+//     if (valAreaV && valIdV) {
+//       let maskPoint = JSON.parse(JSON.stringify(maskPoints));
+//       maskPoint.id = homeRegion + "-" + valAreaV + "-" + valIdV;
+//       maskPoint.phase = massFaz[5].toString();
+//       maskTflink.north.wayPointsArray.push(maskPoint);
+//     }
+//   }
+//   // восток
+//   if (valAreaV && valIdV) {
+//     let maskPoint = JSON.parse(JSON.stringify(maskPoints));
+//     maskTflink.east.id = homeRegion + "-" + valAreaV + "-" + valIdV;
+//     if (valAreaS && valIdS) {
+//       maskPoint.id = homeRegion + "-" + valAreaS + "-" + valIdS;
+//       maskPoint.phase = massFaz[6].toString();
+//       maskTflink.east.wayPointsArray.push(maskPoint);
+//     }
+//     if (valAreaZ && valIdZ) {
+//       let maskPoint = JSON.parse(JSON.stringify(maskPoints));
+//       maskPoint.id = homeRegion + "-" + valAreaZ + "-" + valIdZ;
+//       maskPoint.phase = massFaz[7].toString();
+//       maskTflink.east.wayPointsArray.push(maskPoint);
+//     }
+//     if (valAreaU && valIdU) {
+//       let maskPoint = JSON.parse(JSON.stringify(maskPoints));
+//       maskPoint.id = homeRegion + "-" + valAreaU + "-" + valIdU;
+//       maskPoint.phase = massFaz[8].toString();
+//       maskTflink.east.wayPointsArray.push(maskPoint);
+//     }
+//   }
+//   // юг
+//   if (valAreaU && valIdU) {
+//     maskTflink.south.id = homeRegion + "-" + valAreaU + "-" + valIdU;
+//     if (valAreaV && valIdV) {
+//       let maskPoint = JSON.parse(JSON.stringify(maskPoints));
+//       maskPoint.id = homeRegion + "-" + valAreaV + "-" + valIdV;
+//       maskPoint.phase = massFaz[9].toString();
+//       maskTflink.south.wayPointsArray.push(maskPoint);
+//     }
+//     if (valAreaS && valIdS) {
+//       let maskPoint = JSON.parse(JSON.stringify(maskPoints));
+//       maskPoint.id = homeRegion + "-" + valAreaS + "-" + valIdS;
+//       maskPoint.phase = massFaz[10].toString();
+//       maskTflink.south.wayPointsArray.push(maskPoint);
+//     }
+//     if (valAreaZ && valIdZ) {
+//       let maskPoint = JSON.parse(JSON.stringify(maskPoints));
+//       maskPoint.id = homeRegion + "-" + valAreaZ + "-" + valIdZ;
+//       maskPoint.phase = massFaz[11].toString();
+//       maskTflink.south.wayPointsArray.push(maskPoint);
+//     }
+//   }
+//   return maskTflink;
+// };
 
-export const MakingKluch = (
-  rec1: string,
-  homeRegion: any,
-  massAreaId: Array<number>
-) => {
-  let klushTo1 = "";
-  let klushTo2 = "";
-  let klushTo3 = "";
-  let valAreaZ = massAreaId[0];
-  let valIdZ = massAreaId[1];
-  let valAreaS = massAreaId[2];
-  let valIdS = massAreaId[3];
-  let valAreaV = massAreaId[4];
-  let valIdV = massAreaId[5];
-  let valAreaU = massAreaId[6];
-  let valIdU = massAreaId[7];
+// export const MakingKluch = (
+//   rec1: string,
+//   homeRegion: any,
+//   massAreaId: Array<number>
+// ) => {
+//   let klushTo1 = "";
+//   let klushTo2 = "";
+//   let klushTo3 = "";
+//   let valAreaZ = massAreaId[0];
+//   let valIdZ = massAreaId[1];
+//   let valAreaS = massAreaId[2];
+//   let valIdS = massAreaId[3];
+//   let valAreaV = massAreaId[4];
+//   let valIdV = massAreaId[5];
+//   let valAreaU = massAreaId[6];
+//   let valIdU = massAreaId[7];
 
-  switch (rec1) {
-    case "З":
-      if (valAreaZ && valIdZ) {
-        klushTo1 = MakingKey(homeRegion, valAreaU, valIdU);
-        klushTo2 = MakingKey(homeRegion, valAreaV, valIdV);
-        klushTo3 = MakingKey(homeRegion, valAreaS, valIdS);
-      }
-      break;
-    case "С":
-      if (valAreaS && valIdS) {
-        klushTo1 = MakingKey(homeRegion, valAreaZ, valIdZ);
-        klushTo2 = MakingKey(homeRegion, valAreaU, valIdU);
-        klushTo3 = MakingKey(homeRegion, valAreaV, valIdV);
-      }
-      break;
-    case "В":
-      if (valAreaV && valIdV) {
-        klushTo1 = MakingKey(homeRegion, valAreaS, valIdS);
-        klushTo2 = MakingKey(homeRegion, valAreaZ, valIdZ);
-        klushTo3 = MakingKey(homeRegion, valAreaU, valIdU);
-      }
-      break;
-    case "Ю":
-      if (valAreaU && valIdU) {
-        klushTo1 = MakingKey(homeRegion, valAreaV, valIdV);
-        klushTo2 = MakingKey(homeRegion, valAreaS, valIdS);
-        klushTo3 = MakingKey(homeRegion, valAreaZ, valIdZ);
-      }
-  }
-  return [klushTo1, klushTo2, klushTo3];
-};
+//   switch (rec1) {
+//     case "З":
+//       if (valAreaZ && valIdZ) {
+//         klushTo1 = MakingKey(homeRegion, valAreaU, valIdU);
+//         klushTo2 = MakingKey(homeRegion, valAreaV, valIdV);
+//         klushTo3 = MakingKey(homeRegion, valAreaS, valIdS);
+//       }
+//       break;
+//     case "С":
+//       if (valAreaS && valIdS) {
+//         klushTo1 = MakingKey(homeRegion, valAreaZ, valIdZ);
+//         klushTo2 = MakingKey(homeRegion, valAreaU, valIdU);
+//         klushTo3 = MakingKey(homeRegion, valAreaV, valIdV);
+//       }
+//       break;
+//     case "В":
+//       if (valAreaV && valIdV) {
+//         klushTo1 = MakingKey(homeRegion, valAreaS, valIdS);
+//         klushTo2 = MakingKey(homeRegion, valAreaZ, valIdZ);
+//         klushTo3 = MakingKey(homeRegion, valAreaU, valIdU);
+//       }
+//       break;
+//     case "Ю":
+//       if (valAreaU && valIdU) {
+//         klushTo1 = MakingKey(homeRegion, valAreaV, valIdV);
+//         klushTo2 = MakingKey(homeRegion, valAreaS, valIdS);
+//         klushTo3 = MakingKey(homeRegion, valAreaZ, valIdZ);
+//       }
+//   }
+//   return [klushTo1, klushTo2, klushTo3];
+// };
 
-export const OutputNumFaza = (
-  num: number,
-  imgFaza: any,
-  maxFaza: number,
-  hBlock: number
-) => {
-  const OutputFaza = (img: any) => {
-    let widthHeight = hBlock / 3;
-    if (!img) widthHeight = hBlock / 12;
-    return (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        xmlnsXlink="http://www.w3.org/1999/xlink"
-        style={{ width: widthHeight, height: widthHeight }}
-      >
-        <image
-          width={"95%"}
-          height={"100%"}
-          xlinkHref={"data:image/png;base64," + img}
-        />
-      </svg>
-    );
-  };
+// export const OutputNumFaza = (
+//   num: number,
+//   imgFaza: any,
+//   maxFaza: number,
+//   hBlock: number
+// ) => {
+//   const OutputFaza = (img: any) => {
+//     let widthHeight = hBlock / 3;
+//     if (!img) widthHeight = hBlock / 12;
+//     return (
+//       <svg
+//         xmlns="http://www.w3.org/2000/svg"
+//         xmlnsXlink="http://www.w3.org/1999/xlink"
+//         style={{ width: widthHeight, height: widthHeight }}
+//       >
+//         <image
+//           width={"95%"}
+//           height={"100%"}
+//           xlinkHref={"data:image/png;base64," + img}
+//         />
+//       </svg>
+//     );
+//   };
 
-  return (
-    <>
-      {num <= maxFaza && (
-        <>
-          <Grid
-            item
-            xs={0.4}
-            sx={{ fontSize: 12, textAlign: "right", height: hBlock / 3 }}
-          >
-            <Box sx={styleAppSt02}>{num}</Box>
-          </Grid>
-          <Grid item xs={3.6} sx={{ textAlign: "center" }}>
-            <Box sx={styleAppSt02}>{OutputFaza(imgFaza)}</Box>
-          </Grid>
-        </>
-      )}
-    </>
-  );
-};
+//   return (
+//     <>
+//       {num <= maxFaza && (
+//         <>
+//           <Grid
+//             item
+//             xs={0.4}
+//             sx={{ fontSize: 12, textAlign: "right", height: hBlock / 3 }}
+//           >
+//             <Box sx={styleAppSt02}>{num}</Box>
+//           </Grid>
+//           <Grid item xs={3.6} sx={{ textAlign: "center" }}>
+//             <Box sx={styleAppSt02}>{OutputFaza(imgFaza)}</Box>
+//           </Grid>
+//         </>
+//       )}
+//     </>
+//   );
+// };
 
-export const ReplaceInSvg = (svgPict: any) => {
-  let svgPipa = svgPict;
-  if (svgPict) {
-    let heightImg = window.innerWidth / 3.333 + 14;
-    let widthHeight = heightImg.toString();
-    let ch = "";
-    let vxod = svgPict.indexOf("width=");
-    for (let i = 0; i < 100; i++) {
-      if (isNaN(Number(svgPipa[vxod + 7 + i]))) break;
-      ch = ch + svgPipa[vxod + 7 + i];
-    }
-    for (let i = 0; i < 6; i++) {
-      svgPipa = svgPipa.replace(ch, widthHeight);
-    }
-  }
-  return svgPipa;
-};
-//=== ToDoMode =====================================
-export const CircleObj = () => {
-  const circle = {
-    width: 18,
-    height: 18,
-    border: 3,
-    marginTop: 1.2,
-    marginLeft: 2.5,
-    borderRadius: 9,
-    borderColor: "#9B5BDD",
-  };
-  return <Box sx={circle}></Box>;
-};
+// export const ReplaceInSvg = (svgPict: any) => {
+//   let svgPipa = svgPict;
+//   if (svgPict) {
+//     let heightImg = window.innerWidth / 3.333 + 14;
+//     let widthHeight = heightImg.toString();
+//     let ch = "";
+//     let vxod = svgPict.indexOf("width=");
+//     for (let i = 0; i < 100; i++) {
+//       if (isNaN(Number(svgPipa[vxod + 7 + i]))) break;
+//       ch = ch + svgPipa[vxod + 7 + i];
+//     }
+//     for (let i = 0; i < 6; i++) {
+//       svgPipa = svgPipa.replace(ch, widthHeight);
+//     }
+//   }
+//   return svgPipa;
+// };
+// //=== ToDoMode =====================================
+// export const CircleObj = () => {
+//   const circle = {
+//     width: 18,
+//     height: 18,
+//     border: 3,
+//     marginTop: 1.2,
+//     marginLeft: 2.5,
+//     borderRadius: 9,
+//     borderColor: "#9B5BDD",
+//   };
+//   return <Box sx={circle}></Box>;
+// };
 //=== Разное =======================================
 export const InputDirect = (func: any, otherWork: boolean) => {
   const styleSetNapr = {
-    //border: 1,
     width: "165px",
-    maxHeight: "3px",
-    minHeight: "3px",
-    bgcolor: "#D7F1C0",
-    boxShadow: 3,
+    maxHeight: "1px",
+    minHeight: "1px",
+    bgcolor: "#BAE186",
+    border: 1,
+    borderRadius: 1,
+    borderColor: "#93D145",
+    boxShadow: 6,
     paddingTop: 1.5,
-    paddingBottom: 1.5,
+    paddingBottom: 1.2,
     textAlign: "center",
   };
 
   const styleBoxFormNapr = {
     "& > :not(style)": {
-      //border: 1,
       marginTop: "-12px",
-      //marginLeft: '-12px',
       width: "165px",
     },
   };
@@ -796,15 +796,11 @@ export const InputDirect = (func: any, otherWork: boolean) => {
 
 export const StrokaMenuGlob = (func: any, otherWork: boolean) => {
   const styleApp01 = {
-    //border: 1,
     fontSize: 14,
     marginRight: 0.1,
     marginLeft: 0.5,
     width: 165,
-    maxHeight: "21px",
-    minHeight: "21px",
-    backgroundColor: "#D7F1C0",
-    color: "black",
+    paddingBottom: 0.5,
   };
 
   return <Box sx={styleApp01}>{InputDirect(func, otherWork)}</Box>;
