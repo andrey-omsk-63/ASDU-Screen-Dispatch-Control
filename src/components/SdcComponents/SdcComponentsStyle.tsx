@@ -7,29 +7,14 @@ export const styleTitleDEMO = {
 };
 
 export const styleVarKnop = {
-  //bgcolor: "background.paper",
-  //borderColor: "primary.main",
-  // border: "1px solid #000",
-  // borderColor: "#d4d4d4", // серый
-  // borderRadius: 2,
-  // height: '10vh',
   height: "75px",
   marginBottom: 0.5,
-  //backgroundColor: "#E3EBF2",  // светло-серый
-  //backgroundColor: "#EFF3F8", // светло-серый
   textAlign: "center",
 };
 
 export const styleConstKnop = {
-  // bgcolor: "background.paper",
-  // border: "1px solid #000",
-  // borderColor: "primary.main",
-  // borderRadius: 2,
-  // height: '10vh',
   height: "75px",
   marginBottom: 0.5,
-  //backgroundColor: "#E3EBF2",  // светло-серый
-  //backgroundColor: "#EFF3F8", // светло-серый
   textAlign: "center",
 };
 
