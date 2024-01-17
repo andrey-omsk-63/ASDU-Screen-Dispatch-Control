@@ -18,23 +18,13 @@ export const GetPointData = (index: number, map: any) => {
   let cont1 = "";
   let cont2 = "";
   let cont3 = "";
-  // if (index < map.tflight.length) {
   cont1 = map.tflight[index].description + "<br/>";
   cont3 = map.tflight[index].tlsost.description + "<br/>";
-  // cont2 = '[' + map.tflight[index].region.num + ', ';
-  cont2 = "[" + map.tflight[index].area.num + ", ";
+  cont2 = "[";
+  // + map.tflight[index].area.num + ", ";
   cont2 += map.tflight[index].ID + ", " + map.tflight[index].idevice + "]";
-  // } else {
-  //   let idx = index - map.tflight.length;
-  //   cont1 = addobjects[idx].description + '<br/>';
-  //   cont2 = '[' + addobjects[idx].region + ', ' + addobjects[idx].area;
-  //   cont2 += ', ' + addobjects[idx].id + ']';
-  // }
 
-  return {
-    hintContent: cont1 + cont3 + cont2,
-    //+ "<br/>",
-  };
+  return { hintContent: cont1 + cont3 + cont2 };
 };
 
 export const GetPointOptions1 = (Hoster: any) => {
@@ -53,22 +43,21 @@ export const GetPointOptions1 = (Hoster: any) => {
 //=== Разное =======================================
 export const InputDirect = (func: any, otherWork: boolean) => {
   const styleSetNapr = {
-    width: "165px",
-    maxHeight: "1px",
-    minHeight: "1px",
-    bgcolor: "#BAE186",
-    border: 1,
+    width: "140px",
+    maxHeight: "2px",
+    minHeight: "2px",
+    bgcolor: "#BAE186", // салатовый
+    border: "1px solid #93D145", // тёмно салатовый
     borderRadius: 1,
-    borderColor: "#93D145",
-    boxShadow: 6,
-    paddingTop: 1.5,
-    paddingBottom: 1.2,
+    p: 1.25,
     textAlign: "center",
+    boxShadow: 6,
   };
 
   const styleBoxFormNapr = {
     "& > :not(style)": {
-      marginTop: "-12px",
+      marginTop: "-10px",
+      marginLeft: "-12px",
       width: "165px",
     },
   };
@@ -123,10 +112,11 @@ export const InputDirect = (func: any, otherWork: boolean) => {
           InputProps={{
             disableUnderline: true,
             style: {
-              fontSize: currency === 1 ? 17 : 15,
+              fontSize: currency === 1 ? 14.5 : 14,
+              //fontSize: 14,
               fontWeight: 700,
               color: currency === 1 ? "red" : "black",
-              marginTop: currency === 1 ? -3 : 0,
+              //marginTop: currency === 1 ? -3 : 0,
             },
           }}
           variant="standard"

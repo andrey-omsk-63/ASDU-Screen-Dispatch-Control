@@ -12,7 +12,7 @@ import { styleModalEnd } from "../MainMapStyle";
 
 import { styleVarKnopNum, styleVarKnop } from "./SdcComponentsStyle";
 import { styleConstKnop, styleOutputFaza } from "./SdcComponentsStyle";
-import { StyleSetControl } from "./SdcComponentsStyle";
+import { StyleSetControl, styleControl01 } from "./SdcComponentsStyle";
 import { styleTitle, styleTitleDEMO } from "./SdcComponentsStyle";
 import { StyleModalMenuVar, StyleModalMenuConst } from "./SdcComponentsStyle";
 
@@ -62,8 +62,8 @@ const SdcControlVertex = (props: {
   //=== инициализация ======================================
   if (oldIdx !== props.idx) {
     datestat.working = true; // занато
-    kluchGl = map.tflight[props.idx].area.num + "-";
-    kluchGl += map.tflight[props.idx].ID + " ";
+    //kluchGl = map.tflight[props.idx].area.num + "-";
+    kluchGl = map.tflight[props.idx].ID + " ";
     let massFaz = {
       idx: 0,
       area: 0,
@@ -337,7 +337,7 @@ const SdcControlVertex = (props: {
   }
 
   let titleDEMO = DEMO ? "( Демонстрационный режим )" : "";
-
+  
   return (
     <Box sx={styleSetControl}>
       <Button sx={styleModalEnd} onClick={handleCloseSet}>
@@ -345,23 +345,25 @@ const SdcControlVertex = (props: {
       </Button>
       <Box sx={styleTitleDEMO}>{titleDEMO}</Box>
       <Box sx={styleTitle}>
-        <b>
-          Перекрёсток {kluchGl} ({map.tflight[props.idx].description})
-        </b>
+        <em>
+          [id{kluchGl}] <b>{map.tflight[props.idx].description}</b>
+        </em>
       </Box>
-      <Grid container sx={{ marginTop: 1.5 }}>
-        <Grid item xs={8} sx={{ paddingLeft: 0.1, paddingRight: 0.5 }}>
-          <Grid container>{StrokaFazaKnop()} </Grid>
-        </Grid>
-        <Grid item xs sx={{ paddingRight: 1 }}>
-          <Grid container>
-            {OutputConstFaza("ЖМ")}
-            {OutputConstFaza("ОС")}
-            {OutputConstFaza("ЛР")}
-            {OutputConstFaza("КУ")}
+      <Box sx={styleControl01}>
+        <Grid container sx={{}}>
+          <Grid item xs={8} sx={{ paddingLeft: 0.1, paddingRight: 0.5 }}>
+            <Grid container>{StrokaFazaKnop()} </Grid>
+          </Grid>
+          <Grid item xs sx={{ paddingRight: 1 }}>
+            <Grid container>
+              {OutputConstFaza("ЖМ")}
+              {OutputConstFaza("ОС")}
+              {OutputConstFaza("ЛР")}
+              {OutputConstFaza("КУ")}
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      </Box>
     </Box>
   );
 };

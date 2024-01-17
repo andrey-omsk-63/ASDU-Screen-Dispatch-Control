@@ -1,7 +1,7 @@
 //=== SdcControlVertex ===================================
 export const styleTitleDEMO = {
   fontSize: 17,
-  marginTop: 2,
+  marginTop: 1,
   textAlign: "center",
   color: "red",
 };
@@ -81,12 +81,22 @@ export const StyleSetControl = (DEMO: boolean) => {
     transform: "translate(-50%, -50%)",
     width: "340px",
     bgcolor: "background.paper",
-    border: "1px solid #000",
-    borderColor: DEMO ? "red" : "primary.main",
+    border: "1px solid #FFF",
+    //borderColor: DEMO ? "red" : "primary.main",
     borderRadius: 1,
     boxShadow: 24,
-    paddingBottom: 0.5,
+    textShadow: "2px 2px 3px rgba(0,0,0,0.3)",
+    padding: "1px 15px 15px 15px",
   };
   return styleSetControl;
+};
+
+export const styleControl01 = {
+  bgcolor: "#F1F5FB",
+  border: "1px solid #d4d4d4",
+  borderRadius: 1,
+  marginTop: 1,
+  boxShadow: 6,
+  padding: "5px 0px 5px 0px",
 };
 //========================================================
