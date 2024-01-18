@@ -18,6 +18,8 @@ import { StrokaMenuGlob, CenterCoord } from "./SdcServiceFunctions";
 
 import { SendSocketGetPhases } from "./SdcSocketFunctions";
 
+import { MyYandexKey } from "./MapConst";
+
 import { searchControl } from "./MainMapStyle";
 
 let flagOpen = false;
@@ -140,9 +142,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     zoom,
   };
 
-  const ChangeDemoSost = (mode: number) => {
-    setDemoSost(mode + demoSost); // костыль
-  };
+  const ChangeDemoSost = (mode: number) => setDemoSost(mode + demoSost); // костыль
 
   return (
     <Grid container sx={{ height: "99.9vh" }}>
@@ -153,12 +153,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
         <Grid container sx={{ height: "96.9vh" }}>
           <Grid item xs>
             {Object.keys(map.tflight).length && (
-              <YMaps
-                query={{
-                  apikey: "65162f5f-2d15-41d1-a881-6c1acf34cfa1",
-                  lang: "ru_RU",
-                }}
-              >
+              <YMaps query={{ apikey: MyYandexKey, lang: "ru_RU" }}>
                 <Map
                   modules={["templateLayoutFactory"]}
                   state={mapState}

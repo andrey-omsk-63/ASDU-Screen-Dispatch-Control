@@ -8,6 +8,8 @@ import Button from "@mui/material/Button";
 
 import { SendSocketDispatch } from "../SdcSocketFunctions";
 
+import { MaxFaz } from "./../MapConst";
+
 import { styleModalEnd } from "../MainMapStyle";
 
 import { styleVarKnopNum, styleVarKnop } from "./SdcComponentsStyle";
@@ -25,6 +27,9 @@ let kluchGl = "";
 let stopSwitch = false;
 let tekDemoTlsost = -1;
 let shippedKU = false;
+
+let kolFaz = 0;
+let needDopKnop = false;
 
 const colorNormal = "#E9F5D8"; // светло-салатовый
 const colorExtra = "#96CD8F"; // тёмно-салатовый
@@ -58,11 +63,15 @@ const SdcControlVertex = (props: {
   //========================================================
   const [sentParam, setSentParam] = React.useState(-1);
   const [flagPusk, setFlagPusk] = React.useState(false);
+  const [trigger, setTrigger] = React.useState(false);
 
   //=== инициализация ======================================
   if (oldIdx !== props.idx) {
+    let sumFaz = map.tflight[props.idx].phases.length;
+    kolFaz = sumFaz < MaxFaz ? sumFaz + 1 : MaxFaz;
+    needDopKnop = sumFaz === MaxFaz ? false : true;
+
     datestat.working = true; // занато
-    //kluchGl = map.tflight[props.idx].area.num + "-";
     kluchGl = map.tflight[props.idx].ID + " ";
     let massFaz = {
       idx: 0,
@@ -180,7 +189,7 @@ const SdcControlVertex = (props: {
     }
   };
 
-  const handleCloseSet = () => {
+  const handleCloseSet = React.useCallback(() => {
     if (timerId) CloseInterval(); // принудительное закрытие
     console.log("Финиш", shippedKU, timerId, massInt);
     oldIdx = -1;
@@ -193,42 +202,48 @@ const SdcControlVertex = (props: {
       props.change(datestat.demoTlsost);
     }
     dispatch(statsaveCreate(datestat));
-  };
+  }, [DEMO, datestat, massfaz.idevice, debug, ws, props, dispatch]);
 
   const handleClick = (mode: number) => {
-    massfaz.faza = mode;
-    stopSwitch = true;
-    dispatch(massfazCreate(massfaz));
-    shippedKU = mode === 9 ? true : false;
+    if (needDopKnop && mode === kolFaz) {
+      kolFaz = MaxFaz; // Развернуть кнопки
+      needDopKnop = false;
+      setTrigger(!trigger) // ререндер
+    } else {
+      massfaz.faza = mode;
+      stopSwitch = true;
+      dispatch(massfazCreate(massfaz));
+      shippedKU = mode === 9 ? true : false;
 
-    console.log("New_Отправка ", shippedKU, mode, massfaz);
+      console.log("New_Отправка ", shippedKU, mode, massfaz);
 
-    !DEMO && SendSocketDispatch(debug, ws, massfaz.idevice, 9, mode);
-    if (mode < 9 && mode > 0) {
-      if (timerId === null) {
-        timerId = setInterval(() => DoTimerId(), timer);
-        massInt.push(timerId);
+      !DEMO && SendSocketDispatch(debug, ws, massfaz.idevice, 9, mode);
+      if (mode < 9 && mode > 0) {
+        if (timerId === null) {
+          timerId = setInterval(() => DoTimerId(), timer);
+          massInt.push(timerId);
+        }
+        if (DEMO) {
+          needRend = true;
+          setFlagPusk(!flagPusk);
+        }
+      } else {
+        if (!DEMO) CloseInterval();
       }
       if (DEMO) {
-        needRend = true;
-        setFlagPusk(!flagPusk);
-      }
-    } else {
-      if (!DEMO) CloseInterval();
-    }
-    if (DEMO) {
-      // проверка режима ЛР
-      if (mode === 0) {
-        datestat.demoLR = true;
-        dispatch(statsaveCreate(datestat));
-      } else {
-        if (datestat.demoLR) {
-          datestat.demoLR = false;
+        // проверка режима ЛР
+        if (mode === 0) {
+          datestat.demoLR = true;
           dispatch(statsaveCreate(datestat));
+        } else {
+          if (datestat.demoLR) {
+            datestat.demoLR = false;
+            dispatch(statsaveCreate(datestat));
+          }
         }
       }
+      setSentParam(mode);
     }
-    setSentParam(mode);
   };
 
   const OutputFaza = (img: any, i: number) => {
@@ -249,7 +264,8 @@ const SdcControlVertex = (props: {
             />
           </svg>
         )}
-        {!img && <Box sx={{ fontSize: 41 }}>{i + 1}</Box>}
+        {!img && i >= 0 && <Box sx={{ fontSize: 41 }}>{i + 1}</Box>}
+        {!img && i < 0 && <Box sx={{ fontSize: 33 }}>Фазы ЗУ</Box>}
       </>
     );
   };
@@ -258,7 +274,7 @@ const SdcControlVertex = (props: {
     let resStr = [];
     if (map.tflight[props.idx].phases.length > 0) {
       // for (let i = 0; i < map.tflight[props.idx].phases.length; i++) {
-      for (let i = 0; i < 8; i++) {
+      for (let i = 0; i < kolFaz; i++) {
         let colorKnop = colorNormal;
         let bShadow = 4;
         if (sentParam === i + 1) colorKnop = colorSent;
@@ -267,16 +283,21 @@ const SdcControlVertex = (props: {
           bShadow = 12;
         }
         let styleMenuVar = StyleModalMenuVar(colorKnop, bShadow);
+        let contentKnop1 =
+          needDopKnop && i === kolFaz - 1 ? null : datestat.phSvg[i];
+        let contentKnop2 = needDopKnop && i === kolFaz - 1 ? -1 : i;
+        let num = needDopKnop && i === kolFaz - 1 ? '' : (i + 1).toString();
 
         resStr.push(
           <Grid container key={i}>
             <Grid item xs={0.5} sx={styleVarKnopNum}>
-              <b>{i + 1}</b>
+              <b>{num}</b>
             </Grid>
             <Grid item xs={11.5} sx={styleVarKnop}>
               <Box sx={styleOutputFaza}>
                 <Button sx={styleMenuVar} onClick={() => handleClick(i + 1)}>
-                  {OutputFaza(datestat.phSvg[i], i)}
+                  {/* {OutputFaza(datestat.phSvg[i], i)} */}
+                  {OutputFaza(contentKnop1, contentKnop2)}
                 </Button>
               </Box>
             </Grid>
@@ -336,10 +357,32 @@ const SdcControlVertex = (props: {
     setFlagPusk(!flagPusk);
   }
 
+  //=== отслеживания клика мышом за пределами рамки ========
+  const boxer = React.useRef(null);
+
+  const Clicker = (ref: any) => {
+    const handleClickOutside = React.useCallback(
+      (event: any) => {
+        if (ref.current && !ref.current.contains(event.target))
+          handleCloseSet();
+      },
+      [ref]
+    );
+
+    React.useEffect(() => {
+      document.addEventListener("click", handleClickOutside, true);
+      return () => {
+        document.removeEventListener("click", handleClickOutside, true);
+      };
+    }, [handleClickOutside]);
+  };
+
+  Clicker(boxer);
+  //========================================================
   let titleDEMO = DEMO ? "( Демонстрационный режим )" : "";
 
   return (
-    <Box sx={styleSetControl}>
+    <Box ref={boxer} sx={styleSetControl}>
       <Button sx={styleModalEnd} onClick={handleCloseSet}>
         &#10006;
       </Button>
@@ -351,8 +394,7 @@ const SdcControlVertex = (props: {
       </Box>
       <Box sx={styleControl01}>
         <Grid container sx={{}}>
-          {/* <Grid item xs={8} sx={{ paddingLeft: 0.1, paddingRight: 0.5 }}> */}
-          <Grid item xs={8} sx={{ padding: "0px 6px 0px 1px", }}>
+          <Grid item xs={8} sx={{ padding: "0px 6px 0px 1px" }}>
             <Grid container>{StrokaFazaKnop()} </Grid>
           </Grid>
           <Grid item xs sx={{ paddingRight: 1 }}>
