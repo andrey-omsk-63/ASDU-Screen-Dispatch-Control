@@ -337,7 +337,7 @@ const SdcControlVertex = (props: {
   }
 
   let titleDEMO = DEMO ? "( Демонстрационный режим )" : "";
-  
+
   return (
     <Box sx={styleSetControl}>
       <Button sx={styleModalEnd} onClick={handleCloseSet}>
@@ -351,7 +351,8 @@ const SdcControlVertex = (props: {
       </Box>
       <Box sx={styleControl01}>
         <Grid container sx={{}}>
-          <Grid item xs={8} sx={{ paddingLeft: 0.1, paddingRight: 0.5 }}>
+          {/* <Grid item xs={8} sx={{ paddingLeft: 0.1, paddingRight: 0.5 }}> */}
+          <Grid item xs={8} sx={{ padding: "0px 6px 0px 1px", }}>
             <Grid container>{StrokaFazaKnop()} </Grid>
           </Grid>
           <Grid item xs sx={{ paddingRight: 1 }}>

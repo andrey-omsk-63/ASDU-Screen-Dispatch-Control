@@ -97,6 +97,6 @@ export const styleControl01 = {
   borderRadius: 1,
   marginTop: 1,
   boxShadow: 6,
-  padding: "5px 0px 5px 0px",
+  padding: "7px 0px 5px 0px",
 };
 //========================================================
