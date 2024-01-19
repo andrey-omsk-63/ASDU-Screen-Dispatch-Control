@@ -6,17 +6,18 @@ export const styleTitleDEMO = {
   color: "red",
 };
 
-export const styleVarKnop = {
+export const styleKnop = {
   height: "75px",
   marginBottom: 0.5,
   textAlign: "center",
+  textShadow: "2px 2px 3px rgba(0,0,0,0.3)",
 };
 
-export const styleConstKnop = {
-  height: "75px",
-  marginBottom: 0.5,
-  textAlign: "center",
-};
+// export const styleKnop = {
+//   height: "75px",
+//   marginBottom: 0.5,
+//   textAlign: "center",
+// };
 
 export const styleVarKnopNum = {
   marginTop: 4,
@@ -32,11 +33,14 @@ export const styleOutputFaza = {
   left: "50%",
 };
 
-export const styleTitle = {
-  color: "#5B1080",
-  fontSize: 17,
-  marginTop: 1,
-  textAlign: "center",
+export const StyleTitle = (fontsize: number) => {
+  const styleTitle = {
+    fontSize: fontsize,
+    color: "#5B1080",
+    marginTop: 1,
+    textAlign: "center",
+  };
+  return styleTitle;
 };
 
 export const StyleModalMenuVar = (colorKnop: string, bShadow: number) => {
@@ -51,6 +55,7 @@ export const StyleModalMenuVar = (colorKnop: string, bShadow: number) => {
     borderColor: "#d4d4d4", // серый
     borderRadius: 2,
     boxShadow: bShadow,
+    textShadow: "2px 2px 3px rgba(0,0,0,0.3)",
   };
   return styleModalMenuVar;
 };
@@ -68,6 +73,7 @@ export const StyleModalMenuConst = (colorKnop: string, bShadow: number) => {
     borderColor: "#d4d4d4", // серый
     borderRadius: 2,
     boxShadow: bShadow,
+    textShadow: "2px 2px 3px rgba(0,0,0,0.3)",
   };
   return styleModalMenuConst;
 };
@@ -86,7 +92,7 @@ export const StyleSetControl = (DEMO: boolean) => {
     borderRadius: 1,
     boxShadow: 24,
     textShadow: "2px 2px 3px rgba(0,0,0,0.3)",
-    padding: "1px 15px 15px 15px",
+    padding: "1px 15px 10px 15px",
   };
   return styleSetControl;
 };

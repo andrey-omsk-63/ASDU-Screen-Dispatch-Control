@@ -76,7 +76,7 @@ export const InputDirect = (func: any, otherWork: boolean) => {
           func(62);
       }
     } else {
-      func(63); // Косяк при работе с меню
+      //func(63); // Косяк при работе с меню
     }
   };
 

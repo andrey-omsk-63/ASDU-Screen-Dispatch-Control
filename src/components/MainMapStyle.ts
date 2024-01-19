@@ -219,7 +219,6 @@ export const styleBoxFormAV = {
   "& > :not(style)": {
     marginTop: "-0px",
     marginLeft: "-2px",
-    //height: "15px",
     width: "50px",
   },
 };
