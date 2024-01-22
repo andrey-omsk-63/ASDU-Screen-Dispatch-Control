@@ -32,9 +32,9 @@ export interface Stater {
   id: string;
   phSvg: Array<any>;
   working: boolean;
-  demoIdx: number;
-  demoTlsost: number;
-  demoLR: boolean;
+  demoIdx: Array<number>;
+  demoTlsost: Array<number>;
+  demoLR: Array<boolean>;
 }
 
 export let dateStat: Stater = {
@@ -48,9 +48,9 @@ export let dateStat: Stater = {
   id: '0',
   phSvg: [null, null, null, null, null, null, null, null],
   working: false,
-  demoIdx: -1,
-  demoTlsost: -1,
-  demoLR: false,
+  demoIdx: [],
+  demoTlsost: [],
+  demoLR: [],
 };
 
 export interface Pointer {
@@ -74,15 +74,15 @@ export interface Fazer {
   idevice: number;
 }
 
-export let massFaz: Fazer = {
-  idx: 0,
-  area: 0,
-  id: 0,
-  faza: 0,
-  fazaSist: -1,
-  phases: [],
-  idevice: 0,
-};
+export let massFaz: Fazer[] = [];
+//   idx: 0,
+//   area: 0,
+//   id: 0,
+//   faza: 0,
+//   fazaSist: -1,
+//   phases: [],
+//   idevice: 0,
+// };
 
 export interface NameMode {
   name: string;

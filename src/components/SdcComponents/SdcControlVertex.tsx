@@ -20,13 +20,12 @@ import { StyleModalMenuVar, StyleModalMenuConst } from "./SdcComponentsStyle";
 
 let oldIdx = -1;
 let oldSistFaza = -1;
-// let timerId: any = null;
-// let massInt: any[] = [];
 let needRend = false;
 let kluchGl = "";
-let stopSwitch = false;
+
+let stopSwitch: Array<boolean> = [];
 let tekDemoTlsost = -1;
-let shippedKU = false;
+let shippedKU: Array<boolean> = [];
 
 let timerId: any[] = [];
 let massInt: any[][] = []; //null
@@ -37,6 +36,9 @@ let kolFaz = 0;
 let needDopKnop = false;
 let statusVertex = 0;
 let statusName = 0;
+let mF: any = null;
+let present = 0;
+let pres = 0;
 
 const colorNormal = "#E9F5D8"; // светло-салатовый
 const colorExtra = "#96CD8F"; // тёмно-салатовый
@@ -59,7 +61,7 @@ const SdcControlVertex = (props: {
     const { massfazReducer } = state;
     return massfazReducer.massfaz;
   });
-  //console.log("massfaz:", massInt, massfaz);
+  //console.log("0massfaz:", massfaz);
   let datestat = useSelector((state: any) => {
     const { statsaveReducer } = state;
     return statsaveReducer.datestat;
@@ -79,12 +81,6 @@ const SdcControlVertex = (props: {
 
   //=== инициализация ======================================
   if (oldIdx !== props.idx) {
-    let sumFaz = map.tflight[props.idx].phases.length;
-    kolFaz = sumFaz < MaxFaz ? sumFaz + 1 : MaxFaz;
-    needDopKnop = sumFaz === MaxFaz ? false : true;
-
-    datestat.working = true; // занато
-    kluchGl = map.tflight[props.idx].ID + " ";
     let massFaz = {
       idx: 0,
       area: 0,
@@ -94,42 +90,56 @@ const SdcControlVertex = (props: {
       phases: [],
       idevice: map.tflight[props.idx].idevice,
     };
-    massfaz = massFaz;
-    dispatch(massfazCreate(massfaz));
-    oldSistFaza = -1;
+    let sumFaz = map.tflight[props.idx].phases.length;
+    kolFaz = sumFaz < MaxFaz ? sumFaz + 1 : MaxFaz;
+    needDopKnop = sumFaz === MaxFaz ? false : true;
 
-    nomInMass = massMem.indexOf(props.idx); // запускался ли светофор ранее?
-    if (nomInMass < 0) {
-      massMem.push(props.idx);
+    datestat.working = true; // занато
+    kluchGl = map.tflight[props.idx].ID + " ";
+
+    console.log("1massfaz:", JSON.parse(JSON.stringify(massfaz)));
+
+    let nomIn = massMem.indexOf(props.idx); // запускался ли светофор ранее?
+    if (nomIn < 0) {
+      massMem.push(props.idx); // светофор ранее не запускался
       timerId.push(null);
       nomInMass = massMem.length - 1;
       let mass: any[] = [];
       massInt.push(mass);
+      massfaz.push(massFaz);
+      massfaz[nomInMass].idx = props.idx;
+      stopSwitch.push(false);
+      shippedKU.push(false);
+    } else {
+      nomInMass = nomIn;
     }
+    mF = massfaz[nomInMass];
+    dispatch(massfazCreate(massfaz));
+    oldSistFaza = -1;
 
-    shippedKU = false;
-    !DEMO && SendSocketDispatch(debug, ws, massfaz.idevice, 4, 1);
+    //shippedKU = false;
+    !DEMO && SendSocketDispatch(debug, ws, mF.idevice, 4, 1);
     setSentParam(-1);
     oldIdx = props.idx;
-    stopSwitch = false;
-    if (DEMO) {
-      datestat.demoIdx = props.idx;
-      datestat.demoLR = false;
-      datestat.demoTlsost = 1;
-      massfaz.fazaSist = 1;
+    if (DEMO && nomIn < 0) {
+      datestat.demoIdx.push(props.idx);
+      datestat.demoLR.push(false);
+      datestat.demoTlsost.push(1);
+      mF.fazaSist = 1;
       timerId[nomInMass] = setInterval(() => DoTimerId(), timer);
       massInt[nomInMass].push(timerId[nomInMass]);
     }
 
-    console.log("1######:", massMem, nomInMass, timerId);
-    console.log("2######:", massInt);
+    console.log("2massfaz:", JSON.parse(JSON.stringify(massfaz)));
+    console.log("1######:", massMem, nomInMass, timerId, massInt);
+    console.log("2######:", datestat);
 
     dispatch(statsaveCreate(datestat));
   } else {
-    if (massfaz.fazaSist !== 9 && massfaz.fazaSist !== 12) {
-      if (oldSistFaza !== massfaz.fazaSist) {
+    if (mF.fazaSist !== 9 && mF.fazaSist !== 12) {
+      if (oldSistFaza !== mF.fazaSist) {
         setSentParam(-1);
-        oldSistFaza = massfaz.fazaSist;
+        oldSistFaza = mF.fazaSist;
       }
     }
   }
@@ -146,68 +156,93 @@ const SdcControlVertex = (props: {
   };
 
   const DoTimerId = () => {
-    //console.log("DoTimerId:", massfaz);
+    let ch = 0; // проверка массива timerId на заполненость
+    for (let i = 0; i < timerId.length; i++) if (timerId[i] !== null) ch++;
+    !ch && console.log("Нет запущенных светофоров!!!");
+    if (!ch) return;
+
+    for (let i = 0; i < timerId.length; i++) {
+      if (i === present) {
+        present++;
+        if (present >= timerId.length) present = 0;
+        break;
+      }
+    }
+
+    //let mass = timerId
+    //mass.push(timerId)
+    let mass = [1, 3, null, 12, null, null, 1, 3, null, 12, null, null];
+    let begin = mass.indexOf(pres);
+    for (let i = begin; i < mass.length; i++) {
+      pres++;
+      if (mass[pres] !== null) {
+        if (pres >= mass.length / 2) pres = pres - mass.length / 2;
+        break;
+      }
+    }
+    console.log("!!!!!!:", pres, mass[pres]);
+
+    mF = massfaz[present];
+    console.log("Отправка с", mF.idx, present, timerId[present], timerId);
+
     if (!DEMO) {
-      SendSocketDispatch(debug, ws, massfaz.idevice, 9, massfaz.faza);
+      SendSocketDispatch(debug, ws, mF.idevice, 9, mF.faza);
     } else {
-      datestat.demoTlsost = 1;
+      datestat.demoTlsost[present] = 1;
       if (!stopSwitch) {
-        massfaz.fazaSist = massfaz.fazaSist === 2 ? 1 : 2;
+        mF.fazaSist = mF.fazaSist === 2 ? 1 : 2;
       } else {
-        massfaz.fazaSist = massfaz.faza;
+        mF.fazaSist = mF.faza;
       }
       dispatch(massfazCreate(massfaz));
       needRend = true;
       setFlagPusk(!flagPusk);
     }
-    if (DEMO && massfaz.faza < 9 && massfaz.faza > 0) datestat.demoTlsost = 2; // Передана фаза
+    if (DEMO && mF.faza < 9 && mF.faza > 0) datestat.demoTlsost[present] = 2; // Передана фаза
     if (DEMO) {
-      if (
-        (!massfaz.fazaSist && !massfaz.faza) ||
-        (massfaz.fazaSist === 9 && massfaz.faza === 9)
-      ) {
+      if ((!mF.fazaSist && !mF.faza) || (mF.fazaSist === 9 && mF.faza === 9)) {
         console.log("DEMO ЛР или КУ");
-        if (!massfaz.fazaSist && !massfaz.faza) datestat.demoTlsost = 5; // ЛР
-        if (massfaz.fazaSist === 9 && massfaz.faza === 9)
-          datestat.demoTlsost = 1; // КУ
-        massfaz.fazaSist = 1;
+        if (!mF.fazaSist && !mF.faza) datestat.demoTlsost[present] = 5; // ЛР
+        if (mF.fazaSist === 9 && mF.faza === 9)
+          datestat.demoTlsost[present] = 1; // КУ
+        mF.fazaSist = 1;
         dispatch(massfazCreate(massfaz));
-        stopSwitch = false;
+        stopSwitch[present] = false;
       }
     }
-    if (timerId[nomInMass] === null) {
-      timerId[nomInMass] = setInterval(() => DoTimerId(), timer);
-      massInt.push(timerId[nomInMass]);
-    }
-    if (
-      (DEMO && massfaz.fazaSist === 10) ||
-      (DEMO && massfaz.fazaSist === 11)
-    ) {
+    // if (timerId[nomInMass] === null) {
+    //   timerId[nomInMass] = setInterval(
+    //     () => DoTimerId(nomInMass, timerId[nomInMass]),
+    //     timer
+    //   );
+    //   massInt.push(timerId[nomInMass]);
+    // }
+    if ((DEMO && mF.fazaSist === 10) || (DEMO && mF.fazaSist === 11)) {
       console.log("DEMO ЖМ или ОС");
-      if (massfaz.fazaSist === 10) datestat.demoTlsost = 7; // ЖМ
-      if (massfaz.fazaSist === 11) datestat.demoTlsost = 12; // ОС
+      if (mF.fazaSist === 10) datestat.demoTlsost[present] = 7; // ЖМ
+      if (mF.fazaSist === 11) datestat.demoTlsost[present] = 12; // ОС
     } else {
-      if (!DEMO && massfaz.faza && massfaz.faza !== 9) {
+      if (!DEMO && mF.faza && mF.faza !== 9) {
         for (let i = 0; i < massInt.length - 1; i++) {
-          if (massInt[i]) {
+          if (massInt[nomInMass][i]) {
             clearInterval(massInt[nomInMass][i]);
             massInt[nomInMass][i] = null;
           }
         }
-        massInt = massInt.filter(function (el: any) {
+        massInt[nomInMass] = massInt[nomInMass].filter(function (el: any) {
           return el !== null;
         });
       }
     }
     if (DEMO) {
       dispatch(statsaveCreate(datestat));
-      if (tekDemoTlsost !== datestat.demoTlsost) {
-        if (datestat.demoLR) {
+      if (tekDemoTlsost !== datestat.demoTlsost[present]) {
+        if (datestat.demoLR[present]) {
           props.change(5);
           tekDemoTlsost = 5;
         } else {
-          props.change(datestat.demoTlsost);
-          tekDemoTlsost = datestat.demoTlsost;
+          props.change(datestat.demoTlsost[present]);
+          tekDemoTlsost = datestat.demoTlsost[present];
         }
       }
     }
@@ -220,15 +255,14 @@ const SdcControlVertex = (props: {
     console.log("Финиш", shippedKU, timerId, massInt);
     oldIdx = -1;
     props.setOpen(false);
-    if (!DEMO && shippedKU)
-      SendSocketDispatch(debug, ws, massfaz.idevice, 4, 0);
+    if (!DEMO && shippedKU) SendSocketDispatch(debug, ws, mF.idevice, 4, 0);
     datestat.working = false; // свободно
     if (DEMO) {
-      datestat.demoTlsost = 1;
-      props.change(datestat.demoTlsost);
+      datestat.demoTlsost[nomInMass] = 1;
+      props.change(datestat.demoTlsost[nomInMass]);
     }
     dispatch(statsaveCreate(datestat));
-  }, [DEMO, datestat, massfaz.idevice, debug, ws, props, dispatch]);
+  }, [DEMO, datestat, debug, ws, props, dispatch]);
 
   const handleClick = (mode: number) => {
     if (needDopKnop && mode === kolFaz) {
@@ -236,14 +270,14 @@ const SdcControlVertex = (props: {
       needDopKnop = false;
       setTrigger(!trigger); // ререндер
     } else {
-      massfaz.faza = mode;
-      stopSwitch = true;
+      mF.faza = mode;
+      stopSwitch[nomInMass] = true;
       dispatch(massfazCreate(massfaz));
-      shippedKU = mode === 9 ? true : false;
+      shippedKU[nomInMass] = mode === 9 ? true : false;
 
-      console.log("New_Отправка ", shippedKU, mode, massfaz);
+      console.log(nomInMass, "New_Отправка ", shippedKU[nomInMass], mode, mF);
 
-      !DEMO && SendSocketDispatch(debug, ws, massfaz.idevice, 9, mode);
+      !DEMO && SendSocketDispatch(debug, ws, mF.idevice, 9, mode);
       if (mode < 9 && mode > 0) {
         if (timerId[nomInMass] === null) {
           timerId[nomInMass] = setInterval(() => DoTimerId(), timer);
@@ -259,11 +293,11 @@ const SdcControlVertex = (props: {
       if (DEMO) {
         // проверка режима ЛР
         if (mode === 0) {
-          datestat.demoLR = true;
+          datestat.demoLR[nomInMass] = true;
           dispatch(statsaveCreate(datestat));
         } else {
-          if (datestat.demoLR) {
-            datestat.demoLR = false;
+          if (datestat.demoLR[nomInMass]) {
+            datestat.demoLR[nomInMass] = false;
             dispatch(statsaveCreate(datestat));
           }
         }
@@ -304,7 +338,7 @@ const SdcControlVertex = (props: {
         let colorKnop = clinch ? colorBad : colorNormal;
         let bShadow = 4;
         if (sentParam === i + 1) colorKnop = colorSent;
-        if (massfaz.fazaSist === i + 1) {
+        if (mF.fazaSist === i + 1) {
           colorKnop = colorExtra;
           bShadow = 12;
         }
@@ -342,7 +376,7 @@ const SdcControlVertex = (props: {
       case "ЖМ":
         handleMode = 10;
         if (sentParam === 10) colorKnop = colorSent;
-        if (massfaz.fazaSist === 10 || massfaz.fazaSist === 14) {
+        if (mF.fazaSist === 10 || mF.fazaSist === 14) {
           colorKnop = colorExtra;
           bShadow = 12;
         }
@@ -350,7 +384,7 @@ const SdcControlVertex = (props: {
       case "ОС":
         handleMode = 11;
         if (sentParam === 11) colorKnop = colorSent;
-        if (massfaz.fazaSist === 11 || massfaz.fazaSist === 15) {
+        if (mF === 11 || mF.fazaSist === 15) {
           colorKnop = colorExtra;
           bShadow = 12;
         }
