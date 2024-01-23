@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { statsaveCreate } from "../redux/actions";
+import { massfazCreate,statsaveCreate } from "../redux/actions";
 
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -17,6 +17,7 @@ import SdcErrorMessage from "./SdcComponents/SdcErrorMessage";
 import { StrokaMenuGlob, CenterCoord } from "./SdcServiceFunctions";
 
 import { SendSocketGetPhases } from "./SdcSocketFunctions";
+import { SendSocketDispatch } from "./SdcSocketFunctions";
 
 import { MyYandexKey } from "./MapConst";
 
@@ -31,6 +32,9 @@ let funcBound: any = null;
 
 let soobErr = "";
 
+let control = false;
+let present = -1;
+
 const MainMapSdc = (props: { trigger: boolean }) => {
   //== Piece of Redux =======================================
   const map = useSelector((state: any) => {
@@ -41,6 +45,10 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     const { coordinatesReducer } = state;
     return coordinatesReducer.coordinates;
   });
+  let massfaz = useSelector((state: any) => {
+    const { massfazReducer } = state;
+    return massfazReducer.massfaz;
+  });
   let datestat = useSelector((state: any) => {
     const { statsaveReducer } = state;
     return statsaveReducer.datestat;
@@ -48,9 +56,10 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   const debug = datestat.debug;
   const ws = datestat.ws;
   const homeRegion = datestat.region;
+  const DEMO = datestat.demo;
   const dispatch = useDispatch();
   //===========================================================
-  const [control, setControl] = React.useState(false);
+  //const [control, setControl] = React.useState(false);
   const [idxObj, setIdxObj] = React.useState(-1);
   const [flagCenter, setFlagCenter] = React.useState(false);
   const [demoSost, setDemoSost] = React.useState(-1);
@@ -59,8 +68,8 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   const mapp = React.useRef<any>(null);
 
   const OnPlacemarkClickPoint = (index: number) => {
+    console.log("OnPlacemarkClickPoint:", index, datestat.working);
     if (!datestat.working) {
-      setIdxObj(index);
       let area = map.tflight[index].area.num;
       let id = map.tflight[index].ID;
       datestat.area = area;
@@ -68,7 +77,9 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       if (!debug) datestat.phSvg = Array(8).fill(null);
       SendSocketGetPhases(debug, ws, homeRegion, area, id);
       dispatch(statsaveCreate(datestat));
-      setControl(true);
+      //setControl(true);
+      control = true;
+      setIdxObj(index);
     } else {
       soobErr = "В данный момент происходит управление другим перекрёстком";
       setOpenSetErr(true);
@@ -137,12 +148,122 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     flagOpen = true;
   }
   //========================================================
+  const DoTimerId = () => {
+    let ch = 0; // проверка массива timerId на заполненость
+    for (let i = 0; i < datestat.timerId.length; i++)
+      if (datestat.timerId[i] !== null) ch++;
+    !ch && console.log("Нет запущенных светофоров!!!");
+    if (!ch) return;
+
+    let mass = JSON.parse(JSON.stringify(datestat.timerId));
+    for (let i = 0; i < datestat.timerId.length; i++)
+      mass.push(datestat.timerId[i]);
+    let begin = mass.indexOf(present);
+    if (begin < 0) begin = 0; // первый проход
+    for (let i = 0; i < mass.length; i++) {
+      present++;
+      if (mass[present] !== null) {
+        if (present >= mass.length / 2) present = present - mass.length / 2;
+        break;
+      }
+    }
+    console.log("!!!!!!:", present, mass[present], mass);
+
+    let mF = massfaz[present];
+    console.log(
+      "Отправка с",
+      mF,
+      present,
+      datestat.timerId[present],
+      datestat.timerId
+    );
+    console.log("datestat:", datestat.stopSwitch, datestat);
+
+    if (!DEMO) {
+      SendSocketDispatch(debug, ws, mF.idevice, 9, mF.faza);
+    } else {
+      datestat.demoTlsost[present] = 1;
+      if (!datestat.stopSwitch[present]) {
+        mF.fazaSist = mF.fazaSist === 2 ? 1 : 2;
+      } else {
+        mF.fazaSist = mF.faza;
+      }
+      dispatch(massfazCreate(massfaz));
+      //needRend = true;
+      //setFlagPusk(!flagPusk);
+    }
+
+    if (DEMO && mF.faza < 9 && mF.faza > 0) datestat.demoTlsost[present] = 2; // Передана фаза
+    
+    if (DEMO) {
+      if ((!mF.fazaSist && !mF.faza) || (mF.fazaSist === 9 && mF.faza === 9)) {
+        console.log("DEMO ЛР или КУ");
+        if (!mF.fazaSist && !mF.faza) datestat.demoTlsost[present] = 5; // ЛР
+        if (mF.fazaSist === 9 && mF.faza === 9)
+          datestat.demoTlsost[present] = 1; // КУ
+        mF.fazaSist = 1;
+        dispatch(massfazCreate(massfaz));
+        datestat.stopSwitch[present] = false;
+        dispatch(statsaveCreate(datestat));
+      }
+    }
+
+    // if (datestat.timerId[nomInMass] === null) {
+    //   datestat.timerId[nomInMass] = setInterval(
+    //     () => DoTimerId(nomInMass, timerId[nomInMass]),
+    //     timer
+    //   );
+    //   massInt.push(timerId[nomInMass]);
+    // }
+
+    if ((DEMO && mF.fazaSist === 10) || (DEMO && mF.fazaSist === 11)) {
+      console.log("DEMO ЖМ или ОС");
+      if (mF.fazaSist === 10) datestat.demoTlsost[present] = 7; // ЖМ
+      if (mF.fazaSist === 11) datestat.demoTlsost[present] = 12; // ОС
+    } else {
+      if (!DEMO && mF.faza && mF.faza !== 9) {
+        for (let i = 0; i < datestat.massInt.length - 1; i++) {
+          if (datestat.massInt[present][i]) {
+            clearInterval(datestat.massInt[present][i]);
+            datestat.massInt[present][i] = null;
+          }
+        }
+
+        console.log("$$$$$$:", present, datestat.massInt);
+
+        // datestat.massInt[present] = datestat.massInt[present].filter(function (el: any) {
+        //   return el !== null;
+        // });
+      }
+    }
+
+    //if (DEMO) {
+      
+      if (datestat.tekDemoTlsost[present] !== datestat.demoTlsost[present]) {
+        if (datestat.demoLR[present]) {
+          //props.change(5);
+          datestat.tekDemoTlsost[present] = 5;
+        } else {
+          //props.change(datestat.demoTlsost[present]);
+          datestat.tekDemoTlsost[present] = datestat.demoTlsost[present];
+        }
+      }
+      dispatch(statsaveCreate(datestat));
+    //}
+  };
+  //========================================================
   let mapState: any = {
     center: pointCenter,
     zoom,
   };
 
   const ChangeDemoSost = (mode: number) => setDemoSost(mode + demoSost); // костыль
+
+  const SetControl = (mode: any) => {
+    console.log("SETCONTROL:", mode);
+    //setControl(mode)
+    control = false;
+  };
 
   return (
     <Grid container sx={{ height: "99.9vh" }}>
@@ -176,10 +297,11 @@ const MainMapSdc = (props: { trigger: boolean }) => {
                   <PlacemarkDo />
                   {control && datestat.readyFaza && (
                     <SdcControlVertex
-                      setOpen={setControl}
+                      setOpen={SetControl}
                       idx={idxObj}
                       trigger={props.trigger}
                       change={ChangeDemoSost}
+                      interval={DoTimerId}
                     />
                   )}
                   {openSetErr && (
