@@ -142,7 +142,6 @@ const SdcControlVertex = (props: {
       }
     }
   }
-
   //========================================================
   const CloseInterval = (nominmass: number) => {
     console.log("CloseInt:", nominmass, datestat.massInt[nominmass]);
@@ -164,7 +163,7 @@ const SdcControlVertex = (props: {
     dispatch(statsaveCreate(datestat));
     oldIdx = -1;
 
-    console.log("1Финиш:", shippedKU[nomInMass]);
+    console.log("1Финиш:", shippedKU[nomInMass], massMem);
     console.log("2Финиш:", datestat.timerId, datestat.massInt);
 
     props.setOpen(false);
