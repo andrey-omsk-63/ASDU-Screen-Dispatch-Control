@@ -5,6 +5,8 @@ import { Placemark, YMapsApi } from "react-yandex-maps";
 
 import { GetPointData } from "../SdcServiceFunctions";
 
+import { massMem } from "./SdcControlVertex";
+
 const SdcDoPlacemarkDo = (props: {
   ymaps: YMapsApi | null;
   coordinate: any;
@@ -34,12 +36,15 @@ const SdcDoPlacemarkDo = (props: {
 
   const Hoster = React.useCallback(() => {
     let host = "https://localhost:3000/18.svg";
+    let nomInMass = massMem.indexOf(props.idx);
+    
     if (!debug) {
       let mpp = mapp;
       if (DEMO) {
         mpp = "1"; // режим Демо
-        if (props.idx === datestat.demoIdx) {
-          mpp = datestat.demoTlsost.toString();
+        //if (props.idx === datestat.demoIdx) {
+        if (nomInMass >= 0) {
+          mpp = datestat.demoTlsost[nomInMass].toString();
         }
       } else {
         if (nomSvg > 0) mpp = nomSvg.toString();
@@ -48,11 +53,14 @@ const SdcDoPlacemarkDo = (props: {
     } else {
       if (DEMO) {
         host = "https://localhost:3000/1.svg";
-        //console.log("######:", props.idx, datestat.demoIdx,datestat.demoTlsost);
-        if (props.idx === datestat.demoIdx) {
-          let mpp = datestat.demoTlsost.toString();
+        //if (props.idx === datestat.demoIdx) {
+        if (nomInMass >= 0) {
+          
+          console.log("###:", props.idx, nomInMass, massMem);
+
+          let mpp = datestat.demoTlsost[nomInMass].toString();
           host = "https://localhost:3000/" + mpp + ".svg";
-          //console.log("HOST:", host);
+          console.log("HOST:", host);
         }
       }
     }
@@ -63,7 +71,7 @@ const SdcDoPlacemarkDo = (props: {
     debug,
     DEMO,
     props.idx,
-    datestat.demoIdx,
+    //datestat.demoIdx,
     datestat.demoTlsost,
   ]);
 

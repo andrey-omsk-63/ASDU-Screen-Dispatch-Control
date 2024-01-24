@@ -78,8 +78,10 @@ export interface Fazer {
   id: number;
   faza: number;
   fazaSist: number;
+  fazaZU: number;
   phases: Array<number>;
   idevice: number;
+
 }
 
 export let massFaz: Fazer[] = [];
