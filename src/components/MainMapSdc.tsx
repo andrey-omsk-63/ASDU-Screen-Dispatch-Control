@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { statsaveCreate } from "../redux/actions";
+import { massfazCreate, statsaveCreate } from "../redux/actions";
 
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -15,9 +15,11 @@ import SdcControlVertex from "./SdcComponents/SdcControlVertex";
 import SdcErrorMessage from "./SdcComponents/SdcErrorMessage";
 
 import { StrokaMenuGlob, CenterCoord } from "./SdcServiceFunctions";
+import { CloseInterval } from "./SdcServiceFunctions";
 
 import { SendSocketGetPhases } from "./SdcSocketFunctions";
-//import { SendSocketDispatch } from "./SdcSocketFunctions";
+
+import { SendSocketDispatch } from "./SdcSocketFunctions";
 
 import { MyYandexKey } from "./MapConst";
 
@@ -33,11 +35,7 @@ let newCenter: any = [];
 let funcBound: any = null;
 
 let soobErr = "";
-
-//let control = false;
 let idxObj = -1;
-//let present = -1;
-//let needRend = false;
 
 const MainMapSdc = (props: { trigger: boolean }) => {
   //== Piece of Redux =======================================
@@ -49,10 +47,10 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     const { coordinatesReducer } = state;
     return coordinatesReducer.coordinates;
   });
-  // let massfaz = useSelector((state: any) => {
-  //   const { massfazReducer } = state;
-  //   return massfazReducer.massfaz;
-  // });
+  let massfaz = useSelector((state: any) => {
+    const { massfazReducer } = state;
+    return massfazReducer.massfaz;
+  });
   let datestat = useSelector((state: any) => {
     const { statsaveReducer } = state;
     return statsaveReducer.datestat;
@@ -70,11 +68,34 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   const [ymaps, setYmaps] = React.useState<YMapsApi | null>(null);
   const mapp = React.useRef<any>(null);
 
+  const StatusQuo = () => {
+    for (let i = 0; i < datestat.timerId.length; i++) {
+      if (!DEMO && datestat.timerId[i] !== null) {
+        SendSocketDispatch(debug, ws, massfaz[i].idevice, 4, 0); // закрытие id
+      }
+      CloseInterval(datestat, i);
+    }
+    datestat.timerId = [];
+    datestat.massInt = [];
+    datestat.first = true;
+    datestat.working = false;
+    datestat.massMem = [];
+    datestat.demoIdx = [];
+    datestat.demoTlsost = [];
+    datestat.demoLR = [];
+    datestat.stopSwitch = [];
+    datestat.tekDemoTlsost = [];
+    dispatch(statsaveCreate(datestat));
+    massfaz = [];
+    dispatch(massfazCreate(massfaz));
+  };
+
   const OnPlacemarkClickPoint = (index: number) => {
-    console.log("1OnPlacemarkClickPoint:", index, datestat.working);
+    //console.log("1OnPlacemarkClickPoint:", index, datestat.working);
     if (!datestat.working) {
       let area = map.tflight[index].area.num;
       let id = map.tflight[index].ID;
+      console.log("OnPlacemarkClickPoint id:", id);
       datestat.area = area;
       datestat.id = id;
       if (!debug) datestat.phSvg = Array(8).fill(null);
@@ -82,7 +103,6 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       dispatch(statsaveCreate(datestat));
       idxObj = index;
       setControl(true);
-      console.log("2OnPlacemarkClickPoint:", index, datestat.working);
     } else {
       soobErr = "В данный момент происходит управление другим перекрёстком";
       setOpenSetErr(true);
@@ -125,12 +145,14 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   const PressButton = (mode: number) => {
     switch (mode) {
       case 61: // режим управления
+        StatusQuo();
         datestat.finish = false;
         datestat.demo = false;
         dispatch(statsaveCreate(datestat));
         DEMO = false;
         break;
       case 62: // режим Демо
+        StatusQuo();
         datestat.finish = false;
         datestat.demo = true;
         dispatch(statsaveCreate(datestat));
@@ -265,10 +287,16 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     zoom,
   };
 
+  const RandomNumber = (min: number, max: number) => {
+    let rand = Math.random() * (max - min) + min;
+    return Math.floor(rand);
+  };
+
   const ChangeDemoSost = (mode: number) => {
     console.log("ChangeDemoSost:", mode);
-    setDemoSost(mode + demoSost);// костыль
-  }; 
+    //setDemoSost(mode + demoSost);// костыль
+    setDemoSost(RandomNumber(1, 1000) + demoSost); // костыль
+  };
 
   const SetControl = (mode: any) => {
     console.log("SETCONTROL:", mode);

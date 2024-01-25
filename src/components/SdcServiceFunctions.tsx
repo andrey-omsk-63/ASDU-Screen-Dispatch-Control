@@ -13,6 +13,15 @@ export const CenterCoord = (aY: number, aX: number, bY: number, bX: number) => {
   return [coord0, coord1];
 };
 
+export const CloseInterval = (datestat: any, nominmass: number) => {
+  console.log("CloseInt:", nominmass, datestat.massInt[nominmass]);
+  if (datestat.massInt[nominmass]) {
+    clearInterval(datestat.massInt[nominmass]);
+    datestat.massInt[nominmass] = null;
+  }
+  datestat.timerId[nominmass] = null;
+};
+
 //=== Placemark =====================================
 export const GetPointData = (index: number, map: any) => {
   let cont1 = "";

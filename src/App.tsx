@@ -31,7 +31,9 @@ export interface Stater {
   area: string;
   id: string;
   phSvg: Array<any>;
+  first: boolean;
   working: boolean;
+  massMem: Array<number>;
   demoIdx: Array<number>;
   demoTlsost: Array<number>;
   demoLR: Array<boolean>;
@@ -51,7 +53,9 @@ export let dateStat: Stater = {
   area: "0",
   id: "0",
   phSvg: [null, null, null, null, null, null, null, null],
+  first: true,
   working: false,
+  massMem:[],
   demoIdx: [],
   demoTlsost: [],
   demoLR: [],
@@ -78,7 +82,7 @@ export interface Fazer {
   id: number;
   faza: number;
   fazaSist: number;
-  fazaZU: number;
+  fazaZU: number; // 0 - отправлено ЖМ, ОС, ЛР или КУ (10,11,0,9)
   phases: Array<number>;
   idevice: number;
 
