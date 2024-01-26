@@ -32,7 +32,7 @@ let kolFaz: Array<number> = []; // количестово доступных ф�
 let nomInMass = -1; // номер в массиве "запущенных" светофоров
 let present = -1;
 let statusVertex = 0;
-let statusName = 0;
+let statusName = "";
 
 let kluchGl = "";
 let mF: any = null;
@@ -48,7 +48,7 @@ const SdcControlVertex = (props: {
   trigger: boolean;
   change: Function;
 }) => {
-  //== Piece of Redux ======================================
+  //=== Piece of Redux =====================================
   const map = useSelector((state: any) => {
     const { mapReducer } = state;
     return mapReducer.map.dateMap;
@@ -89,8 +89,6 @@ const SdcControlVertex = (props: {
     kolFaz = []; // количестово доступных фаз на id
     nomInMass = -1; // номер в массиве "запущенных" светофоров
     present = -1;
-    statusVertex = 0;
-    statusName = 0;
     datestat.first = false;
     dispatch(statsaveCreate(datestat));
   }
@@ -113,7 +111,7 @@ const SdcControlVertex = (props: {
     if (nomIn < 0) {
       // светофор ранее не запускался
       massfaz.push(massFaz);
-      datestat.massMem.push(props.idx); 
+      datestat.massMem.push(props.idx);
       datestat.timerId.push(null);
       nomInMass = datestat.massMem.length - 1;
       datestat.massInt.push([]);
@@ -124,8 +122,9 @@ const SdcControlVertex = (props: {
       oldSistFaza.push(-1);
       kolFaz.push(sumFaz < MaxFaz ? sumFaz + 1 : MaxFaz);
       needDopKnop.push(sumFaz === MaxFaz ? false : true);
+
       console.log(
-        "Вкл нового id",
+        "Новый id:",
         massfaz[nomInMass].id,
         nomInMass,
         datestat.massMem
@@ -137,10 +136,12 @@ const SdcControlVertex = (props: {
     !DEMO && SendSocketDispatch(debug, ws, mF.idevice, 4, 1);
     setSentParam(-1);
     if (nomIn < 0) {
-      datestat.demoIdx.push(props.idx);
-      datestat.demoLR.push(false);
-      datestat.demoTlsost.push(1);
-      mF.fazaSist = 1;
+      if (DEMO) {
+        datestat.demoIdx.push(props.idx);
+        datestat.demoLR.push(false);
+        datestat.demoTlsost.push(1);
+        mF.fazaSist = 1;
+      }
       datestat.timerId[nomInMass] = setInterval(() => DoTimerId(), timer);
       datestat.massInt[nomInMass] = datestat.timerId[nomInMass];
     }

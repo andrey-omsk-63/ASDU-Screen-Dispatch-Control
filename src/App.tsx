@@ -30,10 +30,10 @@ export interface Stater {
   region: string;
   area: string;
   id: string;
-  phSvg: Array<any>;
-  first: boolean;
+  phSvg: Array<any>; // массив картинок фаз у светофора
+  first: boolean; // флаг начального запуска на данном режиме работы
   working: boolean;
-  massMem: Array<number>;
+  massMem: Array<number>; // массив "запущенных" светофоров
   demoIdx: Array<number>;
   demoTlsost: Array<number>;
   demoLR: Array<boolean>;
@@ -55,7 +55,7 @@ export let dateStat: Stater = {
   phSvg: [null, null, null, null, null, null, null, null],
   first: true,
   working: false,
-  massMem:[],
+  massMem: [],
   demoIdx: [],
   demoTlsost: [],
   demoLR: [],
@@ -85,7 +85,6 @@ export interface Fazer {
   fazaZU: number; // 0 - отправлено ЖМ, ОС, ЛР или КУ (10,11,0,9)
   phases: Array<number>;
   idevice: number;
-
 }
 
 export let massFaz: Fazer[] = [];
@@ -114,7 +113,7 @@ let soob = "";
 let flagMap = false;
 
 const App = () => {
-  // //== Piece of Redux ======================================
+  //=== Piece of Redux =====================================
   let massfaz = useSelector((state: any) => {
     const { massfazReducer } = state;
     return massfazReducer.massfaz;
@@ -169,7 +168,7 @@ const App = () => {
     WS.onmessage = function (event: any) {
       let allData = JSON.parse(event.data);
       let data = allData.data;
-      //console.log("пришло:", data.error, allData.type, data);
+      //console.log("пришло:", allData.type, data);
       switch (allData.type) {
         case "tflight":
           //console.log("Tflight:", data, data.tflight);
@@ -184,10 +183,16 @@ const App = () => {
           setTrigger(!trigger);
           break;
         case "phases":
-          if (massfaz.idevice === data.phases[0].device && !dateStat.demo) {
-            massfaz.fazaSist = data.phases[0].phase;
-            dispatch(massfazCreate(massfaz));
-            setTrigger(!trigger);
+          console.log("App пришло:", allData.type, data.phases[0].phase);
+          for (let i = 0; i < massfaz.length; i++) {
+            if (
+              massfaz[i].idevice === data.phases[0].device &&
+              !dateStat.demo
+            ) {
+              massfaz[i].fazaSist = data.phases[0].phase;
+              dispatch(massfazCreate(massfaz));
+              setTrigger(!trigger);
+            }
           }
           break;
         case "mapInfo":
