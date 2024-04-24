@@ -13,12 +13,6 @@ export const styleKnop = {
   textShadow: "2px 2px 3px rgba(0,0,0,0.3)",
 };
 
-// export const styleKnop = {
-//   height: "75px",
-//   marginBottom: 0.5,
-//   textAlign: "center",
-// };
-
 export const styleVarKnopNum = {
   marginTop: 4,
   paddingLeft: 0.1,
@@ -88,7 +82,6 @@ export const StyleSetControl = (DEMO: boolean) => {
     width: "340px",
     bgcolor: "background.paper",
     border: "1px solid #FFF",
-    //borderColor: DEMO ? "red" : "primary.main",
     borderRadius: 1,
     boxShadow: 24,
     textShadow: "2px 2px 3px rgba(0,0,0,0.3)",
@@ -105,4 +98,48 @@ export const styleControl01 = {
   boxShadow: 6,
   padding: "7px 0px 5px 0px",
 };
+
+export const styleServis01 = {
+  height: "75px",
+  margin: "0px 0px 5px 0px",
+  padding: "0px 0px 0px 3px",
+};
+
+export const StyleServis02 = (wdth: any) => {
+  const styleServis02 = {
+    fontSize: 11.0,
+    maxHeight: "21px",
+    minHeight: "21px",
+    maxWidth: wdth,
+    minWidth: wdth,
+    backgroundColor: "#E9F5D8", // светло-салатовый
+    border: "1px solid #d4d4d4", // серый
+    color: "black",
+    textTransform: "unset !important",
+    marginBottom: 0.5,
+    boxShadow: 6,
+  };
+  return styleServis02;
+};
+
+export const styleServis03 = {
+  width: "50px",
+  maxHeight: "1px",
+  minHeight: "1px",
+  border: "1px solid #d4d4d4", // серый
+  borderRadius: 1,
+  bgcolor: "#FFFBE5", // топлёное молоко
+  boxShadow: 6,
+  textAlign: "center",
+  p: 1.2,
+};
+
+export const styleServis04 = {
+  "& > :not(style)": {
+    marginTop: "3px",
+    marginLeft: "-9px",
+    width: "70px",
+  },
+};
+
 //========================================================

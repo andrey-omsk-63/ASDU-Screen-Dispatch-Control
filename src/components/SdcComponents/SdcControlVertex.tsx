@@ -5,6 +5,7 @@ import { massfazCreate, statsaveCreate } from "../../redux/actions";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
 
 import { CloseInterval } from "../SdcServiceFunctions";
 
@@ -21,6 +22,8 @@ import { styleKnop, styleOutputFaza } from "./SdcComponentsStyle";
 import { StyleSetControl, styleControl01 } from "./SdcComponentsStyle";
 import { StyleTitle, styleTitleDEMO } from "./SdcComponentsStyle";
 import { StyleModalMenuVar, StyleModalMenuConst } from "./SdcComponentsStyle";
+import { styleServis01, StyleServis02 } from "./SdcComponentsStyle";
+import { styleServis03, styleServis04 } from "./SdcComponentsStyle";
 
 let oldIdx = -1;
 let needRend = false;
@@ -36,6 +39,8 @@ let statusName = "";
 
 let kluchGl = "";
 let mF: any = null;
+let modeOk = false;
+let INTERVAL = 0;
 
 const colorNormal = "#E9F5D8"; // светло-салатовый
 const colorExtra = "#96CD8F"; // тёмно-салатовый
@@ -68,15 +73,21 @@ const SdcControlVertex = (props: {
   const dispatch = useDispatch();
   let timer = debug || DEMO ? 10000 : 60000;
 
-  //console.log("MAP:", props.idx, map.tflight[props.idx]);
-
   statusVertex = map.tflight[props.idx].tlsost.num;
   statusName = map.tflight[props.idx].tlsost.description;
   let clinch = CLINCH.indexOf(statusVertex) < 0 ? false : true;
+  if (window.localStorage.interval === undefined)
+    window.localStorage.interval = 0;
+  INTERVAL = Number(window.localStorage.interval);
   //========================================================
   const [sentParam, setSentParam] = React.useState(-1);
   const [flagPusk, setFlagPusk] = React.useState(false);
+  const [modeKnopZone, setModeKnopZone] = React.useState(
+    INTERVAL ? true : false
+  );
+  const [value, setValue] = React.useState(INTERVAL);
   const [trigger, setTrigger] = React.useState(false);
+  console.log("INTERVALe:", INTERVAL, modeKnopZone, typeof INTERVAL);
 
   //=== инициализация ======================================
   //console.log("OldIDX:", oldIdx, props.idx, !datestat.working);
@@ -319,6 +330,21 @@ const SdcControlVertex = (props: {
     dispatch(statsaveCreate(datestat));
   };
   //========================================================
+  const StatusLine = () => {
+    return (
+      <>
+        {!DEMO && (
+          <Box sx={StyleTitle(12.1)}>
+            cостояние:{" "}
+            <em>
+              <b>{statusName}</b>
+            </em>
+          </Box>
+        )}
+      </>
+    );
+  };
+
   const OutputFaza = (img: any, i: number) => {
     let widthHeight = 70;
     //if (!img) widthHeight = 35;
@@ -430,6 +456,87 @@ const SdcControlVertex = (props: {
     );
   };
 
+  const IntInput = () => {
+    const handleKey = (event: any) => {
+      if (event.key === "Enter") event.preventDefault();
+    };
+
+    
+    const handleChange = (event: any) => {
+      let valueInp = event.target.value.replace(/^0+/, "");
+      if (Number(valueInp) < 0) valueInp = 0;
+      if (valueInp === "") valueInp = 0;
+      valueInp = Math.trunc(Number(valueInp));
+      modeOk = true;
+      setValue(valueInp);
+    };
+
+    return (
+      <Box sx={styleServis03}>
+        <Box component="form" sx={styleServis04}>
+          <TextField
+            size="small"
+            onKeyPress={handleKey} //отключение Enter
+            type="number"
+            InputProps={{
+              disableUnderline: true,
+              style: {
+                maxHeight: "1px",
+                minHeight: "1px",
+                fontSize: 12,
+                backgroundColor: "#FFFBE5", // топлёное молоко
+              },
+            }}
+            value={value}
+            onChange={handleChange}
+            variant="standard"
+            color="secondary"
+          />
+        </Box>
+      </Box>
+    );
+  };
+
+  const ServisZone = () => {
+    const ClickZone = () => {
+      modeOk = false;
+      console.log("modeKnopZone:", modeKnopZone);
+      if (modeKnopZone) window.localStorage.interval = 0;
+      setModeKnopZone(!modeKnopZone);
+    };
+
+    const ClickOk = () => {
+      modeOk = false;
+      window.localStorage.interval = Number(value);
+      setTrigger(!trigger);
+    };
+
+    let nameKnop = modeKnopZone ? "Отм.интервала" : "Интервал ДУ";
+
+    return (
+      <Grid item xs={12} sx={styleServis01}>
+        <Button sx={StyleServis02("100px")} onClick={() => ClickZone()}>
+          {nameKnop}
+        </Button>
+        {modeKnopZone && (
+          <Box sx={{ width: "98px", textAlign: "center" }}>
+            <Box sx={{ fontSize: 11.0, color: "#5B1080" }}>
+              Интервал фазы ДУ:
+            </Box>
+            <Box sx={{ display: "flex", padding: "6px 0px 0px 0px" }}>
+              {IntInput()}{" "}
+              {modeOk && (
+                <Button sx={StyleServis02("27px")} onClick={() => ClickOk()}>
+                  Да
+                </Button>
+              )}
+            </Box>
+          </Box>
+        )}
+      </Grid>
+    );
+  };
+  //========================================================
   let styleSetControl = StyleSetControl(DEMO);
 
   if (needRend) {
@@ -461,6 +568,8 @@ const SdcControlVertex = (props: {
   //========================================================
   let titleDEMO = DEMO ? "( Демонстрационный режим )" : "";
 
+  console.log("###:", value, INTERVAL,modeKnopZone);
+
   return (
     <Box ref={boxer} sx={styleSetControl}>
       <Button sx={styleModalEnd} onClick={handleCloseSet}>
@@ -483,18 +592,12 @@ const SdcControlVertex = (props: {
               {OutputConstFaza("ОС")}
               {OutputConstFaza("ЛР")}
               {OutputConstFaza("КУ")}
+              {ServisZone()}
             </Grid>
           </Grid>
         </Grid>
       </Box>
-      {!DEMO && (
-        <Box sx={StyleTitle(12.1)}>
-          cостояние:{" "}
-          <em>
-            <b>{statusName}</b>
-          </em>
-        </Box>
-      )}
+      {StatusLine()}
     </Box>
   );
 };
