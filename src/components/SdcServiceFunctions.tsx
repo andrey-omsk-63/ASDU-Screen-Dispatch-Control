@@ -1,9 +1,10 @@
 import * as React from "react";
 
 import Box from "@mui/material/Box";
-
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
+
+import { styleServis03, styleServis04 } from "./SdcComponents/SdcComponentsStyle";
 
 export const CenterCoord = (aY: number, aX: number, bY: number, bX: number) => {
   let coord0 = (aY - bY) / 2 + bY;
@@ -159,4 +160,35 @@ export const StrokaMenuGlob = (func: any, otherWork: boolean) => {
   };
 
   return <Box sx={styleApp01}>{InputDirect(func, otherWork)}</Box>;
+};
+
+export const Inputer = (value: any, handleChange: any) => {
+  const handleKey = (event: any) => {
+    if (event.key === "Enter") event.preventDefault();
+  };
+
+  return (
+    <Box sx={styleServis03}>
+      <Box component="form" sx={styleServis04}>
+        <TextField
+          size="small"
+          onKeyPress={handleKey} //отключение Enter
+          type="number"
+          InputProps={{
+            disableUnderline: true,
+            style: {
+              maxHeight: "1px",
+              minHeight: "1px",
+              fontSize: 12,
+              backgroundColor: "#FFFBE5", // топлёное молоко
+            },
+          }}
+          value={value}
+          onChange={handleChange}
+          variant="standard"
+          color="secondary"
+        />
+      </Box>
+    </Box>
+  );
 };

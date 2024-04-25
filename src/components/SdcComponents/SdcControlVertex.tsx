@@ -5,9 +5,9 @@ import { massfazCreate, statsaveCreate } from "../../redux/actions";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
+//import TextField from "@mui/material/TextField";
 
-import { CloseInterval } from "../SdcServiceFunctions";
+import { CloseInterval, Inputer } from "../SdcServiceFunctions";
 
 import { SendSocketDispatch } from "../SdcSocketFunctions";
 
@@ -17,13 +17,13 @@ import { DEMO } from "./../MainMapSdc";
 
 import { styleModalEnd } from "../MainMapStyle";
 
-import { styleVarKnopNum } from "./SdcComponentsStyle";
+import { styleVarKnopNum, styleServis05 } from "./SdcComponentsStyle";
 import { styleKnop, styleOutputFaza } from "./SdcComponentsStyle";
 import { StyleSetControl, styleControl01 } from "./SdcComponentsStyle";
 import { StyleTitle, styleTitleDEMO } from "./SdcComponentsStyle";
 import { StyleModalMenuVar, StyleModalMenuConst } from "./SdcComponentsStyle";
 import { styleServis01, StyleServis02 } from "./SdcComponentsStyle";
-import { styleServis03, styleServis04 } from "./SdcComponentsStyle";
+//import { styleServis03, styleServis04 } from "./SdcComponentsStyle";
 
 let oldIdx = -1;
 let needRend = false;
@@ -31,12 +31,10 @@ let oldSistFaza: Array<number> = [];
 let shippedKU: Array<boolean> = [];
 let needDopKnop: Array<boolean> = []; // нужны ли доп.кнопки на id
 let kolFaz: Array<number> = []; // количестово доступных фаз на id
-//export let massMem: Array<number> = []; // массив "запущенных" светофоров
 let nomInMass = -1; // номер в массиве "запущенных" светофоров
 let present = -1;
 let statusVertex = 0;
 let statusName = "";
-
 let kluchGl = "";
 let mF: any = null;
 let modeOk = false;
@@ -58,12 +56,10 @@ const SdcControlVertex = (props: {
     const { mapReducer } = state;
     return mapReducer.map.dateMap;
   });
-  //console.log("MAP:", map);
   let massfaz = useSelector((state: any) => {
     const { massfazReducer } = state;
     return massfazReducer.massfaz;
   });
-  //console.log("0massfaz:", massfaz);
   let datestat = useSelector((state: any) => {
     const { statsaveReducer } = state;
     return statsaveReducer.datestat;
@@ -87,14 +83,12 @@ const SdcControlVertex = (props: {
   );
   const [value, setValue] = React.useState(INTERVAL);
   const [trigger, setTrigger] = React.useState(false);
-  console.log("INTERVALe:", INTERVAL, modeKnopZone, typeof INTERVAL);
-
   //=== инициализация ======================================
   //console.log("OldIDX:", oldIdx, props.idx, !datestat.working);
   if (datestat.first) {
     // первый вход в новом режиме управления - очистка внутренних массивов
     oldIdx = -1;
-    needRend = false;
+    needRend = modeOk = false;
     oldSistFaza = [];
     needDopKnop = []; // нужны ли доп.кнопки на id
     kolFaz = []; // количестово доступных фаз на id
@@ -114,7 +108,7 @@ const SdcControlVertex = (props: {
       phases: [],
       idevice: map.tflight[props.idx].idevice,
     };
-    let sumFaz = map.tflight[props.idx].phases.length;
+    let sumFaz = map.tflight[props.idx].phases.length; //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     kluchGl = map.tflight[props.idx].ID + " ";
 
     let nomIn = datestat.massMem.indexOf(props.idx); // запускался ли светофор ранее?
@@ -160,6 +154,7 @@ const SdcControlVertex = (props: {
     dispatch(statsaveCreate(datestat));
     dispatch(massfazCreate(massfaz));
     oldIdx = props.idx;
+    modeOk = false;
   } else {
     if (mF.fazaSist !== 9 && mF.fazaSist !== 12) {
       if (oldSistFaza[nomInMass] !== mF.fazaSist) {
@@ -173,10 +168,6 @@ const SdcControlVertex = (props: {
     if (!DEMO && shippedKU[nomInMass])
       SendSocketDispatch(debug, ws, mF.idevice, 4, 0);
     datestat.working = false; // свободно
-    // if (DEMO) {
-    //   datestat.demoTlsost[nomInMass] = 1;
-    //   props.change(datestat.demoTlsost[nomInMass]);
-    // }
     dispatch(statsaveCreate(datestat));
     oldIdx = -1;
 
@@ -186,8 +177,10 @@ const SdcControlVertex = (props: {
     props.setOpen(false);
   }, [datestat, debug, ws, props, dispatch]);
   //========================================================
-  const handleClick = (mode: number) => {
-    if (needDopKnop[nomInMass] && mode === kolFaz[nomInMass]) {
+  const handleClick = (mode: number, dopKnop: number) => {
+    console.log("HANDLECLICK:", mode, dopKnop);
+    //if (needDopKnop[nomInMass] && mode === kolFaz[nomInMass]) {
+    if (needDopKnop[nomInMass] && dopKnop === -1) {
       kolFaz[nomInMass] = MaxFaz; // Развернуть кнопки
       needDopKnop[nomInMass] = false;
       setTrigger(!trigger); // ререндер
@@ -260,7 +253,6 @@ const SdcControlVertex = (props: {
       }
     }
     let mF = massfaz[present];
-    //console.log("Отправка с", DEMO, present, datestat.timerId[present], mF);
     if (!DEMO) {
       if (mF.fazaZU) {
         console.log("Отправлена фаза c id", mF.id, mF.faza);
@@ -329,7 +321,7 @@ const SdcControlVertex = (props: {
     }
     dispatch(statsaveCreate(datestat));
   };
-  //========================================================
+  //=== Компоненты =========================================
   const StatusLine = () => {
     return (
       <>
@@ -372,8 +364,8 @@ const SdcControlVertex = (props: {
   const StrokaFazaKnop = () => {
     let resStr = [];
     if (map.tflight[props.idx].phases.length > 0) {
-      for (let i = 0; i < kolFaz[nomInMass]; i++) {
-        //console.log('StrokaFazaKnop:',i,mF.fazaSist)
+      let ii = kolFaz[nomInMass] < 5 ? 5 : kolFaz[nomInMass];
+      for (let i = 0; i < ii; i++) {
         let colorKnop = clinch ? colorBad : colorNormal;
         let bShadow = 4;
         if (sentParam === i + 1) colorKnop = colorSent;
@@ -381,17 +373,24 @@ const SdcControlVertex = (props: {
           colorKnop = colorExtra;
           bShadow = 12;
         }
-        if (needDopKnop[nomInMass] && i === kolFaz[nomInMass] - 1)
-          colorKnop = colorNormal;
-        let styleMenuVar = StyleModalMenuVar(colorKnop, bShadow);
         let contentKnop1 =
-          needDopKnop[nomInMass] && i === kolFaz[nomInMass] - 1
+          needDopKnop[nomInMass] && i >= kolFaz[nomInMass] - 1
             ? null
             : datestat.phSvg[i];
-        let contentKnop2 =
-          needDopKnop[nomInMass] && i === kolFaz[nomInMass] - 1 ? -1 : i;
+        let contentKnop2 = i;
+        if (
+          needDopKnop[nomInMass] &&
+          i >= kolFaz[nomInMass] - 1 &&
+          i + 1 === ii
+        )
+          contentKnop2 = -1;
+        if (needDopKnop[nomInMass] && i >= kolFaz[nomInMass] - 1 && i + 1 < ii)
+          contentKnop2 = -2;
+        if (needDopKnop[nomInMass] && contentKnop2 === -1)
+          colorKnop = colorNormal;
+        let styleMenuVar = StyleModalMenuVar(colorKnop, bShadow);
         let num =
-          needDopKnop[nomInMass] && i === kolFaz[nomInMass] - 1
+          needDopKnop[nomInMass] && i >= kolFaz[nomInMass] - 1
             ? ""
             : (i + 1).toString();
 
@@ -401,11 +400,16 @@ const SdcControlVertex = (props: {
               <b>{num}</b>
             </Grid>
             <Grid item xs={11.5} sx={styleKnop}>
-              <Box sx={styleOutputFaza}>
-                <Button sx={styleMenuVar} onClick={() => handleClick(i + 1)}>
-                  {OutputFaza(contentKnop1, contentKnop2)}
-                </Button>
-              </Box>
+              {contentKnop2 !== -2 && (
+                <Box sx={styleOutputFaza}>
+                  <Button
+                    sx={styleMenuVar}
+                    onClick={() => handleClick(i + 1, contentKnop2)}
+                  >
+                    {OutputFaza(contentKnop1, contentKnop2)}
+                  </Button>
+                </Box>
+              )}
             </Grid>
           </Grid>
         );
@@ -448,7 +452,10 @@ const SdcControlVertex = (props: {
     return (
       <Grid item xs={12} sx={styleKnop}>
         <Box sx={styleOutputFaza}>
-          <Button sx={styleMenuConst} onClick={() => handleClick(handleMode)}>
+          <Button
+            sx={styleMenuConst}
+            onClick={() => handleClick(handleMode, 0)}
+          >
             <b>{mode}</b>
           </Button>
         </Box>
@@ -457,11 +464,6 @@ const SdcControlVertex = (props: {
   };
 
   const IntInput = () => {
-    const handleKey = (event: any) => {
-      if (event.key === "Enter") event.preventDefault();
-    };
-
-    
     const handleChange = (event: any) => {
       let valueInp = event.target.value.replace(/^0+/, "");
       if (Number(valueInp) < 0) valueInp = 0;
@@ -471,37 +473,16 @@ const SdcControlVertex = (props: {
       setValue(valueInp);
     };
 
-    return (
-      <Box sx={styleServis03}>
-        <Box component="form" sx={styleServis04}>
-          <TextField
-            size="small"
-            onKeyPress={handleKey} //отключение Enter
-            type="number"
-            InputProps={{
-              disableUnderline: true,
-              style: {
-                maxHeight: "1px",
-                minHeight: "1px",
-                fontSize: 12,
-                backgroundColor: "#FFFBE5", // топлёное молоко
-              },
-            }}
-            value={value}
-            onChange={handleChange}
-            variant="standard"
-            color="secondary"
-          />
-        </Box>
-      </Box>
-    );
+    return <>{Inputer(value, handleChange)} </>;
   };
 
   const ServisZone = () => {
     const ClickZone = () => {
       modeOk = false;
-      console.log("modeKnopZone:", modeKnopZone);
-      if (modeKnopZone) window.localStorage.interval = 0;
+      if (modeKnopZone) {
+        window.localStorage.interval = 0;
+        setValue(0);
+      }
       setModeKnopZone(!modeKnopZone);
     };
 
@@ -523,12 +504,17 @@ const SdcControlVertex = (props: {
             <Box sx={{ fontSize: 11.0, color: "#5B1080" }}>
               Интервал фазы ДУ:
             </Box>
-            <Box sx={{ display: "flex", padding: "6px 0px 0px 0px" }}>
-              {IntInput()}{" "}
-              {modeOk && (
+            <Box sx={{ display: "flex", padding: "5px 0px 0px 0px" }}>
+              {IntInput()}
+              {modeOk ? (
                 <Button sx={StyleServis02("27px")} onClick={() => ClickOk()}>
                   Да
                 </Button>
+              ) : (
+                <>
+                  <Box sx={{ color: "#DFE2E7" }}>.</Box>
+                  <Box sx={styleServis05}>сек</Box>
+                </>
               )}
             </Box>
           </Box>
@@ -568,8 +554,6 @@ const SdcControlVertex = (props: {
   //========================================================
   let titleDEMO = DEMO ? "( Демонстрационный режим )" : "";
 
-  console.log("###:", value, INTERVAL,modeKnopZone);
-
   return (
     <Box ref={boxer} sx={styleSetControl}>
       <Button sx={styleModalEnd} onClick={handleCloseSet}>
@@ -603,3 +587,48 @@ const SdcControlVertex = (props: {
 };
 
 export default SdcControlVertex;
+
+// const StrokaFazaKnop = () => {
+//   let resStr = [];
+//   if (map.tflight[props.idx].phases.length > 0) {
+//     for (let i = 0; i < kolFaz[nomInMass]; i++) {
+//       //console.log('StrokaFazaKnop:',i,mF.fazaSist)
+//       let colorKnop = clinch ? colorBad : colorNormal;
+//       let bShadow = 4;
+//       if (sentParam === i + 1) colorKnop = colorSent;
+//       if (mF.fazaSist === i + 1) {
+//         colorKnop = colorExtra;
+//         bShadow = 12;
+//       }
+//       if (needDopKnop[nomInMass] && i === kolFaz[nomInMass] - 1)
+//         colorKnop = colorNormal;
+//       let styleMenuVar = StyleModalMenuVar(colorKnop, bShadow);
+//       let contentKnop1 =
+//         needDopKnop[nomInMass] && i === kolFaz[nomInMass] - 1
+//           ? null
+//           : datestat.phSvg[i];
+//       let contentKnop2 =
+//         needDopKnop[nomInMass] && i === kolFaz[nomInMass] - 1 ? -1 : i;
+//       let num =
+//         needDopKnop[nomInMass] && i === kolFaz[nomInMass] - 1
+//           ? ""
+//           : (i + 1).toString();
+
+//       resStr.push(
+//         <Grid container key={i}>
+//           <Grid item xs={0.5} sx={styleVarKnopNum}>
+//             <b>{num}</b>
+//           </Grid>
+//           <Grid item xs={11.5} sx={styleKnop}>
+//             <Box sx={styleOutputFaza}>
+//               <Button sx={styleMenuVar} onClick={() => handleClick(i + 1)}>
+//                 {OutputFaza(contentKnop1, contentKnop2)}
+//               </Button>
+//             </Box>
+//           </Grid>
+//         </Grid>
+//       );
+//     }
+//   }
+//   return resStr;
+// };

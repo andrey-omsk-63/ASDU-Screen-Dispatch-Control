@@ -100,6 +100,7 @@ export const styleControl01 = {
 };
 
 export const styleServis01 = {
+  //marginTop: 10,
   height: "75px",
   margin: "0px 0px 5px 0px",
   padding: "0px 0px 0px 3px",
@@ -117,6 +118,7 @@ export const StyleServis02 = (wdth: any) => {
     color: "black",
     textTransform: "unset !important",
     marginBottom: 0.5,
+    marginTop: 0.4,
     boxShadow: 6,
   };
   return styleServis02;
@@ -142,4 +144,9 @@ export const styleServis04 = {
   },
 };
 
+export const styleServis05 = {
+  fontSize: 12.05,
+  color: "#5B1080",
+  padding: "4px 0px 0px 0px",
+};
 //========================================================
