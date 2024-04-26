@@ -21,7 +21,7 @@ import { SendSocketGetPhases } from "./SdcSocketFunctions";
 
 import { SendSocketDispatch } from "./SdcSocketFunctions";
 
-import { MyYandexKey } from "./MapConst";
+import { MyYandexKey, Restart } from "./MapConst";
 
 import { searchControl } from "./MainMapStyle";
 
@@ -36,8 +36,6 @@ let funcBound: any = null;
 
 let soobErr = "";
 let idxObj = -1;
-
-//let ev: any = null
 
 const MainMapSdc = (props: { trigger: boolean }) => {
   //== Piece of Redux =======================================
@@ -83,7 +81,9 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       datestat.massInt = [];
       datestat.first = true;
       datestat.working = false;
-      datestat.massMem = [];
+      datestat.massMem = []; // массив "запущенных" светофоров
+      datestat.massСounter.splice(0, datestat.massСounter.length);
+      //datestat.massСounter = [], // массив счётчиков отправки КУ на "запущенные" светофоры
       datestat.demoIdx = [];
       datestat.demoTlsost = [];
       datestat.demoLR = [];
@@ -96,7 +96,6 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   };
 
   const OnPlacemarkClickPoint = (index: number) => {
-    //console.log("1OnPlacemarkClickPoint:", index, datestat.working);
     if (!datestat.working) {
       let area = map.tflight[index].area.num;
       let id = map.tflight[index].ID;
@@ -184,6 +183,21 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     console.log("SETCONTROL:", mode);
     setControl(mode);
   };
+
+  const DoTimerRestart = () => {
+    for (let i = 0; i < datestat.massСounter.length; i++) {
+      if (datestat.massСounter[i]) {
+        datestat.massСounter[i]--;
+        if (!datestat.massСounter[i]) {
+          let mF = massfaz[i];
+          !DEMO && SendSocketDispatch(debug, ws, mF.idevice, 9, 9);
+          console.log("DoTimerRestart: отправка КУ", i, datestat.massСounter,mF);
+        }
+      }
+    }
+    console.log("DoTimerRestart:", datestat.massСounter);
+    datestat.massСounter.length && dispatch(statsaveCreate(datestat));
+  };
   //=== инициализация ======================================
   if (!flagOpen && Object.keys(map.tflight).length) {
     pointCenter = CenterCoord(
@@ -192,6 +206,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       map.boxPoint.point1.Y,
       map.boxPoint.point1.X
     );
+    setInterval(() => DoTimerRestart(), Restart); // запуск счетчиков отправки КУ
     flagOpen = true;
   }
   //=== Закрытие или перезапуск вкладки ====================

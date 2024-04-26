@@ -34,10 +34,11 @@ export interface Stater {
   first: boolean; // флаг начального запуска на данном режиме работы
   working: boolean;
   massMem: Array<number>; // массив "запущенных" светофоров
+  massСounter: Array<number>; // массив счётчиков отправки КУ на "запущенные" светофоры
   demoIdx: Array<number>;
   demoTlsost: Array<number>;
   demoLR: Array<boolean>;
-  timerId: Array<any>;
+  timerId: Array<any>; // массив времени отправки команд 
   massInt: any[][];
   stopSwitch: Array<boolean>;
   tekDemoTlsost: Array<number>;
@@ -55,7 +56,8 @@ export let dateStat: Stater = {
   phSvg: [null, null, null, null, null, null, null, null],
   first: true,
   working: false,
-  massMem: [],
+  massMem: [], // массив "запущенных" светофоров
+  massСounter: [], // массив счётчиков отправки КУ на "запущенные" светофоры
   demoIdx: [],
   demoTlsost: [],
   demoLR: [],

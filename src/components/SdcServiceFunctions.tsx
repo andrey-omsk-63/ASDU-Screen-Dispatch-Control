@@ -192,3 +192,28 @@ export const Inputer = (value: any, handleChange: any) => {
     </Box>
   );
 };
+
+export const OutputFaza = (img: any, i: number) => {
+  let widthHeight = 70;
+  //if (!img) widthHeight = 35;
+  return (
+    <>
+      {img && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+          style={{ width: window.innerHeight / 5.5, height: widthHeight }}
+        >
+          <image
+            width={"95%"}
+            height={"100%"}
+            xlinkHref={"data:image/png;base64," + img}
+          />
+        </svg>
+      )}
+      {!img && i >= 0 && <Box sx={{ fontSize: 41 }}>{i + 1}</Box>}
+      {!img && i < 0 && <Box sx={{ fontSize: 33 }}>Фазы ЗУ</Box>}
+    </>
+  );
+};
+

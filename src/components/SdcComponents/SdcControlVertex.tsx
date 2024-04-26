@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 //import TextField from "@mui/material/TextField";
 
-import { CloseInterval, Inputer } from "../SdcServiceFunctions";
+import { CloseInterval, Inputer, OutputFaza } from "../SdcServiceFunctions";
 
 import { SendSocketDispatch } from "../SdcSocketFunctions";
 
@@ -72,6 +72,7 @@ const SdcControlVertex = (props: {
   statusVertex = map.tflight[props.idx].tlsost.num;
   statusName = map.tflight[props.idx].tlsost.description;
   let clinch = CLINCH.indexOf(statusVertex) < 0 ? false : true;
+
   if (window.localStorage.interval === undefined)
     window.localStorage.interval = 0;
   INTERVAL = Number(window.localStorage.interval);
@@ -108,7 +109,7 @@ const SdcControlVertex = (props: {
       phases: [],
       idevice: map.tflight[props.idx].idevice,
     };
-    let sumFaz = map.tflight[props.idx].phases.length; //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    let sumFaz = map.tflight[props.idx].phases.length;
     kluchGl = map.tflight[props.idx].ID + " ";
 
     let nomIn = datestat.massMem.indexOf(props.idx); // запускался ли светофор ранее?
@@ -116,11 +117,12 @@ const SdcControlVertex = (props: {
     if (nomIn < 0) {
       // светофор ранее не запускался
       massfaz.push(massFaz);
-      datestat.massMem.push(props.idx);
-      datestat.timerId.push(null);
+      datestat.massMem.push(props.idx); // запись нового id в массив "запущенных" светофоров
       nomInMass = datestat.massMem.length - 1;
-      datestat.massInt.push([]);
       massfaz[nomInMass].idx = props.idx;
+      datestat.timerId.push(null); // массив времени отправки команд
+      datestat.massInt.push([]);
+      datestat.massСounter.push(0); // массив счётчиков отправки КУ на "запущенные" светофоры
       datestat.stopSwitch.push(false);
       shippedKU.push(false);
       datestat.tekDemoTlsost.push(-1);
@@ -141,6 +143,7 @@ const SdcControlVertex = (props: {
     !DEMO && SendSocketDispatch(debug, ws, mF.idevice, 4, 1);
     setSentParam(-1);
     if (nomIn < 0) {
+      // светофор ранее не запускался
       if (DEMO) {
         datestat.demoIdx.push(props.idx);
         datestat.demoLR.push(false);
@@ -178,8 +181,6 @@ const SdcControlVertex = (props: {
   }, [datestat, debug, ws, props, dispatch]);
   //========================================================
   const handleClick = (mode: number, dopKnop: number) => {
-    console.log("HANDLECLICK:", mode, dopKnop);
-    //if (needDopKnop[nomInMass] && mode === kolFaz[nomInMass]) {
     if (needDopKnop[nomInMass] && dopKnop === -1) {
       kolFaz[nomInMass] = MaxFaz; // Развернуть кнопки
       needDopKnop[nomInMass] = false;
@@ -195,24 +196,27 @@ const SdcControlVertex = (props: {
       !DEMO && SendSocketDispatch(debug, ws, mF.idevice, 9, mode);
 
       if (mode > 8 || !mode) mF.fazaZU = 0; // ЖМ, ОС, ЛР или КУ (10,11,0,9)
+      if (mode !== 9) datestat.massСounter[nomInMass] = INTERVAL; // массив счётчиков отправки КУ на "запущенные" светофоры
       if (mode < 9 && mode > 0) {
         // передана фаза
         if (datestat.timerId[nomInMass] === null) {
           datestat.timerId[nomInMass] = setInterval(() => DoTimerId(), timer);
           datestat.massInt = datestat.timerId[nomInMass];
         }
-        console.log("Отпр:", nomInMass, datestat.timerId, datestat.massInt);
+        console.log("Отпр:", nomInMass, datestat.timerId, datestat.massСounter);
         if (DEMO) {
           needRend = true;
           setFlagPusk(!flagPusk);
         }
       } else {
+        // передана КУ
         if (mode === 9) {
           console.log("1Пришло КУ", datestat.massInt, datestat.timerId);
           console.log("2Пришло КУ", props.idx, nomInMass, datestat.massMem);
           let nomIn = datestat.massMem.indexOf(props.idx);
           if (nomIn >= 0) datestat.massMem[nomIn] = -1;
           CloseInterval(datestat, nomInMass);
+          datestat.massСounter[nomInMass] = 0; // массив счётчиков отправки КУ на "запущенные" светофоры
           console.log("Почистили", mode, datestat.massInt, datestat.timerId);
           handleCloseSet();
           return;
@@ -257,7 +261,8 @@ const SdcControlVertex = (props: {
       if (mF.fazaZU) {
         console.log("Отправлена фаза c id", mF.id, mF.faza);
         SendSocketDispatch(debug, ws, mF.idevice, 9, mF.faza);
-      } else console.log("Отправлена пустышка c id", mF.id);
+      }
+      //else console.log("Отправлена пустышка c id", mF.id);
     } else {
       datestat.demoTlsost[present] = 1;
       if (!datestat.stopSwitch[present]) {
@@ -333,30 +338,6 @@ const SdcControlVertex = (props: {
             </em>
           </Box>
         )}
-      </>
-    );
-  };
-
-  const OutputFaza = (img: any, i: number) => {
-    let widthHeight = 70;
-    //if (!img) widthHeight = 35;
-    return (
-      <>
-        {img && (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            xmlnsXlink="http://www.w3.org/1999/xlink"
-            style={{ width: window.innerHeight / 5.5, height: widthHeight }}
-          >
-            <image
-              width={"95%"}
-              height={"100%"}
-              xlinkHref={"data:image/png;base64," + img}
-            />
-          </svg>
-        )}
-        {!img && i >= 0 && <Box sx={{ fontSize: 41 }}>{i + 1}</Box>}
-        {!img && i < 0 && <Box sx={{ fontSize: 33 }}>Фазы ЗУ</Box>}
       </>
     );
   };
@@ -481,6 +462,13 @@ const SdcControlVertex = (props: {
       modeOk = false;
       if (modeKnopZone) {
         window.localStorage.interval = 0;
+        for (let i = 0; i < datestat.massСounter.length; i++) {
+          // обнулить интервал
+          if (datestat.massСounter[i]) {
+            datestat.massСounter[i] = 1;
+            dispatch(statsaveCreate(datestat));
+          }
+        }
         setValue(0);
       }
       setModeKnopZone(!modeKnopZone);
@@ -488,7 +476,25 @@ const SdcControlVertex = (props: {
 
     const ClickOk = () => {
       modeOk = false;
-      window.localStorage.interval = Number(value);
+      let newInterval = Number(value);
+      let difference = window.localStorage.interval - newInterval;
+
+      if (!window.localStorage.interval) {
+        for (let i = 0; i < datestat.massСounter.length; i++) {
+          // задать интервал
+          datestat.massСounter[i] = newInterval;
+        }
+      } else {
+        // корректировать интервал
+        for (let i = 0; i < datestat.massСounter.length; i++) {
+          if (datestat.massСounter[i]) {
+            datestat.massСounter[i] = difference - datestat.massСounter[i];
+            if (datestat.massСounter[i] < 0) datestat.massСounter[i] = 1;
+          }
+        }
+      }
+      dispatch(statsaveCreate(datestat));
+      window.localStorage.interval = newInterval;
       setTrigger(!trigger);
     };
 
