@@ -2,6 +2,7 @@ export const YMapsModul = [
   "multiRouter.MultiRoute",
   "Polyline",
   "templateLayoutFactory",
+  "layout.ImageWithContent",
 ];
 
 export const MyYandexKey = "65162f5f-2d15-41d1-a881-6c1acf34cfa1"; // ключ
@@ -53,4 +54,4 @@ export const CLINCH: Array<number> = [ // список аварийных код
   38, // Нет информации
 ];
 
-export const Restart = 5000; // мсек - интервал пеерезапуска счётчиков отправки КУ 
+export const Restart = 8000; // мсек - интервал пеерезапуска счётчиков отправки КУ 

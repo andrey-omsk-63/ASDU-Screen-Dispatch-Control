@@ -65,6 +65,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   const [flagCenter, setFlagCenter] = React.useState(false);
   const [demoSost, setDemoSost] = React.useState(-1);
   const [openSetErr, setOpenSetErr] = React.useState(false);
+  const [click, setClick] = React.useState(false);
   const [ymaps, setYmaps] = React.useState<YMapsApi | null>(null);
   const mapp = React.useRef<any>(null);
 
@@ -96,6 +97,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   };
 
   const OnPlacemarkClickPoint = (index: number) => {
+    console.log('#############################')
     if (!datestat.working) {
       let area = map.tflight[index].area.num;
       let id = map.tflight[index].ID;
@@ -111,19 +113,30 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       soobErr = "В данный момент происходит управление другим перекрёстком";
       setOpenSetErr(true);
     }
+    setClick(!click)
   };
   //=== вывод светофоров ===================================
   const PlacemarkDo = () => {
+    // let myPlacemark: any = null
+    // if (ymaps) myPlacemark = new ymaps.Placemark([55.75,37.45], {
+    //   iconContent: 'текст'
+    // }, {
+    //   preset: 'islands#darkOrangeStretchyIcon'
+    // }) 
     return (
       <>
         {flagOpen &&
           coordinates.map((coordinate: any, idx: any) => (
+            
+            //mapState.geoObjects.add(myPlacemark)
+
             <SdcDoPlacemarkDo
               key={idx}
               ymaps={ymaps}
               coordinate={coordinate}
               idx={idx}
               OnPlacemarkClickPoint={OnPlacemarkClickPoint}
+              click={click}
             />
           ))}
       </>
@@ -191,7 +204,11 @@ const MainMapSdc = (props: { trigger: boolean }) => {
         if (!datestat.massСounter[i]) {
           let mF = massfaz[i];
           !DEMO && SendSocketDispatch(debug, ws, mF.idevice, 9, 9);
-          console.log("DoTimerRestart: отправка КУ", i, datestat.massСounter,mF);
+
+          console.log("!!!: отправка КУ", i, datestat.massСounter, mF);
+
+          massfaz[i].faza = 9;
+          !DEMO && SendSocketDispatch(debug, ws, mF.idevice, 4, 0);
         }
       }
     }

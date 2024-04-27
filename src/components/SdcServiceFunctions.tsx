@@ -47,6 +47,7 @@ export const GetPointOptions1 = (Hoster: any) => {
     iconImageSize: [30, 38],
     // её "ножки" (точки привязки)
     iconImageOffset: [-15, -38],
+    //iconCaption: "подсказка",
   };
 };
 

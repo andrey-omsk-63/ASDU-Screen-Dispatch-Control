@@ -85,7 +85,6 @@ const SdcControlVertex = (props: {
   const [value, setValue] = React.useState(INTERVAL);
   const [trigger, setTrigger] = React.useState(false);
   //=== инициализация ======================================
-  //console.log("OldIDX:", oldIdx, props.idx, !datestat.working);
   if (datestat.first) {
     // первый вход в новом режиме управления - очистка внутренних массивов
     oldIdx = -1;
@@ -259,9 +258,10 @@ const SdcControlVertex = (props: {
     let mF = massfaz[present];
     if (!DEMO) {
       if (mF.fazaZU) {
+        //============================ мёртвое место?
         console.log("Отправлена фаза c id", mF.id, mF.faza);
         SendSocketDispatch(debug, ws, mF.idevice, 9, mF.faza);
-      }
+      } 
       //else console.log("Отправлена пустышка c id", mF.id);
     } else {
       datestat.demoTlsost[present] = 1;
@@ -281,6 +281,7 @@ const SdcControlVertex = (props: {
     if (DEMO) {
       if ((!mF.fazaSist && !mF.faza) || (mF.fazaSist === 9 && mF.faza === 9)) {
         console.log("id:", mF.id, "DEMO ЛР или КУ", mF.faza);
+
         if (!mF.fazaSist && !mF.faza) datestat.demoTlsost[present] = 5; // ЛР
         if (mF.fazaSist === 9 && mF.faza === 9)
           datestat.demoTlsost[present] = 1; // КУ
@@ -461,14 +462,12 @@ const SdcControlVertex = (props: {
     const ClickZone = () => {
       modeOk = false;
       if (modeKnopZone) {
+        // обнулить интервал
         window.localStorage.interval = 0;
-        for (let i = 0; i < datestat.massСounter.length; i++) {
-          // обнулить интервал
-          if (datestat.massСounter[i]) {
-            datestat.massСounter[i] = 1;
-            dispatch(statsaveCreate(datestat));
-          }
-        }
+        INTERVAL = Number(window.localStorage.interval);
+        for (let i = 0; i < datestat.massСounter.length; i++)
+          if (datestat.massСounter[i]) datestat.massСounter[i] = 1;
+        dispatch(statsaveCreate(datestat));
         setValue(0);
       }
       setModeKnopZone(!modeKnopZone);
@@ -477,13 +476,18 @@ const SdcControlVertex = (props: {
     const ClickOk = () => {
       modeOk = false;
       let newInterval = Number(value);
-      let difference = window.localStorage.interval - newInterval;
+      let difference = INTERVAL - newInterval;
 
-      if (!window.localStorage.interval) {
+      console.log("0ClickOk:", datestat.massСounter, massfaz);
+
+      if (!INTERVAL) {
         for (let i = 0; i < datestat.massСounter.length; i++) {
           // задать интервал
-          datestat.massСounter[i] = newInterval;
+          if (massfaz[i].faza < 9 && massfaz[i].faza > 0)
+            datestat.massСounter[i] = newInterval;
         }
+
+        console.log("1ClickOk:", datestat.massСounter, massfaz);
       } else {
         // корректировать интервал
         for (let i = 0; i < datestat.massСounter.length; i++) {
@@ -495,6 +499,7 @@ const SdcControlVertex = (props: {
       }
       dispatch(statsaveCreate(datestat));
       window.localStorage.interval = newInterval;
+      INTERVAL = newInterval;
       setTrigger(!trigger);
     };
 
@@ -593,48 +598,3 @@ const SdcControlVertex = (props: {
 };
 
 export default SdcControlVertex;
-
-// const StrokaFazaKnop = () => {
-//   let resStr = [];
-//   if (map.tflight[props.idx].phases.length > 0) {
-//     for (let i = 0; i < kolFaz[nomInMass]; i++) {
-//       //console.log('StrokaFazaKnop:',i,mF.fazaSist)
-//       let colorKnop = clinch ? colorBad : colorNormal;
-//       let bShadow = 4;
-//       if (sentParam === i + 1) colorKnop = colorSent;
-//       if (mF.fazaSist === i + 1) {
-//         colorKnop = colorExtra;
-//         bShadow = 12;
-//       }
-//       if (needDopKnop[nomInMass] && i === kolFaz[nomInMass] - 1)
-//         colorKnop = colorNormal;
-//       let styleMenuVar = StyleModalMenuVar(colorKnop, bShadow);
-//       let contentKnop1 =
-//         needDopKnop[nomInMass] && i === kolFaz[nomInMass] - 1
-//           ? null
-//           : datestat.phSvg[i];
-//       let contentKnop2 =
-//         needDopKnop[nomInMass] && i === kolFaz[nomInMass] - 1 ? -1 : i;
-//       let num =
-//         needDopKnop[nomInMass] && i === kolFaz[nomInMass] - 1
-//           ? ""
-//           : (i + 1).toString();
-
-//       resStr.push(
-//         <Grid container key={i}>
-//           <Grid item xs={0.5} sx={styleVarKnopNum}>
-//             <b>{num}</b>
-//           </Grid>
-//           <Grid item xs={11.5} sx={styleKnop}>
-//             <Box sx={styleOutputFaza}>
-//               <Button sx={styleMenuVar} onClick={() => handleClick(i + 1)}>
-//                 {OutputFaza(contentKnop1, contentKnop2)}
-//               </Button>
-//             </Box>
-//           </Grid>
-//         </Grid>
-//       );
-//     }
-//   }
-//   return resStr;
-// };
