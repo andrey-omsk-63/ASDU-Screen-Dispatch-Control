@@ -36,6 +36,7 @@ let funcBound: any = null;
 
 let soobErr = "";
 let idxObj = -1;
+let clicker = 0;
 
 const MainMapSdc = (props: { trigger: boolean }) => {
   //== Piece of Redux =======================================
@@ -66,6 +67,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   const [demoSost, setDemoSost] = React.useState(-1);
   const [openSetErr, setOpenSetErr] = React.useState(false);
   const [click, setClick] = React.useState(false);
+  const [clicka, setClicka] = React.useState(-1);
   const [ymaps, setYmaps] = React.useState<YMapsApi | null>(null);
   const mapp = React.useRef<any>(null);
 
@@ -97,7 +99,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   };
 
   const OnPlacemarkClickPoint = (index: number) => {
-    console.log('#############################')
+    console.log("#############################");
     if (!datestat.working) {
       let area = map.tflight[index].area.num;
       let id = map.tflight[index].ID;
@@ -113,23 +115,14 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       soobErr = "В данный момент происходит управление другим перекрёстком";
       setOpenSetErr(true);
     }
-    setClick(!click)
+    setClick(!click);
   };
   //=== вывод светофоров ===================================
   const PlacemarkDo = () => {
-    // let myPlacemark: any = null
-    // if (ymaps) myPlacemark = new ymaps.Placemark([55.75,37.45], {
-    //   iconContent: 'текст'
-    // }, {
-    //   preset: 'islands#darkOrangeStretchyIcon'
-    // }) 
     return (
       <>
         {flagOpen &&
           coordinates.map((coordinate: any, idx: any) => (
-            
-            //mapState.geoObjects.add(myPlacemark)
-
             <SdcDoPlacemarkDo
               key={idx}
               ymaps={ymaps}
@@ -198,22 +191,42 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   };
 
   const DoTimerRestart = () => {
+    let have = 0;
     for (let i = 0; i < datestat.massСounter.length; i++) {
       if (datestat.massСounter[i]) {
+        have++;
+        //clicker++;
+        //setClicka(clicker);
         datestat.massСounter[i]--;
+        dispatch(statsaveCreate(datestat));
         if (!datestat.massСounter[i]) {
           let mF = massfaz[i];
           !DEMO && SendSocketDispatch(debug, ws, mF.idevice, 9, 9);
-
-          console.log("!!!: отправка КУ", i, datestat.massСounter, mF);
-
           massfaz[i].faza = 9;
+          datestat.massMem[i] = -1;
+          dispatch(statsaveCreate(datestat));
+          dispatch(massfazCreate(massfaz));
           !DEMO && SendSocketDispatch(debug, ws, mF.idevice, 4, 0);
+
+          console.log(
+            "!!!: отправка КУ",
+            i,
+            datestat.massСounter,
+            datestat.massMem,
+            mF
+          );
+          clicker++;
+          setClicka(clicker);
         }
       }
     }
-    console.log("DoTimerRestart:", datestat.massСounter);
-    datestat.massСounter.length && dispatch(statsaveCreate(datestat));
+    if (have) {
+       clicker++;
+      //dispatch(statsaveCreate(datestat));
+       setClicka(clicker);
+      console.log("DoTimerRestart:", have, clicker, datestat.massСounter);
+    }
+    //datestat.massСounter.length && dispatch(statsaveCreate(datestat));
   };
   //=== инициализация ======================================
   if (!flagOpen && Object.keys(map.tflight).length) {
@@ -258,6 +271,8 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     center: pointCenter,
     zoom,
   };
+
+  //console.log("!!!!!!:", click, clicker, clicka, datestat.massСounter);
 
   return (
     <Grid container sx={{ height: "99.9vh" }}>

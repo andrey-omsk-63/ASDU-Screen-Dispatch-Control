@@ -34,8 +34,18 @@ const SdcDoPlacemarkDo = (props: {
     mapp = map.tflight[idx].tlsost.num.toString();
     mappp = map.tflight[idx];
   }
+
   const nomInMass = datestat.massMem.indexOf(props.idx);
-  const haveСounter = nomInMass < 0 ? false : true;
+  let haveСounter = nomInMass < 0 ? false : true; // взведён ли счётчик?
+  let icContent =
+    nomInMass < 0 ? "" : datestat.massСounter[nomInMass].toString();
+
+  if (nomInMass >= 0) {
+    if (!Number(window.localStorage.interval) || !datestat.massСounter[nomInMass]) haveСounter = false;
+  }
+
+  // console.log('interval',haveСounter,Number(window.localStorage.interval))
+  nomInMass >= 0 && console.log('datestat.massСounter:',nomInMass,haveСounter,datestat.massСounter)
 
   const Hoster = React.useCallback(() => {
     let host = "https://localhost:3000/18.svg";
@@ -161,32 +171,30 @@ const SdcDoPlacemarkDo = (props: {
   }, [createChipsLayout, mappp.tlsost.num]);
 
   const getPointOptions2 = () => {
-    let colorBalloon = "islands#violetCircleIcon";
-    return { iconContent: "Нижний Новгород" };
-    // {iconContent: '1'}
+    let colorBalloon = "islands#darkOrangeStretchyIcon";
+    //let colorBalloon = "islands#darkOrangeCircleIcon";
+    return { preset: colorBalloon };
   };
 
-  haveСounter && console.log("Placemark:", props.idx);
+  haveСounter &&
+    console.log("Placemark:", props.idx, nomInMass, datestat.massСounter);
 
   const MemoPlacemarkDo = React.useMemo(
     () => (
       <Placemark
         key={idx}
         geometry={props.coordinate}
-        properties={GetPointData(idx, map)}
-        //options={haveСounter ? getPointOptions2() : getPointOptions1()}
-        options={{
-          preset: "islands#redIcon",
-          iconContent: "1111",
-        }}
-        modules={["layout.ImageWithContent","geoObject.addon.balloon", "geoObject.addon.hint"]}
+        properties={GetPointData(idx, map, icContent)}
+        //properties={GetPointData(idx, map)}
+        options={haveСounter ? getPointOptions2() : getPointOptions1()}
+        //options={getPointOptions1()}
+        modules={["geoObject.addon.hint", "geoObject.addon.balloon"]}
         onClick={() => props.OnPlacemarkClickPoint(idx)}
       />
     ),
-    [idx, map, getPointOptions1, props]
+    [idx, map, getPointOptions1, props, haveСounter, icContent]
   );
   return MemoPlacemarkDo;
 };
 
 export default SdcDoPlacemarkDo;
-//new ymaps

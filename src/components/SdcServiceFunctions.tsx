@@ -4,7 +4,13 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 
-import { styleServis03, styleServis04 } from "./SdcComponents/SdcComponentsStyle";
+import { DEMO } from "./MainMapSdc";
+
+import {
+  styleServis03,
+  styleServis04,
+  StyleTitle
+} from "./SdcComponents/SdcComponentsStyle";
 
 export const CenterCoord = (aY: number, aX: number, bY: number, bX: number) => {
   let coord0 = (aY - bY) / 2 + bY;
@@ -24,7 +30,7 @@ export const CloseInterval = (datestat: any, nominmass: number) => {
 };
 
 //=== Placemark =====================================
-export const GetPointData = (index: number, map: any) => {
+export const GetPointData = (index: number, map: any, icContent: string) => {
   let cont1 = "";
   let cont2 = "";
   let cont3 = "";
@@ -34,7 +40,7 @@ export const GetPointData = (index: number, map: any) => {
   // + map.tflight[index].area.num + ", ";
   cont2 += map.tflight[index].ID + ", " + map.tflight[index].idevice + "]";
 
-  return { hintContent: cont1 + cont3 + cont2 };
+  return { hintContent: cont1 + cont3 + cont2, iconContent: icContent };
 };
 
 export const GetPointOptions1 = (Hoster: any) => {
@@ -218,3 +224,17 @@ export const OutputFaza = (img: any, i: number) => {
   );
 };
 
+export const StatusLine = (statusName: string) => {
+  return (
+    <>
+      {!DEMO && (
+        <Box sx={StyleTitle(12.1)}>
+          cостояние:{" "}
+          <em>
+            <b>{statusName}</b>
+          </em>
+        </Box>
+      )}
+    </>
+  );
+};

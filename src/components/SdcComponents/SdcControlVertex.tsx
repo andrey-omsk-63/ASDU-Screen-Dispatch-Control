@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 //import TextField from "@mui/material/TextField";
 
 import { CloseInterval, Inputer, OutputFaza } from "../SdcServiceFunctions";
+import { StatusLine } from "../SdcServiceFunctions";
 
 import { SendSocketDispatch } from "../SdcSocketFunctions";
 
@@ -23,7 +24,6 @@ import { StyleSetControl, styleControl01 } from "./SdcComponentsStyle";
 import { StyleTitle, styleTitleDEMO } from "./SdcComponentsStyle";
 import { StyleModalMenuVar, StyleModalMenuConst } from "./SdcComponentsStyle";
 import { styleServis01, StyleServis02 } from "./SdcComponentsStyle";
-//import { styleServis03, styleServis04 } from "./SdcComponentsStyle";
 
 let oldIdx = -1;
 let needRend = false;
@@ -84,6 +84,19 @@ const SdcControlVertex = (props: {
   );
   const [value, setValue] = React.useState(INTERVAL);
   const [trigger, setTrigger] = React.useState(false);
+  //========================================================
+  const handleCloseSet = React.useCallback(() => {
+    if (!DEMO && shippedKU[nomInMass])
+      SendSocketDispatch(debug, ws, mF.idevice, 4, 0);
+    datestat.working = false; // свободно
+    dispatch(statsaveCreate(datestat));
+    oldIdx = -1;
+
+    console.log("1Финиш:", shippedKU[nomInMass], datestat.massMem);
+    console.log("2Финиш:", datestat.timerId, datestat.massInt);
+
+    props.setOpen(false);
+  }, [datestat, debug, ws, props, dispatch]);
   //=== инициализация ======================================
   if (datestat.first) {
     // первый вход в новом режиме управления - очистка внутренних массивов
@@ -121,7 +134,9 @@ const SdcControlVertex = (props: {
       massfaz[nomInMass].idx = props.idx;
       datestat.timerId.push(null); // массив времени отправки команд
       datestat.massInt.push([]);
+
       datestat.massСounter.push(0); // массив счётчиков отправки КУ на "запущенные" светофоры
+
       datestat.stopSwitch.push(false);
       shippedKU.push(false);
       datestat.tekDemoTlsost.push(-1);
@@ -158,26 +173,22 @@ const SdcControlVertex = (props: {
     oldIdx = props.idx;
     modeOk = false;
   } else {
-    if (mF.fazaSist !== 9 && mF.fazaSist !== 12) {
-      if (oldSistFaza[nomInMass] !== mF.fazaSist) {
-        setSentParam(-1);
-        oldSistFaza[nomInMass] = mF.fazaSist;
+    if (mF.faza === 9) {
+      console.log("НУЖНО ЗАКРЫТЬ");
+      CloseInterval(datestat, nomInMass);
+      //datestat.massСounter[nomInMass] = 0; // массив счётчиков отправки КУ на "запущенные" светофоры
+      //console.log("Почистили", mode, datestat.massInt, datestat.timerId);
+      handleCloseSet();
+      //return;
+    } else {
+      if (mF.fazaSist !== 9 && mF.fazaSist !== 12) {
+        if (oldSistFaza[nomInMass] !== mF.fazaSist) {
+          setSentParam(-1);
+          oldSistFaza[nomInMass] = mF.fazaSist;
+        }
       }
     }
   }
-  //========================================================
-  const handleCloseSet = React.useCallback(() => {
-    if (!DEMO && shippedKU[nomInMass])
-      SendSocketDispatch(debug, ws, mF.idevice, 4, 0);
-    datestat.working = false; // свободно
-    dispatch(statsaveCreate(datestat));
-    oldIdx = -1;
-
-    console.log("1Финиш:", shippedKU[nomInMass], datestat.massMem);
-    console.log("2Финиш:", datestat.timerId, datestat.massInt);
-
-    props.setOpen(false);
-  }, [datestat, debug, ws, props, dispatch]);
   //========================================================
   const handleClick = (mode: number, dopKnop: number) => {
     if (needDopKnop[nomInMass] && dopKnop === -1) {
@@ -201,8 +212,11 @@ const SdcControlVertex = (props: {
         if (datestat.timerId[nomInMass] === null) {
           datestat.timerId[nomInMass] = setInterval(() => DoTimerId(), timer);
           datestat.massInt = datestat.timerId[nomInMass];
+          setTrigger(!trigger); // ререндер
         }
+
         console.log("Отпр:", nomInMass, datestat.timerId, datestat.massСounter);
+
         if (DEMO) {
           needRend = true;
           setFlagPusk(!flagPusk);
@@ -212,11 +226,14 @@ const SdcControlVertex = (props: {
         if (mode === 9) {
           console.log("1Пришло КУ", datestat.massInt, datestat.timerId);
           console.log("2Пришло КУ", props.idx, nomInMass, datestat.massMem);
+
           let nomIn = datestat.massMem.indexOf(props.idx);
           if (nomIn >= 0) datestat.massMem[nomIn] = -1;
           CloseInterval(datestat, nomInMass);
           datestat.massСounter[nomInMass] = 0; // массив счётчиков отправки КУ на "запущенные" светофоры
+
           console.log("Почистили", mode, datestat.massInt, datestat.timerId);
+
           handleCloseSet();
           return;
         }
@@ -261,7 +278,7 @@ const SdcControlVertex = (props: {
         //============================ мёртвое место?
         console.log("Отправлена фаза c id", mF.id, mF.faza);
         SendSocketDispatch(debug, ws, mF.idevice, 9, mF.faza);
-      } 
+      }
       //else console.log("Отправлена пустышка c id", mF.id);
     } else {
       datestat.demoTlsost[present] = 1;
@@ -328,21 +345,6 @@ const SdcControlVertex = (props: {
     dispatch(statsaveCreate(datestat));
   };
   //=== Компоненты =========================================
-  const StatusLine = () => {
-    return (
-      <>
-        {!DEMO && (
-          <Box sx={StyleTitle(12.1)}>
-            cостояние:{" "}
-            <em>
-              <b>{statusName}</b>
-            </em>
-          </Box>
-        )}
-      </>
-    );
-  };
-
   const StrokaFazaKnop = () => {
     let resStr = [];
     if (map.tflight[props.idx].phases.length > 0) {
@@ -476,27 +478,25 @@ const SdcControlVertex = (props: {
     const ClickOk = () => {
       modeOk = false;
       let newInterval = Number(value);
-      let difference = INTERVAL - newInterval;
-
-      console.log("0ClickOk:", datestat.massСounter, massfaz);
-
-      if (!INTERVAL) {
-        for (let i = 0; i < datestat.massСounter.length; i++) {
-          // задать интервал
-          if (massfaz[i].faza < 9 && massfaz[i].faza > 0)
-            datestat.massСounter[i] = newInterval;
-        }
-
-        console.log("1ClickOk:", datestat.massСounter, massfaz);
-      } else {
-        // корректировать интервал
-        for (let i = 0; i < datestat.massСounter.length; i++) {
-          if (datestat.massСounter[i]) {
-            datestat.massСounter[i] = difference - datestat.massСounter[i];
-            if (datestat.massСounter[i] < 0) datestat.massСounter[i] = 1;
-          }
+      //let difference = INTERVAL - newInterval;
+      //if (!INTERVAL) {
+      for (let i = 0; i < datestat.massСounter.length; i++) {
+        // задать интервал
+        if (massfaz[i].faza < 9 && massfaz[i].faza > 0) {
+          datestat.massСounter[i] = newInterval;
+          dispatch(statsaveCreate(datestat));
         }
       }
+      console.log("1ClickOk:", datestat.massСounter, massfaz);
+      //} else {
+      // корректировать интервал
+      //   for (let i = 0; i < datestat.massСounter.length; i++) {
+      //     if (datestat.massСounter[i]) {
+      //       datestat.massСounter[i] = difference - datestat.massСounter[i];
+      //       if (datestat.massСounter[i] < 0) datestat.massСounter[i] = 1;
+      //     }
+      //   }
+      // }
       dispatch(statsaveCreate(datestat));
       window.localStorage.interval = newInterval;
       INTERVAL = newInterval;
@@ -592,7 +592,7 @@ const SdcControlVertex = (props: {
           </Grid>
         </Grid>
       </Box>
-      {StatusLine()}
+      {StatusLine(statusName)}
     </Box>
   );
 };
