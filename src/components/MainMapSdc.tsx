@@ -1,29 +1,29 @@
-import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { massfazCreate, statsaveCreate } from "../redux/actions";
+import * as React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { massfazCreate, statsaveCreate } from '../redux/actions';
 
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 
-import { YMaps, Map, FullscreenControl } from "react-yandex-maps";
-import { GeolocationControl, YMapsApi } from "react-yandex-maps";
-import { RulerControl, SearchControl } from "react-yandex-maps";
-import { TrafficControl, TypeSelector, ZoomControl } from "react-yandex-maps";
+import { YMaps, Map, FullscreenControl } from 'react-yandex-maps';
+import { GeolocationControl, YMapsApi } from 'react-yandex-maps';
+import { RulerControl, SearchControl } from 'react-yandex-maps';
+import { TrafficControl, TypeSelector, ZoomControl } from 'react-yandex-maps';
 
-import SdcDoPlacemarkDo from "./SdcComponents/SdcDoPlacemarkDo";
-import SdcControlVertex from "./SdcComponents/SdcControlVertex";
-import SdcErrorMessage from "./SdcComponents/SdcErrorMessage";
+import SdcDoPlacemarkDo from './SdcComponents/SdcDoPlacemarkDo';
+import SdcControlVertex from './SdcComponents/SdcControlVertex';
+import SdcErrorMessage from './SdcComponents/SdcErrorMessage';
 
-import { StrokaMenuGlob, CenterCoord } from "./SdcServiceFunctions";
-import { CloseInterval } from "./SdcServiceFunctions";
+import { StrokaMenuGlob, CenterCoord } from './SdcServiceFunctions';
+import { CloseInterval } from './SdcServiceFunctions';
 
-import { SendSocketGetPhases } from "./SdcSocketFunctions";
+import { SendSocketGetPhases } from './SdcSocketFunctions';
 
-import { SendSocketDispatch } from "./SdcSocketFunctions";
+import { SendSocketDispatch } from './SdcSocketFunctions';
 
-import { MyYandexKey, Restart } from "./MapConst";
+import { MyYandexKey, Restart } from './MapConst';
 
-import { searchControl } from "./MainMapStyle";
+import { searchControl } from './MainMapStyle';
 
 export let DEMO = false;
 
@@ -34,7 +34,7 @@ let pointCenter: any = 0;
 let newCenter: any = [];
 let funcBound: any = null;
 
-let soobErr = "";
+let soobErr = '';
 let idxObj = -1;
 let clicker = 0;
 
@@ -99,11 +99,10 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   };
 
   const OnPlacemarkClickPoint = (index: number) => {
-    console.log("#############################");
     if (!datestat.working) {
       let area = map.tflight[index].area.num;
       let id = map.tflight[index].ID;
-      console.log("OnPlacemarkClickPoint id:", id);
+      console.log('OnPlacemarkClickPoint id:', id);
       datestat.area = area;
       datestat.id = id;
       if (!debug) datestat.phSvg = Array(8).fill(null);
@@ -112,7 +111,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       idxObj = index;
       setControl(true);
     } else {
-      soobErr = "В данный момент происходит управление другим перекрёстком";
+      soobErr = 'В данный момент происходит управление другим перекрёстком';
       setOpenSetErr(true);
     }
     setClick(!click);
@@ -139,12 +138,12 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   const InstanceRefDo = (ref: React.Ref<any>) => {
     if (ref) {
       mapp.current = ref;
-      mapp.current.events.remove("boundschange", funcBound);
+      mapp.current.events.remove('boundschange', funcBound);
       funcBound = function () {
         pointCenter = mapp.current.getCenter();
         zoom = mapp.current.getZoom(); // покрутили колёсико мыши
       };
-      mapp.current.events.add("boundschange", funcBound);
+      mapp.current.events.add('boundschange', funcBound);
       if (flagCenter) {
         pointCenter = newCenter;
         setFlagCenter(false);
@@ -169,7 +168,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
         DEMO = true;
         break;
       case 63: // Косяк при работе с меню
-        soobErr = "Завершите предыдущий режим нормальным образом";
+        soobErr = 'Завершите предыдущий режим нормальным образом';
         setOpenSetErr(true);
     }
   };
@@ -186,7 +185,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   };
 
   const SetControl = (mode: any) => {
-    console.log("SETCONTROL:", mode);
+    console.log('SETCONTROL:', mode);
     setControl(mode);
   };
 
@@ -208,23 +207,18 @@ const MainMapSdc = (props: { trigger: boolean }) => {
           dispatch(massfazCreate(massfaz));
           !DEMO && SendSocketDispatch(debug, ws, mF.idevice, 4, 0);
 
-          console.log(
-            "!!!: отправка КУ",
-            i,
-            datestat.massСounter,
-            datestat.massMem,
-            mF
-          );
+          console.log('отправка КУ:', i, datestat.massСounter, datestat.massMem);
+
           clicker++;
           setClicka(clicker);
         }
       }
     }
     if (have) {
-       clicker++;
+      clicker++;
       //dispatch(statsaveCreate(datestat));
-       setClicka(clicker);
-      console.log("DoTimerRestart:", have, clicker, datestat.massСounter);
+      setClicka(clicker);
+      console.log('DoTimerRestart:', have, clicker, datestat.massСounter);
     }
     //datestat.massСounter.length && dispatch(statsaveCreate(datestat));
   };
@@ -234,29 +228,29 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       map.boxPoint.point0.Y,
       map.boxPoint.point0.X,
       map.boxPoint.point1.Y,
-      map.boxPoint.point1.X
+      map.boxPoint.point1.X,
     );
     setInterval(() => DoTimerRestart(), Restart); // запуск счетчиков отправки КУ
     flagOpen = true;
   }
   //=== Закрытие или перезапуск вкладки ====================
   React.useEffect(() => {
-    window.addEventListener("beforeunload", alertUser);
-    window.addEventListener("unload", handleTabClosing);
+    window.addEventListener('beforeunload', alertUser);
+    window.addEventListener('unload', handleTabClosing);
 
     return () => {
-      window.removeEventListener("beforeunload", alertUser);
-      window.removeEventListener("unload", handleTabClosing);
+      window.removeEventListener('beforeunload', alertUser);
+      window.removeEventListener('unload', handleTabClosing);
     };
   });
 
   const handleTabClosing = () => {
-    console.log("3пришло:");
+    console.log('3пришло:');
     removePlayerFromGame();
   };
 
   const alertUser = (event: any) => {
-    console.log("2пришло:", event);
+    console.log('2пришло:', event);
     // ev = JSON.parse(JSON.stringify(event));
     StatusQuo(false);
     //  event.preventDefault();
@@ -264,7 +258,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   };
 
   function removePlayerFromGame() {
-    throw new Error("Function not implemented.");
+    throw new Error('Function not implemented.');
   }
   //========================================================
   let mapState: any = {
@@ -275,33 +269,32 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   //console.log("!!!!!!:", click, clicker, clicka, datestat.massСounter);
 
   return (
-    <Grid container sx={{ height: "99.9vh" }}>
+    <Grid container sx={{ height: '99.9vh' }}>
       <Grid item xs={12}>
         {/* главное меню */}
         <Box>{StrokaMenuGlob(PressButton, datestat.working)}</Box>
         {/* Яндекс карта */}
-        <Grid container sx={{ height: "96.9vh" }}>
+        <Grid container sx={{ height: '96.9vh' }}>
           <Grid item xs>
             {Object.keys(map.tflight).length && (
-              <YMaps query={{ apikey: MyYandexKey, lang: "ru_RU" }}>
+              <YMaps query={{ apikey: MyYandexKey, lang: 'ru_RU' }}>
                 <Map
-                  modules={["templateLayoutFactory"]}
+                  modules={['templateLayoutFactory']}
                   state={mapState}
                   instanceRef={(ref) => InstanceRefDo(ref)}
                   onLoad={(ref) => {
                     ref && setYmaps(ref);
                   }}
-                  width={"99.9%"}
-                  height={"99.9%"}
-                >
+                  width={'99.9%'}
+                  height={'99.9%'}>
                   {/* сервисы Яндекса */}
                   <FullscreenControl />
-                  <GeolocationControl options={{ float: "left" }} />
-                  <RulerControl options={{ float: "right" }} />
+                  <GeolocationControl options={{ float: 'left' }} />
+                  <RulerControl options={{ float: 'right' }} />
                   <SearchControl options={searchControl} />
-                  <TrafficControl options={{ float: "right" }} />
-                  <TypeSelector options={{ float: "right" }} />
-                  <ZoomControl options={{ float: "right" }} />
+                  <TrafficControl options={{ float: 'right' }} />
+                  <TypeSelector options={{ float: 'right' }} />
+                  <ZoomControl options={{ float: 'right' }} />
                   {/* служебные компоненты */}
                   <PlacemarkDo />
                   {control && datestat.readyFaza && (
@@ -312,9 +305,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
                       change={ChangeDemoSost}
                     />
                   )}
-                  {openSetErr && (
-                    <SdcErrorMessage setOpen={setOpenSetErr} sErr={soobErr} />
-                  )}
+                  {openSetErr && <SdcErrorMessage setOpen={setOpenSetErr} sErr={soobErr} />}
                 </Map>
               </YMaps>
             )}
