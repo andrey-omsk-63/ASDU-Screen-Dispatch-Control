@@ -29,6 +29,24 @@ export const CloseInterval = (datestat: any, nominmass: number) => {
   datestat.timerId[nominmass] = null;
 };
 
+export const Distance = (coord1: Array<number>, coord2: Array<number>) => {
+  if (coord1[0] === coord2[0] && coord1[1] === coord2[1]) {
+    return 0;
+  } else {
+    let radlat1 = (Math.PI * coord1[0]) / 180;
+    let radlat2 = (Math.PI * coord2[0]) / 180;
+    let theta = coord1[1] - coord2[1];
+    let radtheta = (Math.PI * theta) / 180;
+    let dist =
+      Math.sin(radlat1) * Math.sin(radlat2) +
+      Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+    if (dist > 1) dist = 1;
+    dist = Math.acos(dist);
+    dist = (dist * 180) / Math.PI;
+    dist = dist * 60 * 1.1515 * 1609.344;
+    return dist;
+  }
+};
 //=== Placemark =====================================
 export const GetPointData = (index: number, map: any, icContent: string) => {
   let cont1 = "";

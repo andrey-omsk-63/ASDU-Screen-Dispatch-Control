@@ -91,10 +91,8 @@ const SdcControlVertex = (props: {
     datestat.working = false; // свободно
     dispatch(statsaveCreate(datestat));
     oldIdx = -1;
-
-    console.log("1Финиш:", shippedKU[nomInMass], datestat.massMem);
-    console.log("2Финиш:", datestat.timerId, datestat.massInt);
-
+    // console.log("1Финиш:", shippedKU[nomInMass], datestat.massMem);
+    // console.log("2Финиш:", datestat.timerId, datestat.massInt);
     props.setOpen(false);
   }, [datestat, debug, ws, props, dispatch]);
   //=== инициализация ======================================
@@ -120,39 +118,33 @@ const SdcControlVertex = (props: {
       fazaZU: 0, // 0 - отправлено ЖМ, ОС, ЛР или КУ (10,11,0,9)
       phases: [],
       idevice: map.tflight[props.idx].idevice,
+      coordinates: [
+        map.tflight[props.idx].points.Y,
+        map.tflight[props.idx].points.X,
+      ],
     };
     let sumFaz = map.tflight[props.idx].phases.length;
     kluchGl = map.tflight[props.idx].ID + " ";
-
     let nomIn = datestat.massMem.indexOf(props.idx); // запускался ли светофор ранее?
-    console.log("запускался ли светофор ранее?", nomIn, datestat.massMem);
+    console.log("запускался ли светофор ранее?", nomIn, datestat.massMem); //============= потом убрать ===
     if (nomIn < 0) {
       // светофор ранее не запускался
       massfaz.push(massFaz);
+      console.log("MASSFAZ:", massfaz);
       datestat.massMem.push(props.idx); // запись нового id в массив "запущенных" светофоров
       nomInMass = datestat.massMem.length - 1;
       massfaz[nomInMass].idx = props.idx;
       datestat.timerId.push(null); // массив времени отправки команд
       datestat.massInt.push([]);
-
       datestat.massСounter.push(0); // массив счётчиков отправки КУ на "запущенные" светофоры
-
       datestat.stopSwitch.push(false);
       shippedKU.push(false);
       datestat.tekDemoTlsost.push(-1);
       oldSistFaza.push(-1);
       kolFaz.push(sumFaz < MaxFaz ? sumFaz + 1 : MaxFaz);
       needDopKnop.push(sumFaz === MaxFaz ? false : true);
+    } else nomInMass = nomIn; // повторное открытие
 
-      console.log(
-        "Новый id:",
-        massfaz[nomInMass].id,
-        nomInMass,
-        datestat.massMem
-      );
-    } else {
-      nomInMass = nomIn; // повторное открытие
-    }
     mF = massfaz[nomInMass];
     !DEMO && SendSocketDispatch(debug, ws, mF.idevice, 4, 1);
     setSentParam(-1);
@@ -174,12 +166,8 @@ const SdcControlVertex = (props: {
     modeOk = false;
   } else {
     if (mF.faza === 9) {
-      console.log("НУЖНО ЗАКРЫТЬ");
       CloseInterval(datestat, nomInMass);
-      //datestat.massСounter[nomInMass] = 0; // массив счётчиков отправки КУ на "запущенные" светофоры
-      //console.log("Почистили", mode, datestat.massInt, datestat.timerId);
       handleCloseSet();
-      //return;
     } else {
       if (mF.fazaSist !== 9 && mF.fazaSist !== 12) {
         if (oldSistFaza[nomInMass] !== mF.fazaSist) {
@@ -204,36 +192,29 @@ const SdcControlVertex = (props: {
       console.log(nomInMass, "New_Отправка ", mode, shippedKU[nomInMass], mF);
 
       !DEMO && SendSocketDispatch(debug, ws, mF.idevice, 9, mode);
-
       if (mode > 8 || !mode) mF.fazaZU = 0; // ЖМ, ОС, ЛР или КУ (10,11,0,9)
-      if (mode !== 9) datestat.massСounter[nomInMass] = INTERVAL; // массив счётчиков отправки КУ на "запущенные" светофоры
       if (mode < 9 && mode > 0) {
+        datestat.massСounter[nomInMass] = INTERVAL; // массив счётчиков отправки КУ на "запущенные" светофоры
         // передана фаза
         if (datestat.timerId[nomInMass] === null) {
           datestat.timerId[nomInMass] = setInterval(() => DoTimerId(), timer);
           datestat.massInt = datestat.timerId[nomInMass];
-          setTrigger(!trigger); // ререндер
         }
-
-        console.log("Отпр:", nomInMass, datestat.timerId, datestat.massСounter);
-
+        console.log("Отпр:", nomInMass, datestat.timerId, datestat.massСounter); //============= потом убрать ===
         if (DEMO) {
           needRend = true;
           setFlagPusk(!flagPusk);
         }
       } else {
+        datestat.massСounter[nomInMass] = 0; // массив счётчиков отправки КУ на "запущенные" светофоры
         // передана КУ
         if (mode === 9) {
-          console.log("1Пришло КУ", datestat.massInt, datestat.timerId);
-          console.log("2Пришло КУ", props.idx, nomInMass, datestat.massMem);
-
+          //console.log("1Пришло КУ", datestat.massInt, datestat.timerId); //============= потом убрать ===
+          //console.log("2Пришло КУ", props.idx, nomInMass, datestat.massMem); //============= потом убрать ===
           let nomIn = datestat.massMem.indexOf(props.idx);
           if (nomIn >= 0) datestat.massMem[nomIn] = -1;
           CloseInterval(datestat, nomInMass);
-          datestat.massСounter[nomInMass] = 0; // массив счётчиков отправки КУ на "запущенные" светофоры
-
-          console.log("Почистили", mode, datestat.massInt, datestat.timerId);
-
+          console.log("Почистили", mode, datestat.massInt, datestat.timerId); //============= потом убрать ===
           handleCloseSet();
           return;
         }
@@ -257,7 +238,7 @@ const SdcControlVertex = (props: {
     let ch = 0; // проверка массива timerId на заполненость
     for (let i = 0; i < datestat.timerId.length; i++)
       if (datestat.timerId[i] !== null) ch++;
-    !ch && console.log("Нет запущенных светофоров!!!");
+    !ch && console.log("Нет запущенных светофоров!!!"); //============= потом убрать ===
     if (!ch) return;
 
     let mass = JSON.parse(JSON.stringify(datestat.timerId));
@@ -288,17 +269,15 @@ const SdcControlVertex = (props: {
         mF.fazaSist = mF.faza;
       }
       dispatch(massfazCreate(massfaz));
-      console.log("Отпр id", mF.id, mF.fazaSist, datestat.stopSwitch[present]);
+      //console.log("Отпр id", mF.id, mF.fazaSist, datestat.stopSwitch[present]); //============= потом убрать ===
       needRend = true;
       setFlagPusk(!flagPusk);
     }
 
     if (DEMO && mF.faza < 9 && mF.faza > 0) datestat.demoTlsost[present] = 2; // Передана фаза
-
     if (DEMO) {
       if ((!mF.fazaSist && !mF.faza) || (mF.fazaSist === 9 && mF.faza === 9)) {
-        console.log("id:", mF.id, "DEMO ЛР или КУ", mF.faza);
-
+        console.log("id:", mF.id, "DEMO ЛР или КУ", mF.faza); //============= потом убрать ===
         if (!mF.fazaSist && !mF.faza) datestat.demoTlsost[present] = 5; // ЛР
         if (mF.fazaSist === 9 && mF.faza === 9)
           datestat.demoTlsost[present] = 1; // КУ
@@ -310,8 +289,6 @@ const SdcControlVertex = (props: {
         dispatch(statsaveCreate(datestat));
       }
     }
-
-    //timerId = setInterval(() => DoTimerId(nomInMass, timerId), timer); // Нужно?
 
     if ((DEMO && mF.fazaSist === 10) || (DEMO && mF.fazaSist === 11)) {
       console.log("id:", mF.id, "DEMO ЖМ или ОС");
@@ -533,18 +510,10 @@ const SdcControlVertex = (props: {
       </Grid>
     );
   };
-  //========================================================
-  let styleSetControl = StyleSetControl(DEMO);
-
-  if (needRend) {
-    needRend = false;
-    setFlagPusk(!flagPusk);
-  }
-
   //=== отслеживания клика мышом за пределами рамки ========
   const boxer = React.useRef(null);
 
-  const Clicker = (ref: any) => {
+  const ClickLeftKnop = (ref: any) => {
     const handleClickOutside = React.useCallback(
       (event: any) => {
         if (ref.current && !ref.current.contains(event.target))
@@ -561,9 +530,32 @@ const SdcControlVertex = (props: {
     }, [handleClickOutside]);
   };
 
-  Clicker(boxer);
+  const ClickRightKnop = (ref: any) => {
+    const handleClickRight = React.useCallback(
+      (event: any) => {
+        if (ref.current && !ref.current.contains(event.target))
+          handleCloseSet();
+      },
+      [ref]
+    );
+
+    React.useEffect(() => {
+      document.addEventListener("contextmenu", handleClickRight, true);
+      return () => {
+        document.removeEventListener("contextmenu", handleClickRight, true);
+      };
+    }, [handleClickRight]);
+  };
+
+  ClickLeftKnop(boxer);
+  ClickRightKnop(boxer);
   //========================================================
   let titleDEMO = DEMO ? "( Демонстрационный режим )" : "";
+  let styleSetControl = StyleSetControl(DEMO);
+  if (needRend) {
+    needRend = false;
+    setFlagPusk(!flagPusk);
+  }
 
   return (
     <Box ref={boxer} sx={styleSetControl}>
