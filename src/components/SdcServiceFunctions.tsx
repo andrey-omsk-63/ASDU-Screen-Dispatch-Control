@@ -6,11 +6,8 @@ import MenuItem from "@mui/material/MenuItem";
 
 import { DEMO } from "./MainMapSdc";
 
-import {
-  styleServis03,
-  styleServis04,
-  StyleTitle
-} from "./SdcComponents/SdcComponentsStyle";
+import { styleServis03, StyleTitle } from "./SdcComponents/SdcComponentsStyle";
+import { styleServis04 } from "./SdcComponents/SdcComponentsStyle";
 
 export const CenterCoord = (aY: number, aX: number, bY: number, bX: number) => {
   let coord0 = (aY - bY) / 2 + bY;
@@ -21,7 +18,7 @@ export const CenterCoord = (aY: number, aX: number, bY: number, bX: number) => {
 };
 
 export const CloseInterval = (datestat: any, nominmass: number) => {
-  console.log("CloseInt:", nominmass, datestat.massInt[nominmass]);
+  //console.log("CloseInt:", nominmass, datestat.massInt[nominmass]);
   if (datestat.massInt[nominmass]) {
     clearInterval(datestat.massInt[nominmass]);
     datestat.massInt[nominmass] = null;

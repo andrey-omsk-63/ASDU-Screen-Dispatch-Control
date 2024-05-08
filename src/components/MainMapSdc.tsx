@@ -103,11 +103,21 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   };
 
   const OnPlacemarkClickPoint = (index: number) => {
-    console.log('OnPlacemarkClickPoint',index,datestat.massMem,datestat.massСounter)
     if (!datestat.working) {
+      let nomIn = datestat.massMem.indexOf(index); // запускался ли светофор ранее?
+      if (nomIn >= 0) {
+        // ранее запускался
+        if (window.localStorage.interval === undefined)
+          window.localStorage.interval = 0;
+        let INTERVAL = Number(window.localStorage.interval);
+        if (datestat.massСounter[nomIn] > 0 && INTERVAL) {
+          datestat.massСounter[nomIn] = INTERVAL; // перезапуск счётчика
+          dispatch(statsaveCreate(datestat));
+          return;
+        }
+      }
       let area = map.tflight[index].area.num;
       let id = map.tflight[index].ID;
-      //console.log("OnPlacemarkClickPoint id:", id);
       datestat.area = area;
       datestat.id = id;
       if (!debug) datestat.phSvg = Array(8).fill(null);
@@ -224,14 +234,12 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   };
 
   const DoTimerRestart = () => {
-    //console.log("DoTimerRestart:", clicker, datestat.massСounter, massfaz);
     let have = 0;
     for (let i = 0; i < datestat.massСounter.length; i++) {
       if (!datestat.massСounter[i]) {
         // смена номерной фазы на ЖМ, ОС или ЛР
         have++;
         datestat.massСounter[i]--;
-        //console.log("!!!: Смена номерной фазы", i, datestat.massСounter);
       }
       if (datestat.massСounter[i] > 0) {
         have++;
@@ -244,7 +252,6 @@ const MainMapSdc = (props: { trigger: boolean }) => {
           dispatch(massfazCreate(massfaz));
           !DEMO && SendSocketDispatch(debug, ws, mF.idevice, 4, 0);
           CloseInterval(datestat, i);
-          console.log("!!!: отправка КУ", i, datestat.massСounter, massfaz);
           datestat.massСounter[i]--;
         }
       }

@@ -188,9 +188,7 @@ const SdcControlVertex = (props: {
       datestat.stopSwitch[nomInMass] = true;
       dispatch(massfazCreate(massfaz));
       shippedKU[nomInMass] = mode === 9 ? true : false;
-
-      console.log(nomInMass, "New_Отправка ", mode, shippedKU[nomInMass], mF);
-
+      //console.log(nomInMass, "New_Отправка ", mode, shippedKU[nomInMass], mF);
       !DEMO && SendSocketDispatch(debug, ws, mF.idevice, 9, mode);
       if (mode > 8 || !mode) mF.fazaZU = 0; // ЖМ, ОС, ЛР или КУ (10,11,0,9)
       if (mode < 9 && mode > 0) {
@@ -200,7 +198,7 @@ const SdcControlVertex = (props: {
           datestat.timerId[nomInMass] = setInterval(() => DoTimerId(), timer);
           datestat.massInt = datestat.timerId[nomInMass];
         }
-        console.log("Отпр:", nomInMass, datestat.timerId, datestat.massСounter); //============= потом убрать ===
+        //console.log("Отпр:", nomInMass, datestat.massMem, datestat.massСounter); //============= потом убрать ===
         if (DEMO) {
           needRend = true;
           setFlagPusk(!flagPusk);
