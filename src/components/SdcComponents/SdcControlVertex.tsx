@@ -188,7 +188,6 @@ const SdcControlVertex = (props: {
       datestat.stopSwitch[nomInMass] = true;
       dispatch(massfazCreate(massfaz));
       shippedKU[nomInMass] = mode === 9 ? true : false;
-      //console.log(nomInMass, "New_Отправка ", mode, shippedKU[nomInMass], mF);
       !DEMO && SendSocketDispatch(debug, ws, mF.idevice, 9, mode);
       if (mode > 8 || !mode) mF.fazaZU = 0; // ЖМ, ОС, ЛР или КУ (10,11,0,9)
       if (mode < 9 && mode > 0) {
@@ -198,7 +197,6 @@ const SdcControlVertex = (props: {
           datestat.timerId[nomInMass] = setInterval(() => DoTimerId(), timer);
           datestat.massInt = datestat.timerId[nomInMass];
         }
-        //console.log("Отпр:", nomInMass, datestat.massMem, datestat.massСounter); //============= потом убрать ===
         if (DEMO) {
           needRend = true;
           setFlagPusk(!flagPusk);
@@ -207,8 +205,6 @@ const SdcControlVertex = (props: {
         datestat.massСounter[nomInMass] = 0; // массив счётчиков отправки КУ на "запущенные" светофоры
         // передана КУ
         if (mode === 9) {
-          //console.log("1Пришло КУ", datestat.massInt, datestat.timerId); //============= потом убрать ===
-          //console.log("2Пришло КУ", props.idx, nomInMass, datestat.massMem); //============= потом убрать ===
           let nomIn = datestat.massMem.indexOf(props.idx);
           if (nomIn >= 0) datestat.massMem[nomIn] = -1;
           CloseInterval(datestat, nomInMass);
