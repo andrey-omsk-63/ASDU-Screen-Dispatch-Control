@@ -41,9 +41,15 @@ let modeOk = false;
 let INTERVAL = 0;
 
 const colorNormal = "#E9F5D8"; // светло-салатовый
-const colorExtra = "#96CD8F"; // тёмно-салатовый
+//const colorExtra = "#96CD8F"; // тёмно-салатовый
+//const colorExtra = "#76ff03"; // светлый лайм
+const colorExtra = "#82e94a"; // средний лайм
 const colorSent = "#AFDAF3"; // светло-голубой
-const colorBad = "#bec6ce"; // серый
+//const colorBad = "#bec6ce"; // серый
+const colorBad = "#E9F5D8"; // светло-салатовый
+
+let colorKnop = colorBad;
+let bShadow = 4;
 
 const SdcControlVertex = (props: {
   setOpen: Function;
@@ -316,14 +322,19 @@ const SdcControlVertex = (props: {
     dispatch(statsaveCreate(datestat));
   };
   //=== Компоненты =========================================
+  const OnColorSent = () => {
+    colorKnop = colorSent;
+    bShadow = 12;
+  };
+
   const StrokaFazaKnop = () => {
     let resStr = [];
     if (map.tflight[props.idx].phases.length > 0) {
       let ii = kolFaz[nomInMass] < 5 ? 5 : kolFaz[nomInMass];
       for (let i = 0; i < ii; i++) {
-        let colorKnop = clinch ? colorBad : colorNormal;
-        let bShadow = 4;
-        if (sentParam === i + 1) colorKnop = colorSent;
+        colorKnop = clinch ? colorBad : colorNormal;
+        bShadow = 4;
+        if (sentParam === i + 1) OnColorSent();
         if (mF.fazaSist === i + 1) {
           colorKnop = colorExtra;
           bShadow = 12;
@@ -374,13 +385,14 @@ const SdcControlVertex = (props: {
   };
 
   const OutputConstFaza = (mode: string) => {
-    let colorKnop = colorNormal;
-    let bShadow = 4;
+    colorKnop = colorNormal;
+    bShadow = 4;
     let handleMode = 0;
+
     switch (mode) {
       case "ЖМ":
         handleMode = 10;
-        if (sentParam === 10) colorKnop = colorSent;
+        if (sentParam === 10) OnColorSent();
         if (mF.fazaSist === 10 || mF.fazaSist === 14) {
           colorKnop = colorExtra;
           bShadow = 12;
@@ -388,18 +400,18 @@ const SdcControlVertex = (props: {
         break;
       case "ОС":
         handleMode = 11;
-        if (sentParam === 11) colorKnop = colorSent;
+        if (sentParam === 11) OnColorSent();
         if (mF === 11 || mF.fazaSist === 15) {
           colorKnop = colorExtra;
           bShadow = 12;
         }
         break;
       case "ЛР":
-        if (DEMO && sentParam === 0) colorKnop = colorSent;
+        if (DEMO && sentParam === 0) OnColorSent();
         handleMode = 0;
         break;
       case "КУ":
-        if (DEMO && sentParam === 9) colorKnop = colorSent;
+        if (DEMO && sentParam === 9) OnColorSent();
         handleMode = 9;
     }
     let styleMenuConst = StyleModalMenuConst(colorKnop, bShadow);

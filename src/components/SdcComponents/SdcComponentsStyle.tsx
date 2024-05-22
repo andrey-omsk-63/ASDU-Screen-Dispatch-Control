@@ -43,10 +43,19 @@ export const StyleModalMenuVar = (colorKnop: string, bShadow: number) => {
     minHeight: "69px",
     width: "208px",
     backgroundColor: colorKnop,
+    // clipPath: `polygon(
+    //   4% 0,
+    //   100% 0,
+    //   100% 80%,
+    //   94% 100%,
+    //   0 100%,
+    //   0 20%
+    // )`,
     color: "black",
     textTransform: "unset !important",
     border: "1px solid #000",
     borderColor: "#d4d4d4", // серый
+    //borderColor:  colorKnop,
     borderRadius: 2,
     boxShadow: bShadow,
     textShadow: "2px 2px 3px rgba(0,0,0,0.3)",
