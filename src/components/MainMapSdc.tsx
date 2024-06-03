@@ -235,6 +235,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
 
   const DoTimerRestart = () => {
     let have = 0;
+    datestat.needComent = false;
     for (let i = 0; i < datestat.massСounter.length; i++) {
       if (!datestat.massСounter[i]) {
         // смена номерной фазы на ЖМ, ОС или ЛР
@@ -253,10 +254,12 @@ const MainMapSdc = (props: { trigger: boolean }) => {
           !DEMO && SendSocketDispatch(debug, ws, mF.idevice, 4, 0);
           CloseInterval(datestat, i);
           datestat.massСounter[i]--;
-        }
+        } else datestat.needComent = true;
       }
-      dispatch(statsaveCreate(datestat));
     }
+    dispatch(statsaveCreate(datestat));
+    let soob = datestat.needComent ? 'нужен' : 'не нужен'
+    console.log('Коментарий',soob)
     if (have) {
       clicker++;
       setClicka(clicker);

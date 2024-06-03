@@ -42,6 +42,7 @@ export interface Stater {
   massInt: any[][];
   stopSwitch: Array<boolean>;
   tekDemoTlsost: Array<number>;
+  needComent: boolean
 }
 
 export let dateStat: Stater = {
@@ -65,6 +66,7 @@ export let dateStat: Stater = {
   massInt: [],
   stopSwitch: [],
   tekDemoTlsost: [],
+  needComent: false,
 };
 
 export interface Pointer {

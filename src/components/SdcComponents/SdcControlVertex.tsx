@@ -129,6 +129,9 @@ const SdcControlVertex = (props: {
         map.tflight[props.idx].points.X,
       ],
     };
+
+    console.log('######:',props.idx,map)
+    
     let sumFaz = map.tflight[props.idx].phases.length;
     kluchGl = map.tflight[props.idx].ID + " ";
     let nomIn = datestat.massMem.indexOf(props.idx); // запускался ли светофор ранее?
