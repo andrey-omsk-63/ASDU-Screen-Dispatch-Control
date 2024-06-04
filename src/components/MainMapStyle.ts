@@ -1,3 +1,11 @@
+export const styleHelpMain = {
+  width: "77%",
+  textAlign: "center",
+  color: "#E6761B", // оранж
+  fontWeight: 500,
+  textShadow: "1px 1px 2px rgba(0,0,0,0.3)",
+};
+
 export const searchControl = {
   float: "left",
   provider: "yandex#search",

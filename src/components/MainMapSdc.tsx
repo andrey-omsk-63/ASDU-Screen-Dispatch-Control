@@ -23,7 +23,7 @@ import { SendSocketDispatch } from "./SdcSocketFunctions";
 
 import { MyYandexKey, Restart, Aura } from "./MapConst";
 
-import { searchControl } from "./MainMapStyle";
+import { searchControl, styleHelpMain } from "./MainMapStyle";
 
 export let DEMO = false;
 
@@ -39,6 +39,8 @@ let soobErr = "";
 let idxObj = -1;
 let clicker = 0;
 let INT: Array<any> = [];
+let helpComment = "";
+let resetCounter = "Правой кнопкой мыши можно сбросить счётчик";
 
 const MainMapSdc = (props: { trigger: boolean }) => {
   //== Piece of Redux =======================================
@@ -70,6 +72,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   const [openSetErr, setOpenSetErr] = React.useState(false);
   const [click, setClick] = React.useState(false);
   const [clicka, setClicka] = React.useState(-1);
+  const [trigger, setTrigger] = React.useState(false);
   const [ymaps, setYmaps] = React.useState<YMapsApi | null>(null);
   const mapp = React.useRef<any>(null);
 
@@ -229,12 +232,12 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   };
 
   const SetControl = (mode: any) => {
-    //console.log("SETCONTROL:", mode);
     setControl(mode);
   };
 
   const DoTimerRestart = () => {
     let have = 0;
+    let oldNeedComent = { ...datestat.needComent };
     datestat.needComent = false;
     for (let i = 0; i < datestat.massСounter.length; i++) {
       if (!datestat.massСounter[i]) {
@@ -258,12 +261,23 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       }
     }
     dispatch(statsaveCreate(datestat));
-    let soob = datestat.needComent ? 'нужен' : 'не нужен'
-    console.log('Коментарий',soob)
+    helpComment = datestat.needComent ? resetCounter : "";
+    if (oldNeedComent !== datestat.needComent) setTrigger(!trigger);
     if (have) {
       clicker++;
       setClicka(clicker);
     }
+  };
+  //========================================================
+  const MainMenu = () => {
+    return (
+      <Box sx={{ display: "flex" }}>
+        {StrokaMenuGlob(PressButton, datestat.working)}
+        <Box sx={styleHelpMain}>
+          <em>{helpComment}</em>
+        </Box>
+      </Box>
+    );
   };
   //=== инициализация ======================================
   if (!flagOpen && Object.keys(map.tflight).length) {
@@ -313,8 +327,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   return (
     <Grid container sx={{ height: "99.9vh" }}>
       <Grid item xs={12}>
-        {/* главное меню */}
-        <Box>{StrokaMenuGlob(PressButton, datestat.working)}</Box>
+        {MainMenu()}
         {/* Яндекс карта */}
         <Grid container sx={{ height: "96.9vh" }}>
           <Grid item xs>
