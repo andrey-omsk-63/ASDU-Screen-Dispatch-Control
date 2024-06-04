@@ -1,22 +1,15 @@
 {
   "files": {
-    "main.css": "/ASDU-Screen-Dispatch-Control/static/css/main.51fc5412.chunk.css",
-    "main.js": "/ASDU-Screen-Dispatch-Control/static/js/main.8a949e99.chunk.js",
-    "main.js.map": "/ASDU-Screen-Dispatch-Control/static/js/main.8a949e99.chunk.js.map",
-    "runtime-main.js": "/ASDU-Screen-Dispatch-Control/static/js/runtime-main.18021773.js",
-    "runtime-main.js.map": "/ASDU-Screen-Dispatch-Control/static/js/runtime-main.18021773.js.map",
-    "static/js/2.01da5bea.chunk.js": "/ASDU-Screen-Dispatch-Control/static/js/2.01da5bea.chunk.js",
-    "static/js/2.01da5bea.chunk.js.map": "/ASDU-Screen-Dispatch-Control/static/js/2.01da5bea.chunk.js.map",
-    "static/js/3.e92b0d48.chunk.js": "/ASDU-Screen-Dispatch-Control/static/js/3.e92b0d48.chunk.js",
-    "static/js/3.e92b0d48.chunk.js.map": "/ASDU-Screen-Dispatch-Control/static/js/3.e92b0d48.chunk.js.map",
+    "main.css": "/ASDU-Screen-Dispatch-Control/static/css/main.3ca7eb09.css",
+    "main.js": "/ASDU-Screen-Dispatch-Control/static/js/main.2395231f.js",
+    "static/js/453.7dda4018.chunk.js": "/ASDU-Screen-Dispatch-Control/static/js/453.7dda4018.chunk.js",
     "index.html": "/ASDU-Screen-Dispatch-Control/index.html",
-    "static/css/main.51fc5412.chunk.css.map": "/ASDU-Screen-Dispatch-Control/static/css/main.51fc5412.chunk.css.map",
-    "static/js/2.01da5bea.chunk.js.LICENSE.txt": "/ASDU-Screen-Dispatch-Control/static/js/2.01da5bea.chunk.js.LICENSE.txt"
+    "main.3ca7eb09.css.map": "/ASDU-Screen-Dispatch-Control/static/css/main.3ca7eb09.css.map",
+    "main.2395231f.js.map": "/ASDU-Screen-Dispatch-Control/static/js/main.2395231f.js.map",
+    "453.7dda4018.chunk.js.map": "/ASDU-Screen-Dispatch-Control/static/js/453.7dda4018.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/runtime-main.18021773.js",
-    "static/js/2.01da5bea.chunk.js",
-    "static/css/main.51fc5412.chunk.css",
-    "static/js/main.8a949e99.chunk.js"
+    "static/css/main.3ca7eb09.css",
+    "static/js/main.2395231f.js"
   ]
 }
