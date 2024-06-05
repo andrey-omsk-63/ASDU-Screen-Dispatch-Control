@@ -303,12 +303,12 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   });
 
   const handleTabClosing = () => {
-    console.log("3пришло:");
+    //console.log("3пришло:");
     removePlayerFromGame();
   };
 
   const alertUser = (event: any) => {
-    console.log("2пришло:", event);
+    //console.log("2пришло:", event);
     // ev = JSON.parse(JSON.stringify(event));
     StatusQuo(false);
     //  event.preventDefault();

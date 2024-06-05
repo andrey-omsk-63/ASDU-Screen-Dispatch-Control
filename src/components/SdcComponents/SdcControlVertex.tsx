@@ -130,16 +130,13 @@ const SdcControlVertex = (props: {
       ],
     };
 
-    console.log('######:',props.idx,map)
-    
     let sumFaz = map.tflight[props.idx].phases.length;
     kluchGl = map.tflight[props.idx].ID + " ";
     let nomIn = datestat.massMem.indexOf(props.idx); // запускался ли светофор ранее?
-    console.log("запускался ли светофор ранее?", nomIn, datestat.massMem); //============= потом убрать ===
+    //console.log("запускался ли светофор ранее?", nomIn, datestat.massMem); //============= потом убрать ===
     if (nomIn < 0) {
       // светофор ранее не запускался
       massfaz.push(massFaz);
-      console.log("MASSFAZ:", massfaz);
       datestat.massMem.push(props.idx); // запись нового id в массив "запущенных" светофоров
       nomInMass = datestat.massMem.length - 1;
       massfaz[nomInMass].idx = props.idx;
@@ -280,7 +277,7 @@ const SdcControlVertex = (props: {
     if (DEMO && mF.faza < 9 && mF.faza > 0) datestat.demoTlsost[present] = 2; // Передана фаза
     if (DEMO) {
       if ((!mF.fazaSist && !mF.faza) || (mF.fazaSist === 9 && mF.faza === 9)) {
-        console.log("id:", mF.id, "DEMO ЛР или КУ", mF.faza); //============= потом убрать ===
+        //console.log("id:", mF.id, "DEMO ЛР или КУ", mF.faza); //============= потом убрать ===
         if (!mF.fazaSist && !mF.faza) datestat.demoTlsost[present] = 5; // ЛР
         if (mF.fazaSist === 9 && mF.faza === 9)
           datestat.demoTlsost[present] = 1; // КУ

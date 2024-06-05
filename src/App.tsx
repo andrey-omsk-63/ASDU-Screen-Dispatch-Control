@@ -153,7 +153,6 @@ const App = () => {
       WS.url.slice(0, 27) === "wss://andrey-omsk-63.github"
     )
       dateStat.debug = true;
-    console.log("!1WS.url:", window.location.origin.slice(0, 22));
     dispatch(statsaveCreate(dateStat));
     flagOpenWS = false;
   }
