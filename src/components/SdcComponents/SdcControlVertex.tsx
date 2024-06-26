@@ -501,7 +501,7 @@ const SdcControlVertex = (props: {
             <Box sx={{ display: "flex", padding: "5px 0px 0px 0px" }}>
               {IntInput()}
               {modeOk ? (
-                <Button sx={StyleServis02("27px")} onClick={() => ClickOk()}>
+                <Button sx={StyleServis02("30px")} onClick={() => ClickOk()}>
                   Да
                 </Button>
               ) : (

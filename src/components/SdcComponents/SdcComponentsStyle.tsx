@@ -127,7 +127,7 @@ export const StyleServis02 = (wdth: any) => {
     color: "black",
     textTransform: "unset !important",
     marginBottom: 0.5,
-    marginTop: 0.4,
+    marginTop: 0.2,
     boxShadow: 6,
   };
   return styleServis02;
@@ -147,7 +147,7 @@ export const styleServis03 = {
 
 export const styleServis04 = {
   "& > :not(style)": {
-    marginTop: "3px",
+    marginTop: "-10px",
     marginLeft: "-9px",
     width: "70px",
   },

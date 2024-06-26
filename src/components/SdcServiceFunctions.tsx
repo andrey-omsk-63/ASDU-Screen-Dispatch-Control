@@ -196,13 +196,14 @@ export const Inputer = (value: any, handleChange: any) => {
           size="small"
           onKeyPress={handleKey} //отключение Enter
           type="number"
-          InputProps={{
-            disableUnderline: true,
+          InputProps={{ disableUnderline: true }}
+          inputProps={{
             style: {
-              maxHeight: "1px",
-              minHeight: "1px",
+              //maxHeight: "1px",
+              //minHeight: "1px",
               fontSize: 12,
-              backgroundColor: "#FFFBE5", // топлёное молоко
+              //backgroundColor: "#FFFBE5", // топлёное молоко
+              cursor: "pointer",
             },
           }}
           value={value}
