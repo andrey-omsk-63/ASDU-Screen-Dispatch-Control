@@ -75,7 +75,7 @@ export const GetPointOptions1 = (Hoster: any) => {
 //=== Разное =======================================
 export const InputDirect = (func: any, otherWork: boolean) => {
   const styleSetNapr = {
-    width: "140px",
+    width: "160px",
     maxHeight: "2px",
     minHeight: "2px",
     bgcolor: "#BAE186", // салатовый
@@ -90,7 +90,7 @@ export const InputDirect = (func: any, otherWork: boolean) => {
     "& > :not(style)": {
       marginTop: "-10px",
       marginLeft: "-12px",
-      width: "165px",
+      width: "185px",
     },
   };
   const handleKey = (event: any) => {
@@ -101,18 +101,20 @@ export const InputDirect = (func: any, otherWork: boolean) => {
     if (!otherWork) {
       setCurrency(Number(event.target.value));
       switch (Number(event.target.value)) {
-        case 0: // режим управления
+        case 0: // заголовок
+          func(61);
+          setCurrency(1);
+          break;
+        case 1: // режим управления
           func(61);
           break;
-        case 1: // режим Demo
+        case 2: // режим Demo
           func(62);
       }
-    } else {
-      //func(63); // Косяк при работе с меню
     }
   };
 
-  let dat = ["Режим управления", "Режим Демо"];
+  let dat = ["Режимы работы:", "● Режим управления", "● Режим Демо"];
   let massKey = [];
   let massDat: any[] = [];
   const currencies: any = [];
@@ -130,7 +132,7 @@ export const InputDirect = (func: any, otherWork: boolean) => {
     currencies.push(maskCurrencies);
   }
 
-  const [currency, setCurrency] = React.useState(0);
+  const [currency, setCurrency] = React.useState(1);
 
   return (
     <Box sx={styleSetNapr}>
@@ -144,11 +146,10 @@ export const InputDirect = (func: any, otherWork: boolean) => {
           InputProps={{
             disableUnderline: true,
             style: {
-              fontSize: currency === 1 ? 14.5 : 14,
+              fontSize:  15,
               //fontSize: 14,
-              fontWeight: 700,
-              color: currency === 1 ? "red" : "black",
-              //marginTop: currency === 1 ? -3 : 0,
+              fontWeight: 500,
+              color: currency === 2 ? "red" : "black",
             },
           }}
           variant="standard"
@@ -159,8 +160,15 @@ export const InputDirect = (func: any, otherWork: boolean) => {
               key={option.value}
               value={option.value}
               sx={{
-                fontSize: 14,
-                color: option.label === "Режим Демо" ? "red" : "black",
+                fontSize: 15,
+                color:
+                  option.label === "● Режим Демо"
+                    ? "red"
+                    : option.label === "Режимы работы:"
+                    ? "blue"
+                    : "black",
+                cursor: option.label === "Режимы работы:" ? "none" : "pointer",
+                fontWeight: option.label === "Режимы работы:" ? 800 : 300,
               }}
             >
               {option.label}
@@ -177,7 +185,7 @@ export const StrokaMenuGlob = (func: any, otherWork: boolean) => {
     fontSize: 14,
     marginRight: 0.1,
     marginLeft: 0.5,
-    width: 165,
+    width: 185,
     paddingBottom: 0.5,
   };
 
