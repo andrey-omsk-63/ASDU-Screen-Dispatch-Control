@@ -146,7 +146,7 @@ export const InputDirect = (func: any, otherWork: boolean) => {
           InputProps={{
             disableUnderline: true,
             style: {
-              fontSize:  15,
+              fontSize: 15,
               //fontSize: 14,
               fontWeight: 500,
               color: currency === 2 ? "red" : "black",
@@ -252,11 +252,13 @@ export const StatusLine = (statusName: string) => {
   return (
     <>
       {!DEMO && (
-        <Box sx={StyleTitle(12.1)}>
-          cостояние:{" "}
-          <em>
-            <b>{statusName}</b>
-          </em>
+        <Box  sx={{padding: "2px 0px 0px 0px",}}>
+          <Box sx={StyleTitle(12.1)}>
+            cостояние:{" "}
+            <em>
+              <b>{statusName}</b>
+            </em>
+          </Box>
         </Box>
       )}
     </>

@@ -17,6 +17,7 @@ export const styleVarKnopNum = {
   marginTop: 4,
   paddingLeft: 0.1,
   fontSize: 12,
+  color: "#7F499A", // сиреневый
 };
 
 export const styleOutputFaza = {
@@ -30,7 +31,7 @@ export const styleOutputFaza = {
 export const StyleTitle = (fontsize: number) => {
   const styleTitle = {
     fontSize: fontsize,
-    color: "#5B1080",
+    color: "#5B1080", // сиреневый
     marginTop: 1,
     textAlign: "center",
   };
@@ -43,19 +44,10 @@ export const StyleModalMenuVar = (colorKnop: string, bShadow: number) => {
     minHeight: "69px",
     width: "208px",
     backgroundColor: colorKnop,
-    // clipPath: `polygon(
-    //   4% 0,
-    //   100% 0,
-    //   100% 80%,
-    //   94% 100%,
-    //   0 100%,
-    //   0 20%
-    // )`,
     color: "black",
     textTransform: "unset !important",
     border: "1px solid #000",
     borderColor: "#d4d4d4", // серый
-    //borderColor:  colorKnop,
     borderRadius: 2,
     boxShadow: bShadow,
     textShadow: "2px 2px 3px rgba(0,0,0,0.3)",
@@ -94,7 +86,7 @@ export const StyleSetControl = (DEMO: boolean) => {
     borderRadius: 1,
     boxShadow: 24,
     textShadow: "2px 2px 3px rgba(0,0,0,0.3)",
-    padding: "1px 15px 10px 15px",
+    padding: "1px 10px 12px 10px",
   };
   return styleSetControl;
 };

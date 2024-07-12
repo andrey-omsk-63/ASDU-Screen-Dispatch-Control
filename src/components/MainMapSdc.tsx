@@ -161,7 +161,6 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       if (datestat.massMem[i] >= 0) {
         let corFromMap = [massfaz[i].coordinates[0], massfaz[i].coordinates[1]];
         let dister = Distance(coord, corFromMap);
-        //console.log("111Нажали на светофор", i, dister, coord, massfaz);
         if (dister <= Aura && minDist > dister) {
           // нажали правой кнопкой на светофор
           minDist = dister;

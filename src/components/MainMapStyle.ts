@@ -20,7 +20,7 @@ export const styleModalEnd = {
   height: "21px",
   maxWidth: "2%",
   minWidth: "2%",
-  color: "black",
+  color: "#7F499A", // сиреневый
   textShadow: "2px 2px 3px rgba(0,0,0,0.3)",
 };
 
@@ -109,7 +109,6 @@ export const styleSetArea = {
   width: "230px",
   maxHeight: "3px",
   minHeight: "3px",
-  //bgcolor: "#FAFAFA",
   bgcolor: "#FFFBE5",
   boxShadow: 3,
   textAlign: "center",
@@ -121,7 +120,6 @@ export const styleSetID = {
   width: "230px",
   maxHeight: "3px",
   minHeight: "3px",
-  //bgcolor: "#FAFAFA",
   bgcolor: "#FFFBE5",
   boxShadow: 3,
   textAlign: "center",

@@ -5,7 +5,6 @@ import { massfazCreate, statsaveCreate } from "../../redux/actions";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-//import TextField from "@mui/material/TextField";
 
 import { CloseInterval, Inputer, OutputFaza } from "../SdcServiceFunctions";
 import { StatusLine } from "../SdcServiceFunctions";
@@ -97,8 +96,6 @@ const SdcControlVertex = (props: {
     datestat.working = false; // свободно
     dispatch(statsaveCreate(datestat));
     oldIdx = -1;
-    // console.log("1Финиш:", shippedKU[nomInMass], datestat.massMem);
-    // console.log("2Финиш:", datestat.timerId, datestat.massInt);
     props.setOpen(false);
   }, [datestat, debug, ws, props, dispatch]);
   //=== инициализация ======================================
@@ -133,7 +130,6 @@ const SdcControlVertex = (props: {
     let sumFaz = map.tflight[props.idx].phases.length;
     kluchGl = map.tflight[props.idx].ID + " ";
     let nomIn = datestat.massMem.indexOf(props.idx); // запускался ли светофор ранее?
-    //console.log("запускался ли светофор ранее?", nomIn, datestat.massMem); //============= потом убрать ===
     if (nomIn < 0) {
       // светофор ранее не запускался
       massfaz.push(massFaz);
@@ -461,8 +457,6 @@ const SdcControlVertex = (props: {
     const ClickOk = () => {
       modeOk = false;
       let newInterval = Number(value);
-      //let difference = INTERVAL - newInterval;
-      //if (!INTERVAL) {
       for (let i = 0; i < datestat.massСounter.length; i++) {
         // задать интервал
         if (massfaz[i].faza < 9 && massfaz[i].faza > 0) {
@@ -507,7 +501,7 @@ const SdcControlVertex = (props: {
               ) : (
                 <>
                   <Box sx={{ color: "#DFE2E7" }}>.</Box>
-                  <Box sx={styleServis05}>сек</Box>
+                  <Box sx={styleServis05}>сек.</Box>
                 </>
               )}
             </Box>
