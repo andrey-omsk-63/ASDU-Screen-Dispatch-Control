@@ -5,8 +5,6 @@ import { Placemark, YMapsApi } from "react-yandex-maps";
 
 import { GetPointData } from "../SdcServiceFunctions";
 
-//import { massMem } from "./SdcControlVertex";
-
 const SdcDoPlacemarkDo = (props: {
   ymaps: YMapsApi | null;
   coordinate: any;
@@ -49,7 +47,6 @@ const SdcDoPlacemarkDo = (props: {
   }
 
   const Hoster = React.useCallback(() => {
-    //let host = 'https://localhost:3000/18.svg';
     let hostt =
       window.location.origin.slice(0, 22) === "https://localhost:3000"
         ? "https://localhost:3000/"
@@ -60,23 +57,18 @@ const SdcDoPlacemarkDo = (props: {
       let mpp = mapp;
       if (DEMO) {
         mpp = "1"; // режим Демо
-        if (nomInMass >= 0) {
-          mpp = datestat.demoTlsost[nomInMass].toString();
-        }
+        if (nomInMass >= 0) mpp = datestat.demoTlsost[nomInMass].toString();
       } else if (nomSvg > 0) mpp = nomSvg.toString();
       host = window.location.origin + "/free/img/trafficLights/" + mpp + ".svg";
       if (datestat.demoLR[nomInMass])
         host = window.location.origin + "/free/img/trafficLights/5.svg";
     } else {
       if (DEMO) {
-        //host = 'https://localhost:3000/1.svg';
         host = hostt + "1.svg";
         if (nomInMass >= 0) {
           let mpp = datestat.demoTlsost[nomInMass].toString();
-          //host = 'https://localhost:3000/' + mpp + '.svg';
           host = hostt + mpp + ".svg";
           if (datestat.demoLR[nomInMass]) host = hostt + "5.svg"; // режим ЛР
-          //if (datestat.demoLR[nomInMass]) host = 'https://localhost:3000/5.svg'; // режим ЛР
         }
       }
     }
@@ -90,47 +82,6 @@ const SdcDoPlacemarkDo = (props: {
     datestat.demoLR,
     nomInMass,
   ]);
-
-  // const Hoster = React.useCallback(() => {
-  //   let host = 'https://localhost:3000/18.svg';
-  //   //let host = "https://localhost:3000/18.svg";
-
-  //   if (!debug) {
-  //     let mpp = mapp;
-  //     if (DEMO) {
-  //       mpp = '1'; // режим Демо
-  //       if (nomInMass >= 0) {
-  //         mpp = datestat.demoTlsost[nomInMass].toString();
-  //       }
-  //     } else {
-  //       if (nomSvg > 0) mpp = nomSvg.toString();
-  //     }
-  //     host = window.location.origin + '/free/img/trafficLights/' + mpp + '.svg';
-  //     if (datestat.demoLR[nomInMass])
-  //       host = window.location.origin + '/free/img/trafficLights/5.svg';
-  //   } else {
-  //     if (DEMO) {
-  //       host = 'https://localhost:3000/1.svg';
-  //       if (nomInMass >= 0) {
-  //         let mpp = datestat.demoTlsost[nomInMass].toString();
-  //         host = 'https://localhost:3000/' + mpp + '.svg';
-  //         if (datestat.demoLR[nomInMass]) host = 'https://localhost:3000/5.svg'; // режим ЛР
-  //       }
-  //     }
-  //   }
-  //   console.log('!host:', host);
-  //   return host;
-  // }, [
-  //   mapp,
-  //   nomSvg,
-  //   debug,
-  //   DEMO,
-  //   //props.idx,
-  //   //datestat.massMem,
-  //   datestat.demoTlsost,
-  //   datestat.demoLR,
-  //   nomInMass,
-  // ]);
 
   const createChipsLayout = React.useCallback(
     (calcFunc: Function, currnum: number, rotateDeg?: number) => {
@@ -218,11 +169,8 @@ const SdcDoPlacemarkDo = (props: {
 
   const getPointOptions2 = () => {
     let colorBalloon = "islands#darkOrangeStretchyIcon";
-    //let colorBalloon = "islands#darkOrangeCircleIcon";
     return { preset: colorBalloon };
   };
-
-  //haveСounter && console.log('Placemark:', props.idx, nomInMass, datestat.massСounter);
 
   const MemoPlacemarkDo = React.useMemo(
     () => (
@@ -230,9 +178,7 @@ const SdcDoPlacemarkDo = (props: {
         key={idx}
         geometry={props.coordinate}
         properties={GetPointData(idx, map, icContent)}
-        //properties={GetPointData(idx, map)}
         options={haveСounter ? getPointOptions2() : getPointOptions1()}
-        //options={getPointOptions1()}
         modules={["geoObject.addon.hint", "geoObject.addon.balloon"]}
         onClick={() => props.OnPlacemarkClickPoint(idx)}
       />

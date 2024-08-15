@@ -335,26 +335,26 @@ const SdcControlVertex = (props: {
           colorKnop = colorExtra;
           bShadow = 12;
         }
-        let contentKnop1 =
+        let Knop1 =
           needDopKnop[nomInMass] && i >= kolFaz[nomInMass] - 1
             ? null
             : datestat.phSvg[i];
-        let contentKnop2 = i;
+        let Knop2 = i;
         if (
           needDopKnop[nomInMass] &&
           i >= kolFaz[nomInMass] - 1 &&
           i + 1 === ii
         )
-          contentKnop2 = -1;
+          Knop2 = -1;
         if (needDopKnop[nomInMass] && i >= kolFaz[nomInMass] - 1 && i + 1 < ii)
-          contentKnop2 = -2;
-        if (needDopKnop[nomInMass] && contentKnop2 === -1)
-          colorKnop = colorNormal;
-        let styleMenuVar = StyleModalMenuVar(colorKnop, bShadow);
+          Knop2 = -2;
+        if (needDopKnop[nomInMass] && Knop2 === -1) colorKnop = colorNormal;
+        let styleMenu = StyleModalMenuVar(colorKnop, bShadow);
         let num =
           needDopKnop[nomInMass] && i >= kolFaz[nomInMass] - 1
             ? ""
             : (i + 1).toString();
+        let I = i + 1;
 
         resStr.push(
           <Grid container key={i}>
@@ -362,13 +362,10 @@ const SdcControlVertex = (props: {
               <b>{num}</b>
             </Grid>
             <Grid item xs={11.5} sx={styleKnop}>
-              {contentKnop2 !== -2 && (
+              {Knop2 !== -2 && (
                 <Box sx={styleOutputFaza}>
-                  <Button
-                    sx={styleMenuVar}
-                    onClick={() => handleClick(i + 1, contentKnop2)}
-                  >
-                    {OutputFaza(contentKnop1, contentKnop2)}
+                  <Button sx={styleMenu} onClick={() => handleClick(I, Knop2)}>
+                    {OutputFaza(Knop1, Knop2)}
                   </Button>
                 </Box>
               )}
@@ -410,15 +407,12 @@ const SdcControlVertex = (props: {
         if (DEMO && sentParam === 9) OnColorSent();
         handleMode = 9;
     }
-    let styleMenuConst = StyleModalMenuConst(colorKnop, bShadow);
+    let styleMenu = StyleModalMenuConst(colorKnop, bShadow);
 
     return (
       <Grid item xs={12} sx={styleKnop}>
         <Box sx={styleOutputFaza}>
-          <Button
-            sx={styleMenuConst}
-            onClick={() => handleClick(handleMode, 0)}
-          >
+          <Button sx={styleMenu} onClick={() => handleClick(handleMode, 0)}>
             <b>{mode}</b>
           </Button>
         </Box>

@@ -18,7 +18,6 @@ export const CenterCoord = (aY: number, aX: number, bY: number, bX: number) => {
 };
 
 export const CloseInterval = (datestat: any, nominmass: number) => {
-  //console.log("CloseInt:", nominmass, datestat.massInt[nominmass]);
   if (datestat.massInt[nominmass]) {
     clearInterval(datestat.massInt[nominmass]);
     datestat.massInt[nominmass] = null;
@@ -52,7 +51,6 @@ export const GetPointData = (index: number, map: any, icContent: string) => {
   cont1 = map.tflight[index].description + "<br/>";
   cont3 = map.tflight[index].tlsost.description + "<br/>";
   cont2 = "[";
-  // + map.tflight[index].area.num + ", ";
   cont2 += map.tflight[index].ID + ", " + map.tflight[index].idevice + "]";
 
   return { hintContent: cont1 + cont3 + cont2, iconContent: icContent };
@@ -147,7 +145,6 @@ export const InputDirect = (func: any, otherWork: boolean) => {
             disableUnderline: true,
             style: {
               fontSize: 15,
-              //fontSize: 14,
               fontWeight: 500,
               color: currency === 2 ? "red" : "black",
             },
@@ -206,13 +203,7 @@ export const Inputer = (value: any, handleChange: any) => {
           type="number"
           InputProps={{ disableUnderline: true }}
           inputProps={{
-            style: {
-              //maxHeight: "1px",
-              //minHeight: "1px",
-              fontSize: 12,
-              //backgroundColor: "#FFFBE5", // топлёное молоко
-              cursor: "pointer",
-            },
+            style: { fontSize: 12, cursor: "pointer" },
           }}
           value={value}
           onChange={handleChange}
@@ -226,7 +217,6 @@ export const Inputer = (value: any, handleChange: any) => {
 
 export const OutputFaza = (img: any, i: number) => {
   let widthHeight = 70;
-  //if (!img) widthHeight = 35;
   return (
     <>
       {img && (
@@ -252,7 +242,7 @@ export const StatusLine = (statusName: string) => {
   return (
     <>
       {!DEMO && (
-        <Box  sx={{padding: "2px 0px 0px 0px",}}>
+        <Box sx={{ padding: "2px 0px 0px 0px" }}>
           <Box sx={StyleTitle(12.1)}>
             cостояние:{" "}
             <em>

@@ -92,7 +92,8 @@ export const StyleSetControl = (DEMO: boolean) => {
 };
 
 export const styleControl01 = {
-  bgcolor: "#F1F5FB",
+  //bgcolor: "#F1F5FB",
+  background: 'linear-gradient(180deg, #F1F5FB 59%, #DEE8F5 )',
   border: "1px solid #d4d4d4",
   borderRadius: 1,
   marginTop: 1,
