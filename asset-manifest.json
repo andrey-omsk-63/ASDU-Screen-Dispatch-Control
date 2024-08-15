@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/ASDU-Screen-Dispatch-Control/static/css/main.3ca7eb09.css",
-    "main.js": "/ASDU-Screen-Dispatch-Control/static/js/main.becefc94.js",
+    "main.js": "/ASDU-Screen-Dispatch-Control/static/js/main.5bfe8c0d.js",
     "static/js/453.7dda4018.chunk.js": "/ASDU-Screen-Dispatch-Control/static/js/453.7dda4018.chunk.js",
     "index.html": "/ASDU-Screen-Dispatch-Control/index.html",
     "main.3ca7eb09.css.map": "/ASDU-Screen-Dispatch-Control/static/css/main.3ca7eb09.css.map",
-    "main.becefc94.js.map": "/ASDU-Screen-Dispatch-Control/static/js/main.becefc94.js.map",
+    "main.5bfe8c0d.js.map": "/ASDU-Screen-Dispatch-Control/static/js/main.5bfe8c0d.js.map",
     "453.7dda4018.chunk.js.map": "/ASDU-Screen-Dispatch-Control/static/js/453.7dda4018.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.3ca7eb09.css",
-    "static/js/main.becefc94.js"
+    "static/js/main.5bfe8c0d.js"
   ]
 }
