@@ -5,25 +5,24 @@ import { massfazCreate, statsaveCreate } from "../redux/actions";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 
-import { YMaps, Map, FullscreenControl } from "react-yandex-maps";
-import { GeolocationControl, YMapsApi } from "react-yandex-maps";
-import { RulerControl, SearchControl } from "react-yandex-maps";
-import { TrafficControl, TypeSelector, ZoomControl } from "react-yandex-maps";
+import { YMaps, Map, YMapsApi } from "react-yandex-maps";
+// import { GeolocationControl, YMapsApi } from "react-yandex-maps";
+// import { RulerControl, SearchControl } from "react-yandex-maps";
+// import { TrafficControl, TypeSelector, ZoomControl } from "react-yandex-maps";
 
 import SdcDoPlacemarkDo from "./SdcComponents/SdcDoPlacemarkDo";
 import SdcControlVertex from "./SdcComponents/SdcControlVertex";
 import SdcErrorMessage from "./SdcComponents/SdcErrorMessage";
 
 import { StrokaMenuGlob, CenterCoord } from "./SdcServiceFunctions";
-import { CloseInterval, Distance } from "./SdcServiceFunctions";
+import { CloseInterval, Distance, YandexServices } from "./SdcServiceFunctions";
 
 import { SendSocketGetPhases } from "./SdcSocketFunctions";
-
 import { SendSocketDispatch } from "./SdcSocketFunctions";
 
 import { MyYandexKey, Restart, Aura } from "./MapConst";
 
-import { searchControl, styleHelpMain } from "./MainMapStyle";
+import { styleHelpMain } from "./MainMapStyle";
 
 export let DEMO = false;
 
@@ -342,15 +341,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
                   width={"99.9%"}
                   height={"99.9%"}
                 >
-                  {/* сервисы Яндекса */}
-                  <FullscreenControl />
-                  <GeolocationControl options={{ float: "left" }} />
-                  <RulerControl options={{ float: "right" }} />
-                  <SearchControl options={searchControl} />
-                  <TrafficControl options={{ float: "right" }} />
-                  <TypeSelector options={{ float: "right" }} />
-                  <ZoomControl options={{ float: "right" }} />
-                  {/* служебные компоненты */}
+                  {YandexServices()}
                   <PlacemarkDo />
                   {control && datestat.readyFaza && (
                     <SdcControlVertex

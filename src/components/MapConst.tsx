@@ -2,24 +2,11 @@ export const YMapsModul = [
   "multiRouter.MultiRoute",
   "Polyline",
   "templateLayoutFactory",
-  //"layout.ImageWithContent",
 ];
 
 export const MyYandexKey = "65162f5f-2d15-41d1-a881-6c1acf34cfa1"; // ключ
 
-export const ZONE = 1; // район для работы (0 - все районы)
-
-export const SUMPK = 121; // количество планов координации
-
 export const MaxFaz = 8; // максимальное количество фаз
-
-export const KolFrom = 4; // количество исходящих направлений
-
-export const KolIn = 5; // количество входящих направлений
-
-export const INCOM = "Вх."; // название входяшего напраления
-
-export const OUTGO = "Исх."; // название исходяшего напраления
 
 export const FromCross: any = {
   pointAaRegin: "",
@@ -35,7 +22,8 @@ export const ToCross: any = {
   pointBcod: "",
 };
 
-export const CLINCH: Array<number> = [ // список аварийных кодов
+export const CLINCH: Array<number> = [
+  // список аварийных кодов
   3, // Перекресток работает в Ручном режиме
   8, // Ручное управление ЖМ
   13, // Светофор отключен в ручном режиме
@@ -54,6 +42,6 @@ export const CLINCH: Array<number> = [ // список аварийных код
   38, // Нет информации
 ];
 
-export const Restart = 1000; // мсек - интервал пеерезапуска счётчиков отправки КУ 
+export const Restart = 1000; // мсек - интервал пеерезапуска счётчиков отправки КУ
 
 export const Aura = 400; // радиус поиска координат светофора при нажатии правой кнопки

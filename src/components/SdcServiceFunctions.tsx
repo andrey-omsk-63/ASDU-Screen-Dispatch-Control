@@ -4,10 +4,15 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 
+import { FullscreenControl, GeolocationControl } from "react-yandex-maps";
+import { RulerControl, SearchControl } from "react-yandex-maps";
+import { TrafficControl, TypeSelector, ZoomControl } from "react-yandex-maps";
+
 import { DEMO } from "./MainMapSdc";
 
 import { styleServis03, StyleTitle } from "./SdcComponents/SdcComponentsStyle";
 import { styleServis04 } from "./SdcComponents/SdcComponentsStyle";
+import { searchControl } from "./MainMapStyle";
 
 export const CenterCoord = (aY: number, aX: number, bY: number, bX: number) => {
   let coord0 = (aY - bY) / 2 + bY;
@@ -42,6 +47,20 @@ export const Distance = (coord1: Array<number>, coord2: Array<number>) => {
     dist = dist * 60 * 1.1515 * 1609.344;
     return dist;
   }
+};
+
+export const YandexServices = () => {
+  return (
+    <>
+      <FullscreenControl />
+      <GeolocationControl options={{ float: "left" }} />
+      <RulerControl options={{ float: "right" }} />
+      <SearchControl options={searchControl} />
+      <TrafficControl options={{ float: "right" }} />
+      <TypeSelector options={{ float: "right" }} />
+      <ZoomControl options={{ float: "right" }} />
+    </>
+  );
 };
 //=== Placemark =====================================
 export const GetPointData = (index: number, map: any, icContent: string) => {
@@ -120,15 +139,8 @@ export const InputDirect = (func: any, otherWork: boolean) => {
     massKey.push(key);
     massDat.push(dat[key]);
   }
-  for (let i = 0; i < massKey.length; i++) {
-    let maskCurrencies = {
-      value: "",
-      label: "",
-    };
-    maskCurrencies.value = massKey[i];
-    maskCurrencies.label = massDat[i];
-    currencies.push(maskCurrencies);
-  }
+  for (let i = 0; i < massKey.length; i++)
+    currencies.push({ value: massKey[i], label: massDat[i] });
 
   const [currency, setCurrency] = React.useState(1);
 
@@ -165,7 +177,7 @@ export const InputDirect = (func: any, otherWork: boolean) => {
                     ? "blue"
                     : "black",
                 cursor: option.label === "Режимы работы:" ? "none" : "pointer",
-                fontWeight: option.label === "Режимы работы:" ? 800 : 300,
+                fontWeight: option.label === "Режимы работы:" ? 800 : 350,
               }}
             >
               {option.label}

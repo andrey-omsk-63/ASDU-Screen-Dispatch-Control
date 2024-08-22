@@ -17,10 +17,10 @@ const AppSocketError = (props: { sErr: string; setOpen: any }) => {
     marginLeft: '24vh',
     width: 380,
     bgcolor: 'background.paper',
-    border: '3px solid #000',
-    borderColor: 'red',
-    borderRadius: 2,
+    border: '3px solid #fff',
+    borderRadius: 1,
     boxShadow: 24,
+    textShadow: "2px 2px 3px rgba(0,0,0,0.3)",
     p: 1.5,
   };
 

@@ -3,7 +3,6 @@ export interface Welcome10 {
   data: Data;
 }
 
-// export interface Data {
 export interface DateMAP {
   areaInfo:       AreaInfo;
   areaZone:       AreaZone[];

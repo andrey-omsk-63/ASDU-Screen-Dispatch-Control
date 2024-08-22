@@ -52,12 +52,10 @@ export const styleSetAdress = {
 };
 
 export const styleSet = {
-  //marginTop: '2vh',
   width: "230px",
   maxHeight: "4px",
   minHeight: "4px",
-  //bgcolor: "#FAFAFA",
-  bgcolor: "#FFFBE5",
+  bgcolor: "#FFFBE5", // топлённое молоко
   boxShadow: 3,
   textAlign: "center",
   p: 1.5,
@@ -102,7 +100,6 @@ export const styleSetAdrArea = {
 export const styleSetAdrID = {
   width: "319px",
   height: "30px",
-  //marginTop: '-1vh',
 };
 
 export const styleSetArea = {

@@ -5,21 +5,15 @@ import { coordinatesCreate, massfazCreate } from "./redux/actions";
 
 import Grid from "@mui/material/Grid";
 
-//import axios from "axios";
-
 import MainMapSdc from "./components/MainMapSdc";
 import AppSocketError from "./AppSocketError";
-
-//import { MasskPoint } from "./components/MapServiceFunctions";
-
-//import { SendSocketGetPhases } from "./components/MapSocketFunctions";
 
 import { dataMap } from "./otladkaMaps";
 import { imgFaza } from "./otladkaPicFaza";
 
 export let dateMapGl: any;
-export let dateBindingsGl: any;
-export let dateAddObjectsGl: any;
+//export let dateBindingsGl: any;
+//export let dateAddObjectsGl: any;
 
 export interface Stater {
   ws: any;
@@ -42,7 +36,7 @@ export interface Stater {
   massInt: any[][];
   stopSwitch: Array<boolean>;
   tekDemoTlsost: Array<number>;
-  needComent: boolean
+  needComent: boolean;
 }
 
 export let dateStat: Stater = {
@@ -69,16 +63,16 @@ export let dateStat: Stater = {
   needComent: false,
 };
 
-export interface Pointer {
-  ID: number;
-  coordinates: Array<number>;
-  nameCoordinates: string;
-  region: number;
-  area: number;
-  phases: Array<number>;
-  phSvg: Array<string | null>;
-}
-export let massDk: Pointer[] = [];
+// export interface Pointer {
+//   ID: number;
+//   coordinates: Array<number>;
+//   nameCoordinates: string;
+//   region: number;
+//   area: number;
+//   phases: Array<number>;
+//   phSvg: Array<string | null>;
+// }
+// export let massDk: Pointer[] = [];
 
 export interface Fazer {
   idx: number;
@@ -94,11 +88,11 @@ export interface Fazer {
 
 export let massFaz: Fazer[] = [];
 
-export interface NameMode {
-  name: string;
-  delRec: boolean;
-}
-export let massMode: NameMode[] = [];
+// export interface NameMode {
+//   name: string;
+//   delRec: boolean;
+// }
+// export let massMode: NameMode[] = [];
 
 export let Coordinates: Array<Array<number>> = []; // массив координат
 
@@ -175,11 +169,9 @@ const App = () => {
         case "tflight":
           //console.log("Tflight:", data, data.tflight);
           for (let j = 0; j < data.tflight.length; j++) {
-            for (let i = 0; i < dateMapGl.tflight.length; i++) {
-              if (data.tflight[j].idevice === dateMapGl.tflight[i].idevice) {
+            for (let i = 0; i < dateMapGl.tflight.length; i++)
+              if (data.tflight[j].idevice === dateMapGl.tflight[i].idevice)
                 dateMapGl.tflight[i].tlsost = data.tflight[j].tlsost;
-              }
-            }
           }
           dispatch(mapCreate(dateMapGl));
           setTrigger(!trigger);
@@ -201,9 +193,8 @@ const App = () => {
           dateMapGl = JSON.parse(JSON.stringify(data));
           dispatch(mapCreate(dateMapGl));
           let massRegion = [];
-          for (let key in dateMapGl.regionInfo) {
+          for (let key in dateMapGl.regionInfo)
             if (!isNaN(Number(key))) massRegion.push(Number(key));
-          }
           homeRegion = massRegion[0].toString();
           dateStat.region = homeRegion;
           dispatch(statsaveCreate(dateStat));
@@ -215,11 +206,9 @@ const App = () => {
           dateStat.area = data.pos.area;
           dateStat.id = data.pos.id.toString();
           dateStat.phSvg = Array(8).fill(null);
-          if (data.phases) {
-            for (let i = 0; i < data.phases.length; i++) {
+          if (data.phases)
+            for (let i = 0; i < data.phases.length; i++)
               dateStat.phSvg[i] = data.phases[i].phase;
-            }
-          }
           dateStat.readyFaza = true;
           dispatch(statsaveCreate(dateStat));
           setTrigger(!trigger);
@@ -235,9 +224,8 @@ const App = () => {
     dateMapGl = JSON.parse(JSON.stringify(dataMap));
     dispatch(mapCreate(dateMapGl));
     let massRegion = [];
-    for (let key in dateMapGl.regionInfo) {
+    for (let key in dateMapGl.regionInfo)
       if (!isNaN(Number(key))) massRegion.push(Number(key));
-    }
     homeRegion = massRegion[0].toString();
     dateStat.region = homeRegion;
     dateStat.phSvg[0] = imgFaza;

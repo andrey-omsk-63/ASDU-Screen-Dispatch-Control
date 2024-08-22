@@ -6,7 +6,6 @@ const intialState = {
 };
 
 export const statsaveReducer = (state = intialState, action: any) => {
-  //console.log('statsaveReducer:', action);
   switch (action.type) {
     case STATSAVE_CREATE:
       return {

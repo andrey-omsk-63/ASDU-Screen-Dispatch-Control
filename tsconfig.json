@@ -33,5 +33,5 @@
     "basket/RgsAppointVertex.tsx",
     "basket/MainMapSdc.tsx",
     "basket/MainMapSdcNew.tsx"
-  ]
+, "basket/massmodeReducer1.tsx", "basket/massdkReducer1.tsx", "basket/bindingsReducer1.tsx", "basket/interfaceBindings1.d.ts", "addobjReducer1.tsx", "interfaceAddObjects1.d.ts"  ]
 }

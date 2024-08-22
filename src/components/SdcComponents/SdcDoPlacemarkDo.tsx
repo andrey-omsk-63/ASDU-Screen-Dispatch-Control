@@ -168,8 +168,7 @@ const SdcDoPlacemarkDo = (props: {
   }, [createChipsLayout, mappp.tlsost.num]);
 
   const getPointOptions2 = () => {
-    let colorBalloon = "islands#darkOrangeStretchyIcon";
-    return { preset: colorBalloon };
+    return { preset: "islands#darkOrangeStretchyIcon" };
   };
 
   const MemoPlacemarkDo = React.useMemo(

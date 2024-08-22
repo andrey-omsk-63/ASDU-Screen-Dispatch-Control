@@ -210,7 +210,6 @@ const SdcControlVertex = (props: {
           let nomIn = datestat.massMem.indexOf(props.idx);
           if (nomIn >= 0) datestat.massMem[nomIn] = -1;
           CloseInterval(datestat, nomInMass);
-          console.log("Почистили", mode, datestat.massInt, datestat.timerId); //============= потом убрать ===
           handleCloseSet();
           return;
         }
@@ -219,11 +218,8 @@ const SdcControlVertex = (props: {
         // проверка режима ЛР
         if (mode === 0) {
           datestat.demoLR[nomInMass] = true;
-        } else {
-          if (datestat.demoLR[nomInMass]) {
-            datestat.demoLR[nomInMass] = false;
-          }
-        }
+        } else if (datestat.demoLR[nomInMass])
+          datestat.demoLR[nomInMass] = false;
       }
       dispatch(statsaveCreate(datestat));
       setSentParam(mode);
@@ -234,8 +230,7 @@ const SdcControlVertex = (props: {
     let ch = 0; // проверка массива timerId на заполненость
     for (let i = 0; i < datestat.timerId.length; i++)
       if (datestat.timerId[i] !== null) ch++;
-    !ch && console.log("Нет запущенных светофоров!!!"); //============= потом убрать ===
-    if (!ch) return;
+    if (!ch) return; // Нет запущенных светофоров!!!
 
     let mass = JSON.parse(JSON.stringify(datestat.timerId));
     for (let i = 0; i < datestat.timerId.length; i++)
@@ -261,11 +256,8 @@ const SdcControlVertex = (props: {
       datestat.demoTlsost[present] = 1;
       if (!datestat.stopSwitch[present]) {
         mF.fazaSist = mF.fazaSist === 2 ? 1 : 2;
-      } else {
-        mF.fazaSist = mF.faza;
-      }
+      } else mF.fazaSist = mF.faza;
       dispatch(massfazCreate(massfaz));
-      //console.log("Отпр id", mF.id, mF.fazaSist, datestat.stopSwitch[present]); //============= потом убрать ===
       needRend = true;
       setFlagPusk(!flagPusk);
     }
@@ -273,7 +265,6 @@ const SdcControlVertex = (props: {
     if (DEMO && mF.faza < 9 && mF.faza > 0) datestat.demoTlsost[present] = 2; // Передана фаза
     if (DEMO) {
       if ((!mF.fazaSist && !mF.faza) || (mF.fazaSist === 9 && mF.faza === 9)) {
-        //console.log("id:", mF.id, "DEMO ЛР или КУ", mF.faza); //============= потом убрать ===
         if (!mF.fazaSist && !mF.faza) datestat.demoTlsost[present] = 5; // ЛР
         if (mF.fazaSist === 9 && mF.faza === 9)
           datestat.demoTlsost[present] = 1; // КУ
