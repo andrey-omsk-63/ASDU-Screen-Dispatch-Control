@@ -6,9 +6,6 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 
 import { YMaps, Map, YMapsApi } from "react-yandex-maps";
-// import { GeolocationControl, YMapsApi } from "react-yandex-maps";
-// import { RulerControl, SearchControl } from "react-yandex-maps";
-// import { TrafficControl, TypeSelector, ZoomControl } from "react-yandex-maps";
 
 import SdcDoPlacemarkDo from "./SdcComponents/SdcDoPlacemarkDo";
 import SdcControlVertex from "./SdcComponents/SdcControlVertex";
