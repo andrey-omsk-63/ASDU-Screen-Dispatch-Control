@@ -214,9 +214,7 @@ export const Inputer = (value: any, handleChange: any) => {
           onKeyPress={handleKey} //отключение Enter
           type="number"
           InputProps={{ disableUnderline: true }}
-          inputProps={{
-            style: { fontSize: 12, cursor: "pointer" },
-          }}
+          inputProps={{ style: { fontSize: 12, cursor: "pointer" } }}
           value={value}
           onChange={handleChange}
           variant="standard"

@@ -152,7 +152,6 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   const FindNearVertex = (coord: Array<number>) => {
     let nomInMass = -1;
     let minDist = 999999;
-    //console.log("000Нажали", datestat.massMem, datestat.massСounter);
     for (let i = 0; i < datestat.massMem.length; i++) {
       if (datestat.massMem[i] >= 0) {
         let corFromMap = [massfaz[i].coordinates[0], massfaz[i].coordinates[1]];
