@@ -10,6 +10,7 @@ import { YMaps, Map, YMapsApi } from "react-yandex-maps";
 import SdcDoPlacemarkDo from "./SdcComponents/SdcDoPlacemarkDo";
 import SdcControlVertex from "./SdcComponents/SdcControlVertex";
 import SdcErrorMessage from "./SdcComponents/SdcErrorMessage";
+import SdcSetup from "./SdcComponents/SdcSetup";
 
 import { StrokaMenuGlob, CenterCoord } from "./SdcServiceFunctions";
 import { CloseInterval, Distance, YandexServices } from "./SdcServiceFunctions";
@@ -65,6 +66,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   const [control, setControl] = React.useState(false);
   const [flagCenter, setFlagCenter] = React.useState(false);
   const [demoSost, setDemoSost] = React.useState(-1);
+  const [needSetup, setNeedSetup] = React.useState(false);
   const [openSetErr, setOpenSetErr] = React.useState(false);
   const [click, setClick] = React.useState(false);
   const [clicka, setClicka] = React.useState(-1);
@@ -102,6 +104,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   };
 
   const OnPlacemarkClickPoint = (index: number) => {
+    console.log("OnPlacemarkClickPoint:", index, datestat.working);
     if (!datestat.working) {
       let nomIn = datestat.massMem.indexOf(index); // запускался ли светофор ранее?
       if (nomIn >= 0) {
@@ -210,9 +213,10 @@ const MainMapSdc = (props: { trigger: boolean }) => {
         dispatch(statsaveCreate(datestat));
         DEMO = true;
         break;
-      case 63: // Косяк при работе с меню
-        soobErr = "Завершите предыдущий режим нормальным образом";
-        setOpenSetErr(true);
+      case 63: // настройки
+        //soobErr = "Режим скоро заработает";
+        //setOpenSetErr(true);
+        setNeedSetup(true);
     }
   };
   //=== Функции - обработчики ==============================
@@ -356,6 +360,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
           </Grid>
         </Grid>
       </Grid>
+      {needSetup && <SdcSetup close={setNeedSetup} />}
     </Grid>
   );
 };

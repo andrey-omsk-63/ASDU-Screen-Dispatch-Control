@@ -37,6 +37,8 @@ export interface Stater {
   stopSwitch: Array<boolean>;
   tekDemoTlsost: Array<number>;
   needComent: boolean;
+  intervalFaza: number; // Задаваемая длительность фазы ДУ (сек)
+  intervalFazaDop: number; // Увеличениение длительности фазы ДУ (сек)
 }
 
 export let dateStat: Stater = {
@@ -61,6 +63,8 @@ export let dateStat: Stater = {
   stopSwitch: [],
   tekDemoTlsost: [],
   needComent: false,
+  intervalFaza: 0, // Задаваемая длительность фазы ДУ (сек)
+  intervalFazaDop: 0, // Увеличениение длительности фазы ДУ (сек)
 };
 
 // export interface Pointer {
@@ -124,7 +128,18 @@ const App = () => {
       coord[1] = dateMapGl.tflight[i].points.X;
       coordinates.push(coord);
     }
+    // достать длительность фазы ДУ из LocalStorage
+    if (window.localStorage.intervalFaza === "undefined")
+      window.localStorage.intervalFaza = 0;
+    dateStat.intervalFaza = Number(window.localStorage.intervalFaza);
+    // достать увеличениение длительности фазы ДУ из LocalStorage
+    if (window.localStorage.intervalFazaDop === "undefined") {
+      window.localStorage.intervalFazaDop = 0;
+      console.log("1###:", window.localStorage.intervalFazaDop);
+    }
+    dateStat.intervalFazaDop = Number(window.localStorage.intervalFazaDop);
     dispatch(coordinatesCreate(coordinates));
+    console.log("dateStat:", dateStat);
   };
 
   const host =
