@@ -118,23 +118,25 @@ export const InputDirect = (func: any, otherWork: boolean) => {
       width: "185px",
     },
   };
-  
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!otherWork) {
-      setCurrency(Number(event.target.value));
+      //setCurrency(Number(event.target.value));
       switch (Number(event.target.value)) {
         case 0: // заголовок
           func(61);
           setCurrency(1);
           break;
         case 1: // режим управления
+          setCurrency(Number(event.target.value));
           func(61);
           break;
         case 2: // настройки
           func(63);
+          //setCurrency(oldMode === 61 ? 1 : 3); // встать пункт меню из которого вызвана настройка
           break;
         case 3: // режим Demo
+          setCurrency(Number(event.target.value));
           func(62);
       }
     }
@@ -216,8 +218,6 @@ export const StrokaMenuGlob = (func: any, otherWork: boolean) => {
 };
 
 export const Inputer = (value: any, handleChange: any) => {
-  
-
   return (
     <Box sx={styleServis03}>
       <Box component="form" sx={styleServis04}>
@@ -276,7 +276,7 @@ export const StatusLine = (statusName: string) => {
     </>
   );
 };
-//=====================================================================
+//=== SdcSetup =====================================
 export const BadExit = (badExit: boolean, handleCloseEnd: Function) => {
   const styleSetPoint = {
     outline: "none",
@@ -412,111 +412,6 @@ export const StrTablVert = (xss: number, recLeft: string, recRight: any) => {
   );
 };
 
-// export const ShiftOptimal = (
-//   mode: boolean,
-//   ChangeOptimal: Function,
-//   shift: number
-// ) => {
-//   const styleOptimalNo = {
-//     marginTop: shift,
-//     marginRight: 1,
-//     maxHeight: "27px",
-//     minHeight: "27px",
-//     maxWidth: 58,
-//     minWidth: 58,
-//     backgroundColor: "#E6F5D6", // светло салатовый
-//     border: "1px solid #d4d4d4", // серый
-//     borderRadius: 1,
-//     textTransform: "unset !important",
-//     boxShadow: 2,
-//     color: "black",
-//   };
-
-//   const styleOptimalYes = {
-//     marginTop: shift,
-//     marginRight: 1,
-//     maxHeight: "27px",
-//     minHeight: "27px",
-//     maxWidth: 58,
-//     minWidth: 58,
-//     backgroundColor: "#bae186", // тёмно салатовый
-//     border: "1px solid #bae186", // тёмно салатовый
-//     borderRadius: 1,
-//     textTransform: "unset !important",
-//     boxShadow: 6,
-//     color: "black",
-//   };
-
-//   let illum = mode ? styleOptimalYes : styleOptimalNo;
-//   let soob = mode ? "Да" : "Нет";
-
-//   return (
-//     <Button sx={illum} onClick={() => ChangeOptimal()}>
-//       {soob}
-//     </Button>
-//   );
-// };
-
-// export const PreparCurrenciesDispVert = () => {
-//   const currencies: any = [];
-//   let dat = ["значками светофоров", "номерами фаз", "картинками фаз"];
-//   let massKey: any = [];
-//   let massDat: any = [];
-//   for (let key in dat) {
-//     massKey.push(key);
-//     massDat.push(dat[key]);
-//   }
-//   for (let i = 0; i < massKey.length; i++)
-//     currencies.push({ value: massKey[i], label: massDat[i] });
-//   return currencies;
-// };
-
-// export const InputFromList = (func: any, currency: any, currencies: any) => {
-//   const styleSet = {
-//     width: "165px",
-//     maxHeight: "6px",
-//     minHeight: "6px",
-//     bgcolor: "#FFFBE5",
-//     border: "1px solid #d4d4d4", // серый
-//     borderRadius: 1,
-//     textAlign: "left",
-//     p: 1.45,
-//     boxShadow: 6,
-//   };
-
-//   const styleBoxForm = {
-//     "& > :not(style)": {
-//       marginTop: "-7px",
-//       marginLeft: "-12px",
-//       width: "175px",
-//       padding: "0px 0px 0px 5px",
-//     },
-//   };
-
-//   return (
-//     <Box sx={styleSet}>
-//       <Box component="form" sx={styleBoxForm}>
-//         <TextField
-//           select
-//           size="small"
-//           onKeyPress={handleKey} //отключение Enter
-//           value={currency}
-//           onChange={func}
-//           InputProps={{ disableUnderline: true, style: { fontSize: 14 } }}
-//           variant="standard"
-//           color="secondary"
-//         >
-//           {currencies.map((option: any) => (
-//             <MenuItem key={option.value} value={option.value}>
-//               {option.label}
-//             </MenuItem>
-//           ))}
-//         </TextField>
-//       </Box>
-//     </Box>
-//   );
-// };
-
 export const WaysInput = (
   idx: number,
   VALUE: any,
@@ -583,3 +478,4 @@ export const WaysInput = (
     </Box>
   );
 };
+//=====================================================================

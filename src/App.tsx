@@ -126,19 +126,21 @@ const App = () => {
       let coord = [];
       coord[0] = dateMapGl.tflight[i].points.Y;
       coord[1] = dateMapGl.tflight[i].points.X;
-      coordinates.push(coord);
+      Coordinates.push(coord);
     }
+
     // достать длительность фазы ДУ из LocalStorage
-    if (window.localStorage.intervalFaza === "undefined")
-      window.localStorage.intervalFaza = 0;
-    dateStat.intervalFaza = Number(window.localStorage.intervalFaza);
+    if (window.localStorage.intervalFazaD === undefined)
+      window.localStorage.intervalFazaD = "0";
+    dateStat.intervalFaza = Number(window.localStorage.intervalFazaD);
+    
     // достать увеличениение длительности фазы ДУ из LocalStorage
-    if (window.localStorage.intervalFazaDop === "undefined") {
-      window.localStorage.intervalFazaDop = 0;
-      console.log("1###:", window.localStorage.intervalFazaDop);
-    }
-    dateStat.intervalFazaDop = Number(window.localStorage.intervalFazaDop);
+    if (window.localStorage.intervalFazaDopD === undefined)
+      window.localStorage.intervalFazaDopD = "0";
+    dateStat.intervalFazaDop = Number(window.localStorage.intervalFazaDopD);
+
     dispatch(coordinatesCreate(coordinates));
+    dispatch(statsaveCreate(dateStat));
     console.log("dateStat:", dateStat);
   };
 
@@ -192,7 +194,7 @@ const App = () => {
           setTrigger(!trigger);
           break;
         case "phases":
-          console.log("App пришло:", allData.type, data.phases[0].phase);
+          console.log("phases:", data, data.phases[0].phase);
           for (let i = 0; i < massfaz.length; i++) {
             if (
               massfaz[i].idevice === data.phases[0].device &&

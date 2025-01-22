@@ -21,6 +21,10 @@ const SdcDoPlacemarkDo = (props: {
     const { statsaveReducer } = state;
     return statsaveReducer.datestat;
   });
+  let massfaz = useSelector((state: any) => {
+    const { massfazReducer } = state;
+    return massfazReducer.massfaz;
+  });
   const debug = datestat.debug;
   const DEMO = datestat.demo;
   //===========================================================
@@ -36,7 +40,9 @@ const SdcDoPlacemarkDo = (props: {
   const nomInMass = datestat.massMem.indexOf(props.idx);
   let haveСounter = nomInMass < 0 ? false : true; // взведён ли счётчик?
   let icContent =
-    nomInMass < 0 ? "" : datestat.massСounter[nomInMass].toString();
+    nomInMass < 0
+      ? ""
+      : datestat.massСounter[nomInMass] + "(" + massfaz[nomInMass].faza + ")";
 
   if (nomInMass >= 0) {
     if (

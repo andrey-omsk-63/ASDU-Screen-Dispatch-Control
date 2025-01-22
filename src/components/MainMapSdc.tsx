@@ -31,11 +31,11 @@ let pointCenter: any = 0;
 let newCenter: any = [];
 let funcBound: any = null;
 let funcContex: any = null;
-
 let soobErr = "";
 let idxObj = -1;
 let clicker = 0;
 let INT: Array<any> = [];
+
 let helpComment = "";
 let resetCounter = "Правой кнопкой мыши можно сбросить счётчик";
 
@@ -104,16 +104,15 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   };
 
   const OnPlacemarkClickPoint = (index: number) => {
-    console.log("OnPlacemarkClickPoint:", index, datestat.working);
     if (!datestat.working) {
       let nomIn = datestat.massMem.indexOf(index); // запускался ли светофор ранее?
       if (nomIn >= 0) {
         // ранее запускался
         if (window.localStorage.interval === undefined)
           window.localStorage.interval = 0;
-        let INTERVAL = Number(window.localStorage.interval);
-        if (datestat.massСounter[nomIn] > 0 && INTERVAL) {
-          datestat.massСounter[nomIn] = INTERVAL; // перезапуск счётчика
+        let INTERVALDOP = Number(window.localStorage.intervalFazaDopD);
+        if (datestat.massСounter[nomIn] > 0 && INTERVALDOP) {
+          datestat.massСounter[nomIn] += INTERVALDOP; // подкачка счётчика
           dispatch(statsaveCreate(datestat));
           return;
         }
@@ -214,8 +213,6 @@ const MainMapSdc = (props: { trigger: boolean }) => {
         DEMO = true;
         break;
       case 63: // настройки
-        //soobErr = "Режим скоро заработает";
-        //setOpenSetErr(true);
         setNeedSetup(true);
     }
   };

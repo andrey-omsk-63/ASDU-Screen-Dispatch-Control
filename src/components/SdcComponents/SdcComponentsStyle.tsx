@@ -50,6 +50,7 @@ export const StyleModalMenuVar = (colorKnop: string, bShadow: number) => {
     borderColor: "#d4d4d4", // серый
     borderRadius: 2,
     boxShadow: bShadow,
+    lineHeight: 1.7,
     textShadow: "2px 2px 3px rgba(0,0,0,0.3)",
   };
   return styleModalMenuVar;
@@ -67,6 +68,7 @@ export const StyleModalMenuConst = (colorKnop: string, bShadow: number) => {
     border: "1px solid #000",
     borderColor: "#d4d4d4", // серый
     borderRadius: 2,
+    lineHeight: 1.7,
     boxShadow: bShadow,
     textShadow: "2px 2px 3px rgba(0,0,0,0.3)",
   };
@@ -92,20 +94,24 @@ export const StyleSetControl = (DEMO: boolean) => {
 };
 
 export const styleControl01 = {
-  background: 'linear-gradient(180deg, #F1F5FB 59%, #DEE8F5 )',
+  background: "linear-gradient(180deg, #F1F5FB 59%, #DEE8F5 )",
   border: "1px solid #d4d4d4",
   borderRadius: 1,
   marginTop: 1,
   boxShadow: 6,
-  padding: "7px 0px 5px 0px",
+  padding: "7px 0px 0px 0px",
 };
 
 export const styleServis01 = {
-  height: "75px",
-  margin: "0px 0px 5px 0px",
-  padding: "0px 0px 0px 3px",
+  fontSize: 11.0,
+  color: "#5B1080",
+  height: "69px",
+  margin: "9px 0px 5px 2px",
+  //padding: "2px 0px 0px 3px",
+  //textAlign: "center",
+  border: 0,
 };
-
+// убрать
 export const StyleServis02 = (wdth: any) => {
   const styleServis02 = {
     fontSize: 11.0,
@@ -143,7 +149,7 @@ export const styleServis04 = {
     width: "70px",
   },
 };
-
+// убрать
 export const styleServis05 = {
   fontSize: 12.05,
   color: "#5B1080",
