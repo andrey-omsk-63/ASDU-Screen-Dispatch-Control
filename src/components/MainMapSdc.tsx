@@ -12,20 +12,20 @@ import SdcControlVertex from "./SdcComponents/SdcControlVertex";
 import SdcErrorMessage from "./SdcComponents/SdcErrorMessage";
 import SdcSetup from "./SdcComponents/SdcSetup";
 
-import { StrokaMenuGlob, CenterCoord } from "./SdcServiceFunctions";
+import { StrokaMenuGlob, CenterCoordBegin } from "./SdcServiceFunctions";
 import { CloseInterval, Distance, YandexServices } from "./SdcServiceFunctions";
 
 import { SendSocketGetPhases } from "./SdcSocketFunctions";
 import { SendSocketDispatch } from "./SdcSocketFunctions";
 
-import { MyYandexKey, Restart, Aura } from "./MapConst";
+import { MyYandexKey, Restart, Aura, zoomStart } from "./MapConst";
 
 import { styleHelpMain } from "./MainMapStyle";
 
 export let DEMO = false;
 
 let flagOpen = false;
-const zoomStart = 10;
+//const zoomStart = 10;
 let zoom = zoomStart;
 let pointCenter: any = 0;
 let newCenter: any = [];
@@ -241,13 +241,14 @@ const MainMapSdc = (props: { trigger: boolean }) => {
         datestat.massСounter[i]--;
       }
       if (datestat.massСounter[i] > 0) {
+        let mF = massfaz[i];
         have++;
-        datestat.massСounter[i]--;
+        //console.log("massfaz[i]", mF.fazaSist, mF.faza);
+        if (mF.fazaSist === mF.faza) datestat.massСounter[i]--; // норм запущен счётчик
         if (!datestat.massСounter[i]) {
-          let mF = massfaz[i];
           !DEMO && SendSocketDispatch(debug, ws, mF.idevice, 9, 9);
           massfaz[i].faza = 9;
-          datestat.massMem[i] = -1;
+          datestat.massMem[i] = massfaz[i].idevice = massfaz[i].idx = -1; // затереть в massfaz и massMem
           dispatch(massfazCreate(massfaz));
           !DEMO && SendSocketDispatch(debug, ws, mF.idevice, 4, 0);
           CloseInterval(datestat, i);
@@ -276,12 +277,13 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   };
   //=== инициализация ======================================
   if (!flagOpen && Object.keys(map.tflight).length) {
-    pointCenter = CenterCoord(
-      map.boxPoint.point0.Y,
-      map.boxPoint.point0.X,
-      map.boxPoint.point1.Y,
-      map.boxPoint.point1.X
-    );
+    // pointCenter = CenterCoord(
+    //   map.boxPoint.point0.Y,
+    //   map.boxPoint.point0.X,
+    //   map.boxPoint.point1.Y,
+    //   map.boxPoint.point1.X
+    // );
+    pointCenter = CenterCoordBegin(map); // координаты центра отоброжаемой карты
     INT[0] = setInterval(() => DoTimerRestart(), Restart); // запуск счетчиков отправки КУ
     flagOpen = true;
     clicker = clicka; // костылик

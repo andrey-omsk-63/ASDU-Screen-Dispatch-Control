@@ -30,6 +30,39 @@ export const CenterCoord = (aY: number, aX: number, bY: number, bX: number) => {
   return [coord0, coord1];
 };
 
+export const CenterCoordBegin = (map: any) => {
+  let mapp = map.tflight;
+  let min = 999;
+  let max = 0;
+  let nomMin = -1;
+  let nomMax = -1;
+  for (let i = 0; i < mapp.length; i++) {
+    if (mapp[i].points.X < min) {
+      nomMin = i;
+      min = mapp[i].points.X;
+    }
+    if (mapp[i].points.X > max) {
+      nomMax = i;
+      max = mapp[i].points.X;
+    }
+  }
+
+  return CenterCoord(
+    mapp[nomMin].points.Y,
+    mapp[nomMin].points.X,
+    mapp[nomMax].points.Y,
+    mapp[nomMax].points.X
+  );
+
+  // return CenterCoord(
+  //   map.dateMap.boxPoint.point0.Y,
+  //   map.dateMap.boxPoint.point0.X,
+  //   map.dateMap.boxPoint.point1.Y,
+  //   map.dateMap.boxPoint.point1.X
+  // );
+};
+
+
 export const CloseInterval = (datestat: any, nominmass: number) => {
   if (datestat.massInt[nominmass]) {
     clearInterval(datestat.massInt[nominmass]);

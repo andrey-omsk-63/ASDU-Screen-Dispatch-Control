@@ -133,7 +133,7 @@ const App = () => {
     if (window.localStorage.intervalFazaD === undefined)
       window.localStorage.intervalFazaD = "0";
     dateStat.intervalFaza = Number(window.localStorage.intervalFazaD);
-    
+
     // достать увеличениение длительности фазы ДУ из LocalStorage
     if (window.localStorage.intervalFazaDopD === undefined)
       window.localStorage.intervalFazaDopD = "0";
@@ -194,16 +194,23 @@ const App = () => {
           setTrigger(!trigger);
           break;
         case "phases":
-          console.log("phases:", data, data.phases[0].phase);
-          for (let i = 0; i < massfaz.length; i++) {
-            if (
-              massfaz[i].idevice === data.phases[0].device &&
-              !dateStat.demo
-            ) {
-              massfaz[i].fazaSist = data.phases[0].phase;
-              dispatch(massfazCreate(massfaz));
-              setTrigger(!trigger);
+          console.log("0phases:", data.phases,dateStat.massMem,massfaz);
+          let flagChange = 0;
+          for (let j = 0; j < data.phases.length; j++) {
+            for (let i = 0; i < massfaz.length; i++) {
+              if (
+                massfaz[i].idevice === data.phases[j].device &&
+                !dateStat.demo
+              ) {
+                massfaz[i].fazaSist = data.phases[j].phase;
+                console.log("1phases:",i,massfaz[i].idevice, data.phases[j].phase);
+                flagChange++
+              }
             }
+          }
+          if (flagChange) {
+            dispatch(massfazCreate(massfaz));
+            setTrigger(!trigger);
           }
           break;
         case "mapInfo":
