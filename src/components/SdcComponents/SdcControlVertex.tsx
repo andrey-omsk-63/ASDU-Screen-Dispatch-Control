@@ -45,6 +45,7 @@ const colorExtra = "#82e94a"; // средний лайм
 const colorSent = "#AFDAF3"; // светло-голубой
 //const colorBad = "#bec6ce"; // серый
 const colorBad = "#FDFEFA"; // бледно-салатовый
+const colorGolden = "#FFFAC6"; // бледно-золотистый
 
 let colorKnop = colorBad;
 let bShadow = 4;
@@ -104,7 +105,7 @@ const SdcControlVertex = (props: {
             -1;
 
       let mf = JSON.parse(JSON.stringify(massfaz));
-      console.log("!!!:", nomInMass, datestat.massMem, mf, massfaz);
+      console.log("!!!:", nomInMass, datestat.massMem, mf);
 
       datestat.working = false; // свободно
       dispatch(statsaveCreate(datestat));
@@ -134,6 +135,7 @@ const SdcControlVertex = (props: {
       id: datestat.id,
       faza: -1,
       fazaSist: -1,
+      fazaSistOld: -1,
       fazaZU: 0, // 0 - отправлено ЖМ, ОС, ЛР или КУ (10,11,0,9)
       phases: [],
       idevice: map.tflight[props.idx].idevice,
@@ -150,11 +152,11 @@ const SdcControlVertex = (props: {
       // светофор ранее не запускался
       massfaz.push(massFaz);
       datestat.massMem.push(props.idx); // запись нового id в массив "запущенных" светофоров
-
+      //============
       let mm = JSON.parse(JSON.stringify(datestat.massMem));
       let mf = JSON.parse(JSON.stringify(massfaz));
       console.log("@@@:", props.idx, mm, mf);
-
+      //============
       nomInMass = datestat.massMem.length - 1;
       massfaz[nomInMass].idx = props.idx;
       datestat.timerId.push(null); // массив времени отправки команд
@@ -195,7 +197,7 @@ const SdcControlVertex = (props: {
     } else {
       if (mF.fazaSist !== 9 && mF.fazaSist !== 12) {
         if (oldSistFaza[nomInMass] !== mF.fazaSist) {
-          setSentParam(-1);
+          if(mF.fazaSist !== 9) setSentParam(-1);
           oldSistFaza[nomInMass] = mF.fazaSist;
         }
       }
@@ -345,7 +347,13 @@ const SdcControlVertex = (props: {
         bShadow = 4;
         if (sentParam === i + 1) OnColorSent();
         if (mF.fazaSist === i + 1) {
+          // пришедшая фаза
           colorKnop = colorExtra;
+          bShadow = 12;
+        }
+        if (mF.fazaSist === 9 && mF.fazaSistOld === i + 1) {
+          // промтакт
+          colorKnop = colorGolden;
           bShadow = 12;
         }
         let Knop1 =

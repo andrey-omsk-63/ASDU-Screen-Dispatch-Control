@@ -62,6 +62,12 @@ export const CenterCoordBegin = (map: any) => {
   // );
 };
 
+export const SaveZoom = (zoom: number, pointCenter: Array<number>) => {
+  window.localStorage.ZoomDU = zoom;
+  window.localStorage.PointCenterDU0 = pointCenter[0]
+  window.localStorage.PointCenterDU1 = pointCenter[1]
+  //console.log('SaveZoom:',window.localStorage.ZoomDU)
+};
 
 export const CloseInterval = (datestat: any, nominmass: number) => {
   if (datestat.massInt[nominmass]) {

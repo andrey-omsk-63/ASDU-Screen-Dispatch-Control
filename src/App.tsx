@@ -11,9 +11,9 @@ import AppSocketError from "./AppSocketError";
 import { dataMap } from "./otladkaMaps";
 import { imgFaza } from "./otladkaPicFaza";
 
+import { zoomStart } from "./components/MapConst";
+
 export let dateMapGl: any;
-//export let dateBindingsGl: any;
-//export let dateAddObjectsGl: any;
 
 export interface Stater {
   ws: any;
@@ -67,23 +67,13 @@ export let dateStat: Stater = {
   intervalFazaDop: 0, // Увеличениение длительности фазы ДУ (сек)
 };
 
-// export interface Pointer {
-//   ID: number;
-//   coordinates: Array<number>;
-//   nameCoordinates: string;
-//   region: number;
-//   area: number;
-//   phases: Array<number>;
-//   phSvg: Array<string | null>;
-// }
-// export let massDk: Pointer[] = [];
-
 export interface Fazer {
   idx: number;
   area: number;
   id: number;
   faza: number;
   fazaSist: number;
+  fazaSistOld: number;
   fazaZU: number; // 0 - отправлено ЖМ, ОС, ЛР или КУ (10,11,0,9)
   phases: Array<number>;
   idevice: number;
@@ -91,12 +81,6 @@ export interface Fazer {
 }
 
 export let massFaz: Fazer[] = [];
-
-// export interface NameMode {
-//   name: string;
-//   delRec: boolean;
-// }
-// export let massMode: NameMode[] = [];
 
 export let Coordinates: Array<Array<number>> = []; // массив координат
 
@@ -138,6 +122,18 @@ const App = () => {
     if (window.localStorage.intervalFazaDopD === undefined)
       window.localStorage.intervalFazaDopD = "0";
     dateStat.intervalFazaDop = Number(window.localStorage.intervalFazaDopD);
+
+    // достать начальный zoom Yandex-карты ДУ из LocalStorage
+    if (window.localStorage.ZoomDU === undefined)
+      window.localStorage.ZoomDU = zoomStart;
+
+    // достать центр координат [0] Yandex-карты ДУ из LocalStorage
+    if (window.localStorage.PointCenterDU0 === undefined)
+      window.localStorage.PointCenterDU0 = 0;
+
+    // достать центр координат [1] Yandex-карты ДУ из LocalStorage
+    if (window.localStorage.PointCenterDU1 === undefined)
+      window.localStorage.PointCenterDU1 = 0;
 
     dispatch(coordinatesCreate(coordinates));
     dispatch(statsaveCreate(dateStat));
@@ -194,17 +190,18 @@ const App = () => {
           setTrigger(!trigger);
           break;
         case "phases":
-          console.log("0phases:", data.phases,dateStat.massMem,massfaz);
+          console.log("0PH:", data.phases, dateStat.massMem, massfaz);
           let flagChange = 0;
           for (let j = 0; j < data.phases.length; j++) {
             for (let i = 0; i < massfaz.length; i++) {
-              if (
-                massfaz[i].idevice === data.phases[j].device &&
-                !dateStat.demo
-              ) {
-                massfaz[i].fazaSist = data.phases[j].phase;
-                console.log("1phases:",i,massfaz[i].idevice, data.phases[j].phase);
-                flagChange++
+              let mf = massfaz[i];
+              if (mf.idevice === data.phases[j].device && !dateStat.demo) {
+                if (mf.fazaSist !== 9)
+                  mf.fazaSistOld = JSON.parse(JSON.stringify(mf.fazaSist));
+                mf.fazaSist = data.phases[j].phase;
+                flagChange++;
+
+                console.log("1PH:", i, mf.idevice, mf.fazaSist, mf.fazaSistOld);
               }
             }
           }

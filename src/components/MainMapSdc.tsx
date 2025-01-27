@@ -14,6 +14,7 @@ import SdcSetup from "./SdcComponents/SdcSetup";
 
 import { StrokaMenuGlob, CenterCoordBegin } from "./SdcServiceFunctions";
 import { CloseInterval, Distance, YandexServices } from "./SdcServiceFunctions";
+import { SaveZoom } from "./SdcServiceFunctions";
 
 import { SendSocketGetPhases } from "./SdcSocketFunctions";
 import { SendSocketDispatch } from "./SdcSocketFunctions";
@@ -25,10 +26,8 @@ import { styleHelpMain } from "./MainMapStyle";
 export let DEMO = false;
 
 let flagOpen = false;
-//const zoomStart = 10;
 let zoom = zoomStart;
 let pointCenter: any = 0;
-let newCenter: any = [];
 let funcBound: any = null;
 let funcContex: any = null;
 let soobErr = "";
@@ -64,7 +63,6 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   const dispatch = useDispatch();
   //===========================================================
   const [control, setControl] = React.useState(false);
-  const [flagCenter, setFlagCenter] = React.useState(false);
   const [demoSost, setDemoSost] = React.useState(-1);
   const [needSetup, setNeedSetup] = React.useState(false);
   const [openSetErr, setOpenSetErr] = React.useState(false);
@@ -187,12 +185,9 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       funcBound = function () {
         pointCenter = mapp.current.getCenter();
         zoom = mapp.current.getZoom(); // покрутили колёсико мыши
+        SaveZoom(zoom, pointCenter);
       };
       mapp.current.events.add("boundschange", funcBound);
-      if (flagCenter) {
-        pointCenter = newCenter;
-        setFlagCenter(false);
-      }
     }
   };
 
@@ -243,7 +238,6 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       if (datestat.massСounter[i] > 0) {
         let mF = massfaz[i];
         have++;
-        //console.log("massfaz[i]", mF.fazaSist, mF.faza);
         if (mF.fazaSist === mF.faza) datestat.massСounter[i]--; // норм запущен счётчик
         if (!datestat.massСounter[i]) {
           !DEMO && SendSocketDispatch(debug, ws, mF.idevice, 9, 9);
@@ -277,13 +271,12 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   };
   //=== инициализация ======================================
   if (!flagOpen && Object.keys(map.tflight).length) {
-    // pointCenter = CenterCoord(
-    //   map.boxPoint.point0.Y,
-    //   map.boxPoint.point0.X,
-    //   map.boxPoint.point1.Y,
-    //   map.boxPoint.point1.X
-    // );
-    pointCenter = CenterCoordBegin(map); // координаты центра отоброжаемой карты
+    let point0 = window.localStorage.PointCenterDU0;
+    let point1 = window.localStorage.PointCenterDU1;
+    if (!Number(point0) || !Number(point1)) {
+      pointCenter = CenterCoordBegin(map); // начальные координаты центра отоброжаемой карты
+    } else pointCenter = [Number(point0), Number(point1)];
+    zoom = Number(window.localStorage.ZoomDU); // начальный zoom Yandex-карты ДУ
     INT[0] = setInterval(() => DoTimerRestart(), Restart); // запуск счетчиков отправки КУ
     flagOpen = true;
     clicker = clicka; // костылик
