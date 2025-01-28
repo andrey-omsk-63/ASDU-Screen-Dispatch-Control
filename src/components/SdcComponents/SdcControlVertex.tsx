@@ -92,21 +92,11 @@ const SdcControlVertex = (props: {
   //========================================================
   const handleCloseSet = React.useCallback(
     (mode: number) => {
-      console.log("handleCloseSet:", mode, shippedKU[nomInMass]);
-
       if (!DEMO && !clinch && shippedKU[nomInMass]) {
         SendSocketDispatch(debug, ws, mF.idevice, 9, 9); // КУ
         SendSocketDispatch(debug, ws, mF.idevice, 4, 0); // закрытие id
       }
-      if (mode)
-        datestat.massMem[nomInMass] =
-          massfaz[nomInMass].idevice =
-          massfaz[nomInMass].idx =
-            -1;
-
-      let mf = JSON.parse(JSON.stringify(massfaz));
-      console.log("!!!:", nomInMass, datestat.massMem, mf);
-
+      if (mode) datestat.massMem[nomInMass] = mF.idevice = mF.idx = -1;
       datestat.working = false; // свободно
       dispatch(statsaveCreate(datestat));
       dispatch(massfazCreate(massfaz));
@@ -153,9 +143,9 @@ const SdcControlVertex = (props: {
       massfaz.push(massFaz);
       datestat.massMem.push(props.idx); // запись нового id в массив "запущенных" светофоров
       //============
-      let mm = JSON.parse(JSON.stringify(datestat.massMem));
-      let mf = JSON.parse(JSON.stringify(massfaz));
-      console.log("@@@:", props.idx, mm, mf);
+      // let mm = JSON.parse(JSON.stringify(datestat.massMem));
+      // let mf = JSON.parse(JSON.stringify(massfaz));
+      // console.log("@@@:", props.idx, mm, mf);
       //============
       nomInMass = datestat.massMem.length - 1;
       massfaz[nomInMass].idx = props.idx;
