@@ -13,6 +13,7 @@ import { RulerControl, SearchControl } from "react-yandex-maps";
 import { TrafficControl, TypeSelector, ZoomControl } from "react-yandex-maps";
 
 import { DEMO } from "./MainMapSdc";
+//import { CLINCH } from "./MapConst";
 
 import { styleServis03, StyleTitle } from "./SdcComponents/SdcComponentsStyle";
 import { styleServis04 } from "./SdcComponents/SdcComponentsStyle";
@@ -64,8 +65,8 @@ export const CenterCoordBegin = (map: any) => {
 
 export const SaveZoom = (zoom: number, pointCenter: Array<number>) => {
   window.localStorage.ZoomDU = zoom;
-  window.localStorage.PointCenterDU0 = pointCenter[0]
-  window.localStorage.PointCenterDU1 = pointCenter[1]
+  window.localStorage.PointCenterDU0 = pointCenter[0];
+  window.localStorage.PointCenterDU1 = pointCenter[1];
   //console.log('SaveZoom:',window.localStorage.ZoomDU)
 };
 
@@ -275,7 +276,7 @@ export const Inputer = (value: any, handleChange: any) => {
     </Box>
   );
 };
-
+//nline
 export const OutputFaza = (img: any, i: number) => {
   let widthHeight = 70;
   return (
@@ -299,16 +300,19 @@ export const OutputFaza = (img: any, i: number) => {
   );
 };
 
-export const StatusLine = (statusName: string) => {
+export const StatusLine = (statusName: string, clinch: boolean) => {
+  let coler = clinch ? "red" : "#5B1080"; // красный/сиреневый
   return (
     <>
       {!DEMO && (
         <Box sx={{ padding: "2px 0px 0px 0px" }}>
           <Box sx={StyleTitle(12.1)}>
             cостояние:{" "}
-            <em>
-              <b>{statusName}</b>
-            </em>
+            <Box sx={{ display: "inline-block", color: coler }}>
+              <em>
+                <b>{statusName}</b>
+              </em>
+            </Box>
           </Box>
         </Box>
       )}

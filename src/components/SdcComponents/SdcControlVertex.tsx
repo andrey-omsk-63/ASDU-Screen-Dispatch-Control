@@ -94,7 +94,7 @@ const SdcControlVertex = (props: {
     (mode: number) => {
       console.log("handleCloseSet:", mode, shippedKU[nomInMass]);
 
-      if (!DEMO && shippedKU[nomInMass]) {
+      if (!DEMO && !clinch && shippedKU[nomInMass]) {
         SendSocketDispatch(debug, ws, mF.idevice, 9, 9); // КУ
         SendSocketDispatch(debug, ws, mF.idevice, 4, 0); // закрытие id
       }
@@ -171,7 +171,7 @@ const SdcControlVertex = (props: {
     } else nomInMass = nomIn; // повторное открытие
 
     mF = massfaz[nomInMass];
-    !DEMO && SendSocketDispatch(debug, ws, mF.idevice, 4, 1);
+    !DEMO && !clinch && SendSocketDispatch(debug, ws, mF.idevice, 4, 1);
     setSentParam(-1);
     if (nomIn < 0) {
       // светофор ранее не запускался
@@ -197,7 +197,7 @@ const SdcControlVertex = (props: {
     } else {
       if (mF.fazaSist !== 9 && mF.fazaSist !== 12) {
         if (oldSistFaza[nomInMass] !== mF.fazaSist) {
-          if(mF.fazaSist !== 9) setSentParam(-1);
+          if (mF.fazaSist !== 9) setSentParam(-1);
           oldSistFaza[nomInMass] = mF.fazaSist;
         }
       }
@@ -214,7 +214,10 @@ const SdcControlVertex = (props: {
       datestat.stopSwitch[nomInMass] = true;
       dispatch(massfazCreate(massfaz));
       shippedKU[nomInMass] = mode === 9 ? true : false;
-      !DEMO && mode !== 9 && SendSocketDispatch(debug, ws, mF.idevice, 9, mode);
+      !DEMO &&
+        !clinch &&
+        mode !== 9 &&
+        SendSocketDispatch(debug, ws, mF.idevice, 9, mode);
       if (mode > 8 || !mode) mF.fazaZU = 0; // ЖМ, ОС, ЛР или КУ (10,11,0,9)
       if (mode < 9 && mode > 0) {
         datestat.massСounter[nomInMass] = INTERVAL; // массив счётчиков отправки КУ на "запущенные" светофоры
@@ -273,7 +276,7 @@ const SdcControlVertex = (props: {
       if (mF.fazaZU) {
         //============================ мёртвое место?
         console.log("Отправлена фаза c id", mF.id, mF.faza);
-        SendSocketDispatch(debug, ws, mF.idevice, 9, mF.faza);
+        !clinch && SendSocketDispatch(debug, ws, mF.idevice, 9, mF.faza);
       }
       //else console.log("Отправлена пустышка c id", mF.id);
     } else {
@@ -548,7 +551,7 @@ const SdcControlVertex = (props: {
           </Grid>
         </Grid>
       </Box>
-      {StatusLine(statusName)}
+      {StatusLine(statusName, clinch)}
     </Box>
   );
 };
