@@ -178,6 +178,10 @@ export const InputDirect = (func: any, otherWork: boolean) => {
         case 3: // режим Demo
           setCurrency(Number(event.target.value));
           func(62);
+          break;
+      case 4: // Фрагменты
+        func(64);
+        setCurrency(1);
       }
     }
   };
@@ -187,6 +191,7 @@ export const InputDirect = (func: any, otherWork: boolean) => {
     "● Режим управления",
     "● Настройки",
     "● Режим Демо",
+    "● Фрагменты",
   ];
   let massKey = [];
   let massDat: any[] = [];

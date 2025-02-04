@@ -11,6 +11,7 @@ import SdcDoPlacemarkDo from "./SdcComponents/SdcDoPlacemarkDo";
 import SdcControlVertex from "./SdcComponents/SdcControlVertex";
 import SdcErrorMessage from "./SdcComponents/SdcErrorMessage";
 import SdcSetup from "./SdcComponents/SdcSetup";
+import SdcFragments from "./SdcComponents/SdcFragments";
 
 import { StrokaMenuGlob, CenterCoordBegin } from "./SdcServiceFunctions";
 import { CloseInterval, Distance, YandexServices } from "./SdcServiceFunctions";
@@ -19,7 +20,7 @@ import { SaveZoom } from "./SdcServiceFunctions";
 import { SendSocketGetPhases } from "./SdcSocketFunctions";
 import { SendSocketDispatch } from "./SdcSocketFunctions";
 
-import { MyYandexKey, Restart, Aura, zoomStart } from "./MapConst";
+import { YMapsModul, MyYandexKey, Restart, Aura, zoomStart } from "./MapConst";
 
 import { styleHelpMain } from "./MainMapStyle";
 
@@ -65,6 +66,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   const [control, setControl] = React.useState(false);
   const [demoSost, setDemoSost] = React.useState(-1);
   const [needSetup, setNeedSetup] = React.useState(false);
+  const [fragments, setFragments] = React.useState(false);
   const [openSetErr, setOpenSetErr] = React.useState(false);
   const [click, setClick] = React.useState(false);
   const [clicka, setClicka] = React.useState(-1);
@@ -99,6 +101,24 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       dispatch(massfazCreate(massfaz));
       INT[0] = setInterval(() => DoTimerRestart(), Restart); // запуск счетчиков отправки КУ
     }
+  };
+
+  const SetFragments = (idx: number) => {
+    if (idx >= 0 && ymaps) {
+      mapp.current.geoObjects.removeAll(); // удаление старой коллекции связей
+      let multiRoute: any = [];
+      multiRoute = new ymaps.multiRouter.MultiRoute(
+        { referencePoints: map.fragments[idx].bounds },
+        {
+          boundsAutoApply: true, // вписать в границы
+          routeActiveStrokeWidth: 0, // толщина линии
+          routeStrokeWidth: 0, // толщина линии альтернативного маршрута
+          wayPointVisible: false,
+        }
+      );
+      mapp.current.geoObjects.add(multiRoute);
+    }
+    setFragments(false);
   };
 
   const OnPlacemarkClickPoint = (index: number) => {
@@ -209,6 +229,13 @@ const MainMapSdc = (props: { trigger: boolean }) => {
         break;
       case 63: // настройки
         setNeedSetup(true);
+        break;
+      case 64: // настройки
+        soobErr =
+          "Нет фрагментов Яндекс-карты для вашего аккаунта, создайте их на главной странице системы";
+        if (!map.fragments) {
+          setOpenSetErr(true);
+        } else setFragments(true);
     }
   };
   //=== Функции - обработчики ==============================
@@ -324,7 +351,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
             {Object.keys(map.tflight).length && (
               <YMaps query={{ apikey: MyYandexKey, lang: "ru_RU" }}>
                 <Map
-                  modules={["templateLayoutFactory"]}
+                  modules={YMapsModul}
                   state={mapState}
                   instanceRef={(ref) => InstanceRefDo(ref)}
                   onLoad={(ref) => {
@@ -343,6 +370,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
                       change={ChangeDemoSost}
                     />
                   )}
+                  {fragments && <SdcFragments close={SetFragments} />}
                   {openSetErr && (
                     <SdcErrorMessage setOpen={setOpenSetErr} sErr={soobErr} />
                   )}
