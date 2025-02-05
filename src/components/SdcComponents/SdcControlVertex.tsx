@@ -45,7 +45,9 @@ const colorExtra = "#82e94a"; // средний лайм
 const colorSent = "#AFDAF3"; // светло-голубой
 //const colorBad = "#bec6ce"; // серый
 const colorBad = "#FDFEFA"; // бледно-салатовый
-const colorGolden = "#FFFAC6"; // бледно-золотистый
+//const colorGolden = "#FFFAC6"; // бледно-золотистый
+//const colorGolden = "#FDF6BA"; // золотистый
+const colorGolden = "#fefe3d"; // ярко-золотистый
 
 let colorKnop = colorBad;
 let bShadow = 4;
