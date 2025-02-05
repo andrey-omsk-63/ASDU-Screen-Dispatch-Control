@@ -230,12 +230,16 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       case 63: // настройки
         setNeedSetup(true);
         break;
-      case 64: // настройки
+      case 64: // фрагменты
         soobErr =
           "Нет фрагментов Яндекс-карты для вашего аккаунта, создайте их на главной странице системы";
         if (!map.fragments) {
           setOpenSetErr(true);
-        } else setFragments(true);
+        } else {
+          if (!map.fragments.length) {
+            setOpenSetErr(true);
+          } else setFragments(true);
+        }
     }
   };
   //=== Функции - обработчики ==============================

@@ -179,9 +179,9 @@ export const InputDirect = (func: any, otherWork: boolean) => {
           setCurrency(Number(event.target.value));
           func(62);
           break;
-      case 4: // Фрагменты
-        func(64);
-        setCurrency(1);
+        case 4: // Фрагменты
+          func(64);
+          setCurrency(1);
       }
     }
   };
@@ -333,8 +333,9 @@ export const BadExit = (badExit: boolean, handleCloseEnd: Function) => {
     top: "50%",
     transform: "translate(-50%, -50%)",
     width: 400,
-    bgcolor: "background.paper",
-    border: "1px solid #fff", // белый
+    //bgcolor: "background.paper",
+    bgcolor: "#fff6d2", // светло-жёлтый
+    border: "1px solid #fff6d2", // светло-жёлтый
     borderRadius: 1,
     textShadow: "1px 1px 2px rgba(0,0,0,0.3)",
     boxShadow: 24,
@@ -351,19 +352,8 @@ export const BadExit = (badExit: boolean, handleCloseEnd: Function) => {
     borderRadius: 1,
     boxShadow: 6,
     textTransform: "unset !important",
+    lineHeight: 2.0,
     color: "black",
-  };
-
-  const styleModalEndAttent = {
-    position: "absolute",
-    top: "0%",
-    left: "auto",
-    right: "-0%",
-    maxHeight: "21px",
-    minHeight: "21px",
-    maxWidth: "2%",
-    minWidth: "2%",
-    color: "red",
   };
 
   const handleClose = (mode: boolean) => handleCloseEnd(mode);
@@ -371,15 +361,13 @@ export const BadExit = (badExit: boolean, handleCloseEnd: Function) => {
   return (
     <Modal open={badExit} onClose={() => handleClose(false)}>
       <Box sx={styleSetPoint}>
-        <Button sx={styleModalEndAttent} onClick={() => handleClose(false)}>
-          <b>&#10006;</b>
-        </Button>
+        {ExitCross(() => handleClose(false))}
         <Typography variant="h6" sx={{ color: "red" }}>
           ⚠️Предупреждение
         </Typography>
         <Box sx={{ marginTop: 0.5 }}>
           <Box sx={{ marginBottom: 1.2 }}>
-            <b>Будет произведён выход без сохранения. Продолжать?</b>
+            Будет произведён выход без сохранения. Продолжать?
           </Box>
           <Button sx={styleModalMenu} onClick={() => handleClose(true)}>
             Да
