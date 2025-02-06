@@ -13,7 +13,9 @@ import { imgFaza } from "./otladkaPicFaza";
 
 import { zoomStart } from "./components/MapConst";
 
-export let dateMapGl: any;
+import { DateMAP } from "./interfaceMAP.d";
+
+export let dateMapGl: DateMAP;
 
 export interface Stater {
   ws: any;

@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 
 import { CloseInterval, OutputFaza } from "../SdcServiceFunctions";
-import { StatusLine } from "../SdcServiceFunctions";
+import { StatusLine, MakeMassFaz } from "../SdcServiceFunctions";
 
 import { SendSocketDispatch } from "../SdcSocketFunctions";
 
@@ -22,6 +22,9 @@ import { styleKnop, styleOutputFaza } from "./SdcComponentsStyle";
 import { StyleSetControl, styleControl01 } from "./SdcComponentsStyle";
 import { StyleTitle, styleTitleDEMO } from "./SdcComponentsStyle";
 import { StyleModalMenuVar, StyleModalMenuConst } from "./SdcComponentsStyle";
+
+//import { DateMAP } from "./../../interfaceMAP.d";
+import { Fazer } from "./../../App";
 
 let oldIdx = -1;
 let needRend = false;
@@ -105,7 +108,7 @@ const SdcControlVertex = (props: {
       oldIdx = -1;
       props.setOpen(false);
     },
-    [datestat, debug, ws, props, massfaz, dispatch]
+    [datestat, clinch, debug, ws, props, massfaz, dispatch]
   );
   //=== инициализация ======================================
   if (datestat.first) {
@@ -121,22 +124,8 @@ const SdcControlVertex = (props: {
     dispatch(statsaveCreate(datestat));
   }
   if (oldIdx !== props.idx && !datestat.working) {
-    let massFaz = {
-      idx: props.idx,
-      area: Number(datestat.area),
-      id: datestat.id,
-      faza: -1,
-      fazaSist: -1,
-      fazaSistOld: -1,
-      fazaZU: 0, // 0 - отправлено ЖМ, ОС, ЛР или КУ (10,11,0,9)
-      phases: [],
-      idevice: map.tflight[props.idx].idevice,
-      coordinates: [
-        map.tflight[props.idx].points.Y,
-        map.tflight[props.idx].points.X,
-      ],
-    };
-
+    // открытие светофора (нового или уже ранее запущенного)
+    let massFaz: Fazer = MakeMassFaz(props.idx, datestat, map);
     let sumFaz = map.tflight[props.idx].phases.length;
     kluchGl = map.tflight[props.idx].ID + " ";
     let nomIn = datestat.massMem.indexOf(props.idx); // запускался ли светофор ранее?
@@ -144,11 +133,6 @@ const SdcControlVertex = (props: {
       // светофор ранее не запускался
       massfaz.push(massFaz);
       datestat.massMem.push(props.idx); // запись нового id в массив "запущенных" светофоров
-      //============
-      // let mm = JSON.parse(JSON.stringify(datestat.massMem));
-      // let mf = JSON.parse(JSON.stringify(massfaz));
-      // console.log("@@@:", props.idx, mm, mf);
-      //============
       nomInMass = datestat.massMem.length - 1;
       massfaz[nomInMass].idx = props.idx;
       datestat.timerId.push(null); // массив времени отправки команд
@@ -181,6 +165,7 @@ const SdcControlVertex = (props: {
     dispatch(massfazCreate(massfaz));
     oldIdx = props.idx;
   } else {
+    // пришла фаза
     if (mF.faza === 9) {
       // передана КУ
       shippedKU[nomInMass] = true;

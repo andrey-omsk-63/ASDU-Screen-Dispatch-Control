@@ -6,8 +6,8 @@ import {
 } from "./types";
 
 import { DateMAP } from "./../interfaceMAP.d";
-import { Stater } from "./../App";
-import { Fazer } from "./../App";
+import { Stater, Fazer } from "./../App";
+//import { Fazer } from "./../App";
 
 export function massfazCreate(massFaza: Fazer[] = []) {
   return {

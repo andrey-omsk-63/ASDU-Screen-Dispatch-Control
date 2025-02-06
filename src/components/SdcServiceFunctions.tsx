@@ -15,6 +15,9 @@ import { TrafficControl, TypeSelector, ZoomControl } from "react-yandex-maps";
 import { DEMO } from "./MainMapSdc";
 //import { CLINCH } from "./MapConst";
 
+import { DateMAP } from "./../interfaceMAP.d";
+import { Stater, Fazer } from "./../App";
+
 import { styleServis03, StyleTitle } from "./SdcComponents/SdcComponentsStyle";
 import { styleServis04 } from "./SdcComponents/SdcComponentsStyle";
 import { searchControl, styleModalEnd } from "./MainMapStyle";
@@ -281,7 +284,7 @@ export const Inputer = (value: any, handleChange: any) => {
     </Box>
   );
 };
-//nline
+
 export const OutputFaza = (img: any, i: number) => {
   let widthHeight = 70;
   return (
@@ -304,7 +307,7 @@ export const OutputFaza = (img: any, i: number) => {
     </>
   );
 };
-
+//=== SdcControlVertex =============================
 export const StatusLine = (statusName: string, clinch: boolean) => {
   let coler = clinch ? "red" : "#5B1080"; // красный/сиреневый
   return (
@@ -324,6 +327,22 @@ export const StatusLine = (statusName: string, clinch: boolean) => {
     </>
   );
 };
+
+export const MakeMassFaz = (idx: number, datestat: Stater, map: DateMAP) => {
+    let massFaz: Fazer = {
+      idx: idx,
+      area: Number(datestat.area),
+      id: Number(datestat.id),
+      faza: -1,
+      fazaSist: -1,
+      fazaSistOld: -1,
+      fazaZU: 0, // 0 - отправлено ЖМ, ОС, ЛР или КУ (10,11,0,9)
+      phases: [],
+      idevice: map.tflight[idx].idevice,
+      coordinates: [map.tflight[idx].points.Y, map.tflight[idx].points.X],
+    };
+    return massFaz;
+  };
 //=== SdcSetup =====================================
 export const BadExit = (badExit: boolean, handleCloseEnd: Function) => {
   const styleSetPoint = {
