@@ -174,7 +174,8 @@ const SdcControlVertex = (props: {
     } else {
       if (mF.fazaSist !== 9 && mF.fazaSist !== 12) {
         if (oldSistFaza[nomInMass] !== mF.fazaSist) {
-          if (mF.fazaSist !== 9) setSentParam(-1);
+          // if (mF.fazaSist !== 9) setSentParam(-1);
+          if (mF.fazaSist !== 9 && mF.fazaSist === sentParam) setSentParam(-1);
           oldSistFaza[nomInMass] = mF.fazaSist;
         }
       }
@@ -442,14 +443,22 @@ const SdcControlVertex = (props: {
     return (
       <Grid item xs={12} sx={styleServis01}>
         <Box sx={{ width: "98px", textAlign: "center" }}>
-          <Box sx={{}}>Интервал фазы ДУ:</Box>
-          <Box sx={{ textShadow: "3px 2px 3px rgba(0,0,0,0.3)" }}>
-            <b>{INTERVAL}</b>
-          </Box>
-          <Box sx={{}}>Увеличение фазы:</Box>
-          <Box sx={{ textShadow: "3px 2px 3px rgba(0,0,0,0.3)" }}>
-            <b>{INTERVALDOP}</b>
-          </Box>
+          {!!INTERVAL && (
+            <>
+              <Box sx={{}}>Интервал фазы ДУ:</Box>
+              <Box sx={{ textShadow: "3px 2px 3px rgba(0,0,0,0.3)" }}>
+                <b>{INTERVAL}</b>
+              </Box>
+              {!!INTERVALDOP && (
+                <>
+                  <Box sx={{}}>Увеличение фазы:</Box>
+                  <Box sx={{ textShadow: "3px 2px 3px rgba(0,0,0,0.3)" }}>
+                    <b>{INTERVALDOP}</b>
+                  </Box>
+                </>
+              )}
+            </>
+          )}
         </Box>
       </Grid>
     );

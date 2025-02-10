@@ -73,14 +73,16 @@ const SdcSetup = (props: { close: Function }) => {
   };
 
   const SetInterval = (valueInp: number) => {
-    datestat.intervalFaza = intervalFaza = valueInp; // задаваемая длительность фазы ДУ (сек)
+    intervalFaza = valueInp; // задаваемая длительность фазы ДУ (сек)
     if (!intervalFaza) intervalFazaDop = 0; // увеличениение длительности фазы ДУ (сек)
     Haver();
   };
 
   const SetIntervalDop = (valueInp: number) => {
-    intervalFazaDop = valueInp; // увеличениение длительности фазы ДУ (сек)
-    Haver();
+    if (intervalFaza) {
+      intervalFazaDop = valueInp; // увеличениение длительности фазы ДУ (сек)
+      Haver();
+    }
   };
   //========================================================
   const SetupContent = () => {
