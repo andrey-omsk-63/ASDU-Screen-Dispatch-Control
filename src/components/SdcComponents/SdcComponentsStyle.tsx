@@ -107,28 +107,25 @@ export const styleServis01 = {
   color: "#5B1080",
   height: "69px",
   margin: "9px 0px 5px 2px",
-  //padding: "2px 0px 0px 3px",
-  //textAlign: "center",
-  border: 0,
 };
-// убрать
-export const StyleServis02 = (wdth: any) => {
-  const styleServis02 = {
-    fontSize: 11.0,
-    maxHeight: "21px",
-    minHeight: "21px",
-    maxWidth: wdth,
-    minWidth: wdth,
-    backgroundColor: "#E9F5D8", // светло-салатовый
-    border: "1px solid #d4d4d4", // серый
-    color: "black",
-    textTransform: "unset !important",
-    marginBottom: 0.5,
-    marginTop: 0.2,
-    boxShadow: 6,
-  };
-  return styleServis02;
-};
+
+// export const StyleServis02 = (wdth: any) => {
+//   const styleServis02 = {
+//     fontSize: 11.0,
+//     maxHeight: "21px",
+//     minHeight: "21px",
+//     maxWidth: wdth,
+//     minWidth: wdth,
+//     backgroundColor: "#E9F5D8", // светло-салатовый
+//     border: "1px solid #d4d4d4", // серый
+//     color: "black",
+//     textTransform: "unset !important",
+//     marginBottom: 0.5,
+//     marginTop: 0.2,
+//     boxShadow: 6,
+//   };
+//   return styleServis02;
+// };
 
 export const styleServis03 = {
   width: "50px",

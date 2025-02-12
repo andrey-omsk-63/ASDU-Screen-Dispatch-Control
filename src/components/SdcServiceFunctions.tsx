@@ -329,20 +329,20 @@ export const StatusLine = (statusName: string, clinch: boolean) => {
 };
 
 export const MakeMassFaz = (idx: number, datestat: Stater, map: DateMAP) => {
-    let massFaz: Fazer = {
-      idx: idx,
-      area: Number(datestat.area),
-      id: Number(datestat.id),
-      faza: -1,
-      fazaSist: -1,
-      fazaSistOld: -1,
-      fazaZU: 0, // 0 - отправлено ЖМ, ОС, ЛР или КУ (10,11,0,9)
-      phases: [],
-      idevice: map.tflight[idx].idevice,
-      coordinates: [map.tflight[idx].points.Y, map.tflight[idx].points.X],
-    };
-    return massFaz;
+  let massFaz: Fazer = {
+    idx: idx,
+    area: Number(datestat.area),
+    id: Number(datestat.id),
+    faza: -1,
+    fazaSist: -1,
+    fazaSistOld: -1,
+    fazaZU: 0, // 0 - отправлено ЖМ, ОС, ЛР или КУ (10,11,0,9)
+    phases: [],
+    idevice: map.tflight[idx].idevice,
+    coordinates: [map.tflight[idx].points.Y, map.tflight[idx].points.X],
   };
+  return massFaz;
+};
 //=== SdcSetup =====================================
 export const BadExit = (badExit: boolean, handleCloseEnd: Function) => {
   const styleSetPoint = {
@@ -458,7 +458,7 @@ export const StrTablVert = (xss: number, recLeft: string, recRight: any) => {
             {recRight}
           </Grid>
         ) : (
-          <Grid item xs sx={{ fontSize: 15, color: "#5B1080", border: 0 }}>
+          <Grid item xs sx={{ fontSize: 15, color: "#5B1080", border: 8 }}>
             <b>{recRight}</b>
           </Grid>
         )}
@@ -532,5 +532,110 @@ export const WaysInput = (
       </Box>
     </Box>
   );
+};
+
+export const ShiftOptimal = (
+  mode: boolean,
+  ChangeOptimal: Function,
+  shift: number
+) => {
+  const styleOptimalNo = {
+    marginTop: shift,
+    marginRight: 1,
+    maxHeight: "27px",
+    minHeight: "27px",
+    maxWidth: 58,
+    minWidth: 58,
+    backgroundColor: "#E6F5D6", // светло салатовый
+    border: "1px solid #d4d4d4", // серый
+    borderRadius: 1,
+    textTransform: "unset !important",
+    boxShadow: 2,
+    color: "black",
+  };
+
+  const styleOptimalYes = {
+    marginTop: shift,
+    marginRight: 1,
+    maxHeight: "27px",
+    minHeight: "27px",
+    maxWidth: 58,
+    minWidth: 58,
+    backgroundColor: "#bae186", // тёмно салатовый
+    border: "1px solid #bae186", // тёмно салатовый
+    borderRadius: 1,
+    textTransform: "unset !important",
+    boxShadow: 6,
+    color: "black",
+  };
+
+  let illum = mode ? styleOptimalYes : styleOptimalNo;
+  let soob = mode ? "Да" : "Нет";
+
+  return (
+    <Button sx={illum} onClick={() => ChangeOptimal()}>
+      {soob}
+    </Button>
+  );
+};
+
+export const InputFromList = (func: any, currency: any, currencies: any) => {
+  const styleSet = {
+    width: "165px",
+    maxHeight: "6px",
+    minHeight: "6px",
+    bgcolor: "#FFFBE5",
+    border: "1px solid #d4d4d4", // серый
+    borderRadius: 1,
+    textAlign: "left",
+    p: 1.45,
+    boxShadow: 6,
+  };
+
+  const styleBoxForm = {
+    "& > :not(style)": {
+      marginTop: "-7px",
+      marginLeft: "-12px",
+      width: "175px",
+      padding: "0px 0px 0px 5px",
+    },
+  };
+
+  return (
+    <Box sx={styleSet}>
+      <Box component="form" sx={styleBoxForm}>
+        <TextField
+          select
+          size="small"
+          onKeyPress={handleKey} //отключение Enter
+          value={currency}
+          onChange={func}
+          InputProps={{ disableUnderline: true, style: { fontSize: 14 } }}
+          variant="standard"
+          color="secondary"
+        >
+          {currencies.map((option: any) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </TextField>
+      </Box>
+    </Box>
+  );
+};
+
+export const PreparCurrenciesDispVert = () => {
+  const currencies: any = [];
+  let dat = ["значками светофоров", "номерами фаз", "картинками фаз"];
+  let massKey: any = [];
+  let massDat: any = [];
+  for (let key in dat) {
+    massKey.push(key);
+    massDat.push(dat[key]);
+  }
+  for (let i = 0; i < massKey.length; i++)
+    currencies.push({ value: massKey[i], label: massDat[i] });
+  return currencies;
 };
 //=====================================================================

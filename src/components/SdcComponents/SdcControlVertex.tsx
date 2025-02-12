@@ -174,7 +174,6 @@ const SdcControlVertex = (props: {
     } else {
       if (mF.fazaSist !== 9 && mF.fazaSist !== 12) {
         if (oldSistFaza[nomInMass] !== mF.fazaSist) {
-          // if (mF.fazaSist !== 9) setSentParam(-1);
           if (mF.fazaSist !== 9 && mF.fazaSist === sentParam) setSentParam(-1);
           oldSistFaza[nomInMass] = mF.fazaSist;
         }

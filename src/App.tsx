@@ -6,7 +6,7 @@ import { coordinatesCreate, massfazCreate } from "./redux/actions";
 import Grid from "@mui/material/Grid";
 
 import MainMapSdc from "./components/MainMapSdc";
-import AppSocketError from "./AppSocketError";
+//import AppSocketError from "./AppSocketError";
 
 import { dataMap } from "./otladkaMaps";
 import { imgFaza } from "./otladkaPicFaza";
@@ -39,6 +39,7 @@ export interface Stater {
   stopSwitch: Array<boolean>;
   tekDemoTlsost: Array<number>;
   needComent: boolean;
+  typeVert: number; //  тип отображаемых CO на карте 0 - значки СО 1 - номер фаз 2 - картинка фаз
   intervalFaza: number; // Задаваемая длительность фазы ДУ (сек)
   intervalFazaDop: number; // Увеличениение длительности фазы ДУ (сек)
 }
@@ -65,6 +66,7 @@ export let dateStat: Stater = {
   stopSwitch: [],
   tekDemoTlsost: [],
   needComent: false,
+  typeVert: 0, // тип отображаемых CO на карте 0 - значки СО 1 - номер фаз 2 - картинка фаз
   intervalFaza: 0, // Задаваемая длительность фазы ДУ (сек)
   intervalFazaDop: 0, // Увеличениение длительности фазы ДУ (сек)
 };
@@ -90,7 +92,6 @@ let flagOpenDebug = true;
 let flagOpenWS = true;
 let WS: any = null;
 let homeRegion: string = "0";
-let soob = "";
 let flagMap = false;
 
 const App = () => {
@@ -123,7 +124,9 @@ const App = () => {
     // достать увеличениение длительности фазы ДУ из LocalStorage
     if (window.localStorage.intervalFazaDopD === undefined)
       window.localStorage.intervalFazaDopD = "0";
-    dateStat.intervalFazaDop = Number(window.localStorage.intervalFazaDopD);
+    dateStat.intervalFazaDop = !dateStat.intervalFaza
+      ? 0
+      : Number(window.localStorage.intervalFazaDopD);
 
     // достать начальный zoom Yandex-карты ДУ из LocalStorage
     if (window.localStorage.ZoomDU === undefined)
@@ -149,7 +152,6 @@ const App = () => {
     "W" +
     window.location.search;
 
-  const [openSetErr, setOpenSetErr] = React.useState(false);
   const [openMapInfo, setOpenMapInfo] = React.useState(false);
   const [trigger, setTrigger] = React.useState(false);
   //=== инициализация ======================================
@@ -192,7 +194,7 @@ const App = () => {
           setTrigger(!trigger);
           break;
         case "phases":
-          console.log("0PH:", data.phases, dateStat.massMem, massfaz);
+          //console.log("0PH:", data.phases, dateStat.massMem, massfaz);
           let flagChange = 0;
           for (let j = 0; j < data.phases.length; j++) {
             for (let i = 0; i < massfaz.length; i++) {
@@ -270,7 +272,6 @@ const App = () => {
   return (
     <Grid container sx={{ height: "100vh", width: "100%", bgcolor: "#E9F5D8" }}>
       <Grid item xs>
-        {openSetErr && <AppSocketError sErr={soob} setOpen={setOpenSetErr} />}
         {openMapInfo && <MainMapSdc trigger={trigger} />}
       </Grid>
     </Grid>

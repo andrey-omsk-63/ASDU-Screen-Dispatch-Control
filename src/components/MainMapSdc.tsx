@@ -126,8 +126,8 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       let nomIn = datestat.massMem.indexOf(index); // запускался ли светофор ранее?
       if (nomIn >= 0) {
         // ранее запускался
-        if (window.localStorage.interval === undefined)
-          window.localStorage.interval = 0;
+        if (window.localStorage.intervalFazaD === undefined)
+          window.localStorage.intervalFazaD = 0;
         let INTERVALDOP = Number(window.localStorage.intervalFazaDopD);
         if (datestat.massСounter[nomIn] > 0 && INTERVALDOP) {
           datestat.massСounter[nomIn] += INTERVALDOP; // подкачка счётчика
