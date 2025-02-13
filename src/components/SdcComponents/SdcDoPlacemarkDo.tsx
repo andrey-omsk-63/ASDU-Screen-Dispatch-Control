@@ -46,7 +46,8 @@ const SdcDoPlacemarkDo = (props: {
 
   if (nomInMass >= 0) {
     if (
-      !Number(Number(window.localStorage.intervalFazaD)) ||
+      // !Number(Number(window.localStorage.counterFazaD)) ||
+      !datestat.counterFaza ||
       datestat.massСounter[nomInMass] <= 0
     )
       haveСounter = false;

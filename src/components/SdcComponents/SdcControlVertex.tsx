@@ -83,13 +83,15 @@ const SdcControlVertex = (props: {
   statusName = map.tflight[props.idx].tlsost.description;
   let clinch = CLINCH.indexOf(statusVertex) < 0 ? false : true;
 
-  if (window.localStorage.intervalFazaD === undefined)
-    window.localStorage.intervalFazaD = 0;
-  INTERVAL = Number(window.localStorage.intervalFazaD);
+  // if (window.localStorage.intervalFazaD === undefined)
+  //   window.localStorage.intervalFazaD = 0;
+  // INTERVAL = Number(window.localStorage.intervalFazaD);
 
-  if (window.localStorage.intervalFazaDopD === undefined)
-    window.localStorage.intervalFazaDopD = 0;
-  INTERVALDOP = Number(window.localStorage.intervalFazaDopD);
+  // if (window.localStorage.intervalFazaDopD === undefined)
+  //   window.localStorage.intervalFazaDopD = 0;
+  // INTERVALDOP = Number(window.localStorage.intervalFazaDopD);
+  INTERVAL = datestat.intervalFaza
+  INTERVALDOP = datestat.intervalFazaDop
   //========================================================
   const [sentParam, setSentParam] = React.useState(-1);
   const [flagPusk, setFlagPusk] = React.useState(false);
@@ -197,7 +199,7 @@ const SdcControlVertex = (props: {
         SendSocketDispatch(debug, ws, mF.idevice, 9, mode);
       if (mode > 8 || !mode) mF.fazaZU = 0; // ЖМ, ОС, ЛР или КУ (10,11,0,9)
       if (mode < 9 && mode > 0) {
-        datestat.massСounter[nomInMass] = INTERVAL; // массив счётчиков отправки КУ на "запущенные" светофоры
+        if (datestat.counterFaza) datestat.massСounter[nomInMass] = INTERVAL; // массив счётчиков отправки КУ на "запущенные" светофоры
         // передана фаза
         if (datestat.timerId[nomInMass] === null) {
           datestat.timerId[nomInMass] = setInterval(() => DoTimerId(), timer);

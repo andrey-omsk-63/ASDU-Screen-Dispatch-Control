@@ -15,11 +15,11 @@ import { styleSetPK01, styleSetPK02 } from "../MainMapStyle";
 let flagInput = true;
 let HAVE = 0;
 
-let typeVert = 0; // тип отображаемых CO на карте 0 - значки СО 1 - номер фаз 2 - картинка фаз
+let counterFaza = true; // наличие счётчика длительность фазы ДУ
+let typeVert = 0; // тип отображаемых CO на карте: 0 - значки СО 1 - картинка фаз 2 - номер фаз(счётчик)
 let intervalFaza = 0; // Задаваемая длительность фазы ДУ (сек)
 let intervalFazaDop = 0; // Увеличениение длительности фазы ДУ (сек)
 let currenciesDV: any = [];
-let counterFaza = true;
 
 const SdcSetup = (props: { close: Function }) => {
   //== Piece of Redux =======================================
@@ -36,13 +36,16 @@ const SdcSetup = (props: { close: Function }) => {
   if (flagInput) {
     HAVE = 0;
     typeVert = datestat.typeVert;
+    counterFaza = datestat.counterFaza;
     intervalFaza = datestat.intervalFaza;
     intervalFazaDop = datestat.intervalFazaDop;
     currenciesDV = PreparCurrenciesDispVert();
     flagInput = false;
   }
   //========================================================
-  const [currencyDV, setCurrencyDV] = React.useState(typeVert.toString());
+  const [currencyDV, setCurrencyDV] = React.useState(
+    datestat.typeVert.toString()
+  );
 
   const handleClose = () => {
     flagInput = true;
@@ -67,6 +70,9 @@ const SdcSetup = (props: { close: Function }) => {
   const SaveForm = (mode: number) => {
     if (mode) {
       //записать в LocalStorage и datestat
+      window.localStorage.typeVert = datestat.typeVert = typeVert;
+      window.localStorage.counterFazaD = counterFaza ? 1 : 0; // наличие счётчика длительность фазы ДУ
+      datestat.counterFaza = counterFaza;
       window.localStorage.intervalFazaD = datestat.intervalFaza = intervalFaza; // задаваемая длительность фазы ДУ (сек)
       window.localStorage.intervalFazaDopD = datestat.intervalFazaDop =
         intervalFazaDop; // увеличениение длительности фазы ДУ (сек)
@@ -109,45 +115,36 @@ const SdcSetup = (props: { close: Function }) => {
     width: "53px",
     maxHeight: "22px",
     minHeight: "22px",
-    //marginTop: "0px",
-      //marginLeft: "-9px",
     border: "1px solid #d4d4d4", // серый
     borderRadius: 1,
-    //bgcolor: "#FFFBE5", // топлёное молоко
-    //boxShadow: 6,
-    textAlign: "left",
+    color: "#A8A8A8", // серый
     padding: "3px 0px 0px 3px",
-    //p: 1.5,
   };
 
+  
   const SetupContent = () => {
     return (
       <>
-        {/* <Box sx={{ fontSize: 12, color: "#5B1080" }}>
-          Тип отображаемых связей
-        </Box>
-        {StrTablVert(
-          7.7,
-          "Маршрутизированные (неформальные) связи",
-          ShiftOptimal(massForm.typeRoute, ChangeTypeRoute, -0.1)
-        )} */}
         <Box sx={{ fontSize: 12, marginTop: 0.5, color: "#5B1080" }}>
           Отображение светофорных объектов на маршруте
         </Box>
         {StrTablVert(
+          true,
           7.7,
-          "Светофоры отображаются",
+          "Запущенные светофоры отображаются",
           InputFromList(handleChangeDV, currencyDV, currenciesDV)
         )}
         <Box sx={{ fontSize: 12, marginTop: 0.5, color: "#5B1080" }}>
           Параметры перекрёстков
         </Box>
         {StrTablVert(
+          true,
           7.7,
           "Задавать счётчик длительность фазы ДУ",
           ShiftOptimal(counterFaza, ChangeCounter, -0.1)
         )}
         {StrTablVert(
+          counterFaza,
           7.7,
           "Задаваемая длительность фазы ДУ (сек)",
           counterFaza ? (
@@ -157,9 +154,14 @@ const SdcSetup = (props: { close: Function }) => {
           )
         )}
         {StrTablVert(
+          counterFaza,
           7.7,
           "Увеличениение длительности фазы ДУ (сек)",
-          WaysInput(0, intervalFazaDop, SetIntervalDop, 0, 1000)
+          counterFaza ? (
+            WaysInput(0, intervalFazaDop, SetIntervalDop, 0, 1000)
+          ) : (
+            <Box sx={styleSetID}>{intervalFazaDop}</Box>
+          )
         )}
       </>
     );
@@ -168,7 +170,7 @@ const SdcSetup = (props: { close: Function }) => {
   return (
     <>
       <Modal open={open} onClose={CloseEnd} hideBackdrop={false}>
-        <Box sx={styleSetPK01(580, 319)}>
+        <Box sx={styleSetPK01(580, 304)}>
           {ExitCross(handleCloseBad)}
           <Box sx={styleSetPK02}>
             <b>Системные параметры по умолчанию</b>

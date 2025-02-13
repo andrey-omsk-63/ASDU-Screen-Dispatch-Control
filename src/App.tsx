@@ -39,7 +39,8 @@ export interface Stater {
   stopSwitch: Array<boolean>;
   tekDemoTlsost: Array<number>;
   needComent: boolean;
-  typeVert: number; //  тип отображаемых CO на карте 0 - значки СО 1 - номер фаз 2 - картинка фаз
+  typeVert: number; // тип отображаемых CO на карте: 0 - значки СО 1 - картинка фаз 2 - номер фаз(счётчик)
+  counterFaza: boolean; // наличие счётчика длительность фазы ДУ
   intervalFaza: number; // Задаваемая длительность фазы ДУ (сек)
   intervalFazaDop: number; // Увеличениение длительности фазы ДУ (сек)
 }
@@ -66,7 +67,8 @@ export let dateStat: Stater = {
   stopSwitch: [],
   tekDemoTlsost: [],
   needComent: false,
-  typeVert: 0, // тип отображаемых CO на карте 0 - значки СО 1 - номер фаз 2 - картинка фаз
+  typeVert: 0, // тип отображаемых CO на карте: 0 - значки СО 1 - картинка фаз 2 - номер фаз(счётчик)
+  counterFaza: true, // наличие счётчика длительность фазы ДУ
   intervalFaza: 0, // Задаваемая длительность фазы ДУ (сек)
   intervalFazaDop: 0, // Увеличениение длительности фазы ДУ (сек)
 };
@@ -116,6 +118,18 @@ const App = () => {
       Coordinates.push(coord);
     }
 
+    // достать тип отображаемых фаз на карте из LocalStorage
+    if (window.localStorage.typeVert === undefined)
+      window.localStorage.typeVert = 0;
+    dateStat.typeVert = Number(window.localStorage.typeVert);
+
+    // достать наличие счётчика длительность фазы ДУ из LocalStorage
+    if (window.localStorage.counterFazaD === undefined)
+      window.localStorage.counterFazaD = "0";
+    dateStat.counterFaza = Number(window.localStorage.counterFazaD)
+      ? true
+      : false;
+
     // достать длительность фазы ДУ из LocalStorage
     if (window.localStorage.intervalFazaD === undefined)
       window.localStorage.intervalFazaD = "0";
@@ -142,7 +156,7 @@ const App = () => {
 
     dispatch(coordinatesCreate(coordinates));
     dispatch(statsaveCreate(dateStat));
-    console.log("dateStat:", dateStat);
+    console.log("dateStat:",window.localStorage.counterFazaD, dateStat,);
   };
 
   const host =

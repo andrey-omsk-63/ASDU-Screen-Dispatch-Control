@@ -445,14 +445,22 @@ export const FooterContent = (SaveForm: Function) => {
   );
 };
 
-export const StrTablVert = (xss: number, recLeft: string, recRight: any) => {
+export const StrTablVert = (
+  mode: boolean,
+  xss: number,
+  recLeft: string,
+  recRight: any
+) => {
+  let coler = mode ? "black" : "#A8A8A8";
   return (
     <>
       <Grid container sx={{ marginTop: 1 }}>
         <Grid item xs={0.25}></Grid>
-        <Grid item xs={xss} sx={{ border: 0 }}>
+
+        <Grid item xs={xss} sx={{ color: coler }}>
           <b>{recLeft}</b>
         </Grid>
+
         {typeof recRight === "object" ? (
           <Grid item xs>
             {recRight}
@@ -627,7 +635,7 @@ export const InputFromList = (func: any, currency: any, currencies: any) => {
 
 export const PreparCurrenciesDispVert = () => {
   const currencies: any = [];
-  let dat = ["значками светофоров", "номерами фаз", "картинками фаз"];
+  let dat = ["значок светофора", "картинка фазы", "счётчик(номер фазы)"];
   let massKey: any = [];
   let massDat: any = [];
   for (let key in dat) {

@@ -61,6 +61,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   const ws = datestat.ws;
   const homeRegion = datestat.region;
   DEMO = datestat.demo;
+  const typeVert = datestat.typeVert;
   const dispatch = useDispatch();
   //===========================================================
   const [control, setControl] = React.useState(false);
@@ -126,9 +127,8 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       let nomIn = datestat.massMem.indexOf(index); // запускался ли светофор ранее?
       if (nomIn >= 0) {
         // ранее запускался
-        if (window.localStorage.intervalFazaD === undefined)
-          window.localStorage.intervalFazaD = 0;
-        let INTERVALDOP = Number(window.localStorage.intervalFazaDopD);
+        //let INTERVALDOP = Number(window.localStorage.intervalFazaDopD);
+        let INTERVALDOP = datestat.intervalFazaDop;
         if (datestat.massСounter[nomIn] > 0 && INTERVALDOP) {
           datestat.massСounter[nomIn] += INTERVALDOP; // подкачка счётчика
           dispatch(statsaveCreate(datestat));
@@ -252,9 +252,9 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     setDemoSost(RandomNumber(1, 1000) + demoSost); // костыль
   };
 
-  const SetControl = (mode: any) => {
-    setControl(mode);
-  };
+  // const SetControl = (mode: any) => {
+  //   setControl(mode);
+  // };
 
   const DoTimerRestart = () => {
     let have = 0;
@@ -345,6 +345,69 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     zoom,
   };
 
+  const styleWindPK = {
+    outline: "none",
+    position: "relative",
+    marginTop: "-96.9vh",
+    marginLeft: "auto",
+    marginRight: "5px",
+    width: 222,
+    //height: window.innerHeight * 1.92,
+    p: 1,
+  };
+
+  const styleWindPK01 = {
+    fontSize: 15,
+    textAlign: "center",
+    bgcolor: "background.paper",
+    color: "#5B1080",
+    textShadow: "2px 2px 3px rgba(0,0,0,0.3)",
+  };
+
+  const styleWindPK02 = {
+    fontSize: 12.9,
+    textAlign: "left",
+    background: "linear-gradient(180deg, #F1F5FB 59%, #DEE8F5 )",
+    border: "1px solid #d4d4d4",
+    borderRadius: 1,
+    color: "black",
+    boxShadow: 3,
+    p: 0.5,
+    margin: "3px 0 1px 0",
+  };
+
+  const styleWindPK90 = (ht: number) => {
+    const styleWindPK900 = {
+      width: 222,
+      height: ht,
+      bgcolor: "background.paper",
+      border: "1px solid #FFFFFF",
+      borderRadius: 1,
+      boxShadow: 24,
+      padding: "1px 5px 5px 5px",
+    };
+    return styleWindPK900;
+  };
+
+  const ContentInfo = () => {
+    return (
+      <Box sx={styleWindPK01}>
+        <Box sx={styleWindPK90(120)}>
+          <b>Запущенные светофоры</b>
+          <Box sx={styleWindPK02}>
+            <Box sx={{ marginBottom: 0.5 }}>Функция до 422.611</Box>
+            <Box sx={{ marginBottom: 0.5 }}>Функция после 422.611</Box>
+            <Box sx={{ marginBottom: 0.5 }}>Время расчёта 0.016 сек.</Box>
+          </Box>
+
+          <Box sx={{ fontSize: 12.9, marginTop: 1 }}>
+            <b>Выбран план координации № 212 </b>
+          </Box>
+        </Box>
+      </Box>
+    );
+  };
+
   return (
     <Grid container sx={{ height: "99.9vh" }}>
       <Grid item xs={12}>
@@ -368,7 +431,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
                   <PlacemarkDo />
                   {control && datestat.readyFaza && (
                     <SdcControlVertex
-                      setOpen={SetControl}
+                      setOpen={setControl}
                       idx={idxObj}
                       trigger={props.trigger}
                       change={ChangeDemoSost}
@@ -383,6 +446,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
             )}
           </Grid>
         </Grid>
+        {typeVert !== 2 && <Box sx={styleWindPK}>{ContentInfo()}</Box>}
       </Grid>
       {needSetup && <SdcSetup close={setNeedSetup} />}
     </Grid>
