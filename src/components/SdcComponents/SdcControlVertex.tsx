@@ -66,6 +66,10 @@ const SdcControlVertex = (props: {
     const { mapReducer } = state;
     return mapReducer.map.dateMap;
   });
+  let massdk = useSelector((state: any) => {
+    const { massdkReducer } = state;
+    return massdkReducer.massdk;
+  });
   let massfaz = useSelector((state: any) => {
     const { massfazReducer } = state;
     return massfazReducer.massfaz;
@@ -90,8 +94,8 @@ const SdcControlVertex = (props: {
   // if (window.localStorage.intervalFazaDopD === undefined)
   //   window.localStorage.intervalFazaDopD = 0;
   // INTERVALDOP = Number(window.localStorage.intervalFazaDopD);
-  INTERVAL = datestat.intervalFaza
-  INTERVALDOP = datestat.intervalFazaDop
+  INTERVAL = datestat.intervalFaza;
+  INTERVALDOP = datestat.intervalFazaDop;
   //========================================================
   const [sentParam, setSentParam] = React.useState(-1);
   const [flagPusk, setFlagPusk] = React.useState(false);
@@ -149,7 +153,20 @@ const SdcControlVertex = (props: {
     } else nomInMass = nomIn; // повторное открытие
 
     mF = massfaz[nomInMass];
-    !DEMO && !clinch && SendSocketDispatch(debug, ws, mF.idevice, 4, 1);
+
+    console.log("0MASSDK:", massdk);
+
+    if (!DEMO && !clinch) {
+      for (let i = 0; i < massdk.length; i++) {
+        if (massdk[i].idevice === mF.idevice && mF.idx !== -1) {
+          console.log("1MASSDK:",i, massdk[i].phSvg);
+
+          if (massdk[i].phSvg[0]) {
+            datestat.phSvg = massdk[i].phSvg; // картинки были присланы ранее
+          } else SendSocketDispatch(debug, ws, mF.idevice, 4, 1); // запрос на получение картинок фаз
+        }
+      }
+    }
     setSentParam(-1);
     if (nomIn < 0) {
       // светофор ранее не запускался

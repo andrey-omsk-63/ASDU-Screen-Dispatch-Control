@@ -46,7 +46,7 @@ const SdcDoPlacemarkDo = (props: {
 
   if (nomInMass >= 0) {
     if (
-      // !Number(Number(window.localStorage.counterFazaD)) ||
+      //datestat.typeVert !== 2 ||
       !datestat.counterFaza ||
       datestat.massСounter[nomInMass] <= 0
     )

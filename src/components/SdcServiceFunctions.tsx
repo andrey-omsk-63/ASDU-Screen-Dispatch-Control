@@ -16,7 +16,7 @@ import { DEMO } from "./MainMapSdc";
 //import { CLINCH } from "./MapConst";
 
 import { DateMAP } from "./../interfaceMAP.d";
-import { Stater, Fazer } from "./../App";
+import { Stater, Fazer, Pointer } from "./../App";
 
 import { styleServis03, StyleTitle } from "./SdcComponents/SdcComponentsStyle";
 import { styleServis04 } from "./SdcComponents/SdcComponentsStyle";
@@ -112,6 +112,31 @@ export const YandexServices = () => {
       <ZoomControl options={{ float: "right" }} />
     </>
   );
+};
+
+//export const MasskPoint = (debug: boolean, rec: any, imgFaza: string) => {
+export const MasskPoint = ( rec: any) => {
+  let masskPoint: Pointer = {
+    ID: -1,
+    coordinates: [],
+    nameCoordinates: "",
+    region: 0,
+    area: 0,
+    idevice: -1,
+    phases: [],
+    phSvg: [],
+  };
+  //let img = null;
+  masskPoint.ID = rec.ID;
+  masskPoint.coordinates[0] = rec.points.Y;
+  masskPoint.coordinates[1] = rec.points.X;
+  masskPoint.nameCoordinates = rec.description;
+  masskPoint.region = Number(rec.region.num);
+  masskPoint.area = Number(rec.area.num);
+  masskPoint.idevice = rec.idevice;
+  masskPoint.phases = rec.phases;
+  for (let i = 0; i < 8; i++) masskPoint.phSvg.push(null);
+  return masskPoint;
 };
 //=== Placemark =====================================
 export const GetPointData = (index: number, map: any, icContent: string) => {
@@ -340,6 +365,7 @@ export const MakeMassFaz = (idx: number, datestat: Stater, map: DateMAP) => {
     phases: [],
     idevice: map.tflight[idx].idevice,
     coordinates: [map.tflight[idx].points.Y, map.tflight[idx].points.X],
+    name: map.tflight[idx].description,
   };
   return massFaz;
 };

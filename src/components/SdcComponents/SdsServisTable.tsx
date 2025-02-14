@@ -1,6 +1,6 @@
 import * as React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { massfazCreate, statsaveCreate } from "../../redux/actions";
+import { useSelector } from "react-redux";
+//import { massfazCreate, statsaveCreate } from "../../redux/actions";
 
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -24,48 +24,49 @@ import Button from "@mui/material/Button";
 // import { styleStrokaTabl01, styleStrokaTakt } from "./GsComponentsStyle";
 // import { styleStrokaTabl02, StyleToDoMode } from "./GsComponentsStyle";
 // import { styleToDo01, styleToDo03 } from "./GsComponentsStyle";
+import { styleServisMenu, styleServis00 } from "../MainMapStyle";
 
-let init = true;
-let lengthMassMem = 0;
-let timerId: any[] = [];
-let massInt: any[][] = []; // null
+// let init = true;
+// let lengthMassMem = 0;
+// let timerId: any[] = [];
+// let massInt: any[][] = []; // null
 
-let oldFaz = -1;
-let needRend = false;
-let nomIllum = -1;
-const tShadow = "2px 2px 3px rgba(0,0,0,0.3)";
-let soobError = "";
+// let oldFaz = -1;
+// let needRend = false;
+// let nomIllum = -1;
+//const tShadow = "2px 2px 3px rgba(0,0,0,0.3)";
+//let soobError = "";
 
 const SdsServisTable = (props: {
-  massMem: Array<number>;
-  massCoord: any;
-  funcMode: any;
-  funcSize: any;
-  funcCenter: any;
-  funcHelper: any;
-  trigger: boolean;
-  changeFaz: number;
-  ban: Function;
-  changeDemo: Function;
-  pererisovka: Function; // функция перерисовки рабочего маршрута
+  // massMem: Array<number>;
+  // massCoord: any;
+  // funcMode: any;
+  // funcSize: any;
+  // funcCenter: any;
+  // funcHelper: any;
+  // trigger: boolean;
+  // changeFaz: number;
+  // ban: Function;
+  // changeDemo: Function;
+  // pererisovka: Function; // функция перерисовки рабочего маршрута
 }) => {
   //== Piece of Redux ======================================
-  const map = useSelector((state: any) => {
-    const { mapReducer } = state;
-    return mapReducer.map.dateMap;
-  });
-  let massdk = useSelector((state: any) => {
-    const { massdkReducer } = state;
-    return massdkReducer.massdk;
-  });
-  let addobj = useSelector((state: any) => {
-    const { addobjReducer } = state;
-    return addobjReducer.addobj.dateAdd;
-  });
-  let bindings = useSelector((state: any) => {
-    const { bindingsReducer } = state;
-    return bindingsReducer.bindings.dateBindings;
-  });
+  // const map = useSelector((state: any) => {
+  //   const { mapReducer } = state;
+  //   return mapReducer.map.dateMap;
+  // });
+  // let massdk = useSelector((state: any) => {
+  //   const { massdkReducer } = state;
+  //   return massdkReducer.massdk;
+  // });
+  // let addobj = useSelector((state: any) => {
+  //   const { addobjReducer } = state;
+  //   return addobjReducer.addobj.dateAdd;
+  // });
+  // let bindings = useSelector((state: any) => {
+  //   const { bindingsReducer } = state;
+  //   return bindingsReducer.bindings.dateBindings;
+  // });
   let massfaz = useSelector((state: any) => {
     const { massfazReducer } = state;
     return massfazReducer.massfaz;
@@ -74,7 +75,7 @@ const SdsServisTable = (props: {
     const { statsaveReducer } = state;
     return statsaveReducer.datestat;
   });
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
 
   //console.log("Props:", props.massMem, props.trigger, props.changeFaz, massfaz);
   //========================================================
@@ -88,7 +89,7 @@ const SdsServisTable = (props: {
   // let intervalFaza = datestat.intervalFaza; // Задаваемая длительность фазы ДУ (сек)
   // let intervalFazaDop = datestat.intervalFazaDop; // Увеличениение длительности фазы ДУ (сек)
   // let timer = debug || DEMO ? 20000 : 60000;
-  let hTabl = DEMO ? "78vh" : "81vh";
+  //let hTabl = DEMO ? "78vh" : "81vh";
 
   // const MakeMaskFaz = (i: number) => {
   //   let maskFaz: Fazer = JSON.parse(JSON.stringify(MaskFaz));
@@ -437,124 +438,128 @@ const SdsServisTable = (props: {
   //   }
   // }
   // //====== Компоненты =====================================
-  // const StrokaTabl = () => {
-  //   const ClickKnop = (mode: number) => {
-  //     nomIllum = mode;
-  //     props.funcCenter(props.massCoord[mode]);
-  //     setTrigger(!trigger);
-  //   };
+  const StrokaTabl = () => {
+    //   const ClickKnop = (mode: number) => {
+    //     nomIllum = mode;
+    //     props.funcCenter(props.massCoord[mode]);
+    //     setTrigger(!trigger);
+    //   };
 
-  //   const ClickVertex = (mode: number) => {
-  //     if (mode > 0) {
-  //       if (
-  //         massfaz[mode - 1].runRec !== 0 && // 0 -начало
-  //         massfaz[mode - 1].runRec !== 1 && // 1 - финиш
-  //         massfaz[mode - 1].runRec !== 5 // 5 - финиш Демо
-  //       ) {
-  //         soobError = NoClose;
-  //         setOpenSoobErr(true);
-  //       } else {
-  //         RemovalFromTheRoute(); // МОЖНО закрыть
-  //         CloseVertex(mode);
-  //         setTrigger(!trigger);
-  //       }
-  //     }
-  //   };
+    //   const ClickVertex = (mode: number) => {
+    //     if (mode > 0) {
+    //       if (
+    //         massfaz[mode - 1].runRec !== 0 && // 0 -начало
+    //         massfaz[mode - 1].runRec !== 1 && // 1 - финиш
+    //         massfaz[mode - 1].runRec !== 5 // 5 - финиш Демо
+    //       ) {
+    //         soobError = NoClose;
+    //         setOpenSoobErr(true);
+    //       } else {
+    //         RemovalFromTheRoute(); // МОЖНО закрыть
+    //         CloseVertex(mode);
+    //         setTrigger(!trigger);
+    //       }
+    //     }
+    //   };
 
-  //   const ClickBox = (idx: number) => {
-  //     if (props.massMem.length - 1 === idx) {
-  //       props.funcMode(-1); // удалить "хвост" маршрута
-  //     } else {
-  //       soobError = "Данный светофор из маршрута удалять нельзя";
-  //       setOpenSoobErr(true);
-  //     }
-  //   };
+    //   const ClickBox = (idx: number) => {
+    //     if (props.massMem.length - 1 === idx) {
+    //       props.funcMode(-1); // удалить "хвост" маршрута
+    //     } else {
+    //       soobError = "Данный светофор из маршрута удалять нельзя";
+    //       setOpenSoobErr(true);
+    //     }
+    //   };
 
-  //   const ClickAddition = (idx: number) => {
-  //     for (let i = 0; i < datestat.counterId.length - 1; i++) {
-  //       if (i === idx) datestat.counterId[i] += intervalFazaDop;
-  //       if (i > idx && datestat.counterId[i] < datestat.counterId[idx])
-  //         datestat.counterId[i] = datestat.counterId[i - 1] + 1;
-  //     }
-  //     dispatch(statsaveCreate(datestat));
-  //     setTrigger(!trigger);
-  //   };
+    //   const ClickAddition = (idx: number) => {
+    //     for (let i = 0; i < datestat.counterId.length - 1; i++) {
+    //       if (i === idx) datestat.counterId[i] += intervalFazaDop;
+    //       if (i > idx && datestat.counterId[i] < datestat.counterId[idx])
+    //         datestat.counterId[i] = datestat.counterId[i - 1] + 1;
+    //     }
+    //     dispatch(statsaveCreate(datestat));
+    //     setTrigger(!trigger);
+    //   };
 
-  //   return massfaz.map((massf: any, idx: number) => {
-  //     let runREC = JSON.parse(JSON.stringify(massf.runRec));
-  //     let bull = runREC === 2 || runREC === 4 ? " •" : " ";
-  //     let hostt =
-  //       window.location.origin.slice(0, 22) === "https://localhost:3000"
-  //         ? "https://localhost:3000/"
-  //         : "./";
-  //     let host = hostt + "18.svg";
-  //     if (DEMO && debug) {
-  //       host = hostt + "1.svg";
-  //       if (bull === " •" && runREC === 2) host = hostt + "2.svg";
-  //       if (bull !== " •" && runREC === 5) host = hostt + "2.svg";
-  //     }
-  //     if (!debug && massf.id <= 10000) {
-  //       let num = map.tflight[massf.idx].tlsost.num.toString();
-  //       if (DEMO) {
-  //         num = "1";
-  //         if (bull === " •" && runREC === 2) num = "2";
-  //         if (bull !== " •" && runREC === 5) num = "2";
-  //       }
-  //       host =
-  //         window.location.origin + "/free/img/trafficLights/" + num + ".svg";
-  //     }
-  //     let takt: any = massf.faza;
-  //     if (!massf.faza) takt = "";
-  //     let fazaImg: null | string = null;
-  //     fazaImg = massf.img[takt - 1];
-  //     let pictImg: any = "";
-  //     if (massf.faza) pictImg = OutputFazaImg(fazaImg, massf.faza);
-  //     let illum = nomIllum === idx ? styleStrokaTabl01 : styleStrokaTabl02;
-  //     let finish = runREC !== 1 && runREC !== 5 && runREC > 0 ? true : false;
+    return massfaz.map((massf: any, id: number) => {
+      //     let runREC = JSON.parse(JSON.stringify(massf.runRec));
+      //     let bull = runREC === 2 || runREC === 4 ? " •" : " ";
+      //     let hostt =
+      //       window.location.origin.slice(0, 22) === "https://localhost:3000"
+      //         ? "https://localhost:3000/"
+      //         : "./";
+      //     let host = hostt + "18.svg";
+      //     if (DEMO && debug) {
+      //       host = hostt + "1.svg";
+      //       if (bull === " •" && runREC === 2) host = hostt + "2.svg";
+      //       if (bull !== " •" && runREC === 5) host = hostt + "2.svg";
+      //     }
+      //     if (!debug && massf.id <= 10000) {
+      //       let num = map.tflight[massf.idx].tlsost.num.toString();
+      //       if (DEMO) {
+      //         num = "1";
+      //         if (bull === " •" && runREC === 2) num = "2";
+      //         if (bull !== " •" && runREC === 5) num = "2";
+      //       }
+      //       host =
+      //         window.location.origin + "/free/img/trafficLights/" + num + ".svg";
+      //     }
+      //     let takt: any = massf.faza;
+      //     if (!massf.faza) takt = "";
+      //     let fazaImg: null | string = null;
+      //     fazaImg = massf.img[takt - 1];
+      //     let pictImg: any = "";
+      //     if (massf.faza) pictImg = OutputFazaImg(fazaImg, massf.faza);
+      //     let illum = nomIllum === idx ? styleStrokaTabl01 : styleStrokaTabl02;
+      //     let finish = runREC !== 1 && runREC !== 5 && runREC > 0 ? true : false;
 
-  //     return (
-  //       <Grid key={idx} container sx={{ marginTop: "12px" }}>
-  //         <Grid item xs={0.8} sx={{ paddingTop: 0.7, textAlign: "center" }}>
-  //           <Button sx={illum} onClick={() => ClickKnop(idx)}>
-  //             {idx + 1}
-  //           </Button>
-  //         </Grid>
-  //         <GsFieldOfMiracles finish={finish} idx={idx} func={ClickAddition} />
-  //         <Grid item xs={1.0}>
-  //           {!finish && massf.id <= 10000 && (
-  //             <Box sx={styleStrokaBoxlImg} onClick={() => ClickBox(idx)}>
-  //               {OutputVertexImg(host)}
-  //             </Box>
-  //           )}
-  //           {massf.id > 10000 && <>{CircleObj()}</>}
-  //           {finish && massf.id <= 10000 && massf.fazaSist > 0 && (
-  //             <Button sx={styleStrokaTablImg} onClick={() => ClickVertex(idx)}>
-  //               {OutputVertexImg(host)}
-  //             </Button>
-  //           )}
+      return (
+        <Grid key={id} container sx={{ fontSize: 14 }}>
+          <Grid item xs={0.8} sx={{ paddingTop: 0.3, textAlign: "center" }}>
+            {/* <Button sx={illum} onClick={() => ClickKnop(idx)}>
+              {idx + 1}
+            </Button> */}
+            {massf.idx}
+          </Grid>
+          {/* <GsFieldOfMiracles finish={finish} idx={idx} func={ClickAddition} /> */}
+          <Grid item xs={1.4} sx={{}}></Grid>
+          <Grid item xs={1.0}>
+            {/* {!finish && massf.id <= 10000 && (
+              <Box sx={styleStrokaBoxlImg} onClick={() => ClickBox(idx)}>
+                {OutputVertexImg(host)}
+              </Box>
+            )}
+            {massf.id > 10000 && <>{CircleObj()}</>}
+            {finish && massf.id <= 10000 && massf.fazaSist > 0 && (
+              <Button sx={styleStrokaTablImg} onClick={() => ClickVertex(idx)}>
+                {OutputVertexImg(host)}
+              </Button>
+            )}
 
-  //           {finish && massf.id <= 10000 && massf.fazaSist < 0 && (
-  //             <Box sx={styleStrokaBoxlImg} onClick={() => ClickBox(idx)}>
-  //               {OutputVertexImg(host)}
-  //             </Box>
-  //           )}
-  //         </Grid>
-  //         <Grid item xs={0.4} sx={styleToDo03}>
-  //           {bull}
-  //         </Grid>
-  //         <Grid item xs={1.1} sx={styleStrokaTakt}>
-  //           {takt}
-  //         </Grid>
-  //         <Grid item xs={2} sx={{ textAlign: "center" }}>
-  //           {pictImg}
-  //         </Grid>
-  //         <Grid item xs sx={{ fontSize: 14, padding: "6px 0px 0px 0px" }}>
-  //           {massf.name}
-  //         </Grid>
-  //       </Grid>
-  //     );
-  //   });
-  // };
+            {finish && massf.id <= 10000 && massf.fazaSist < 0 && (
+              <Box sx={styleStrokaBoxlImg} onClick={() => ClickBox(idx)}>
+                {OutputVertexImg(host)}
+              </Box>
+            )} */}
+          </Grid>
+          {/* <Grid item xs={0.4} sx={styleToDo03}> */}
+          <Grid item xs={0.4} sx={{}}>
+            {/* {bull} */}
+          </Grid>
+          {/* <Grid item xs={1.1} sx={styleStrokaTakt}> */}
+          <Grid item xs={1.1} sx={{}}>
+            {/* {takt} */}
+          </Grid>
+          <Grid item xs={2} sx={{ textAlign: "center" }}>
+            {/* {pictImg} */}
+          </Grid>
+          <Grid item xs sx={{ fontSize: 14, padding: "3px 0px 0px 0px" }}>
+            {massf.name}
+          </Grid>
+        </Grid>
+      );
+    });
+  };
   // //========================================================
   // const CheckRun = () => {
   //   for (let i = 0; i < massfaz.length; i++) {
@@ -575,38 +580,71 @@ const SdsServisTable = (props: {
   //   setFlagPusk(!flagPusk);
   // }
 
-  const styleToDoMode = {
-    
+  const StrokaHeader = (xss: number, soob: string) => {
+    return (
+      <Grid item xs={xss} sx={{ fontSize: 14, textAlign: "center" }}>
+        <b>{soob}</b>
+      </Grid>
+    );
+  };
+
+  const HeaderTabl = () => {
+    return (
+      <Grid container sx={{ bgcolor: "#B8CBB9" }}>
+        {StrokaHeader(1, "id")}
+        {StrokaHeader(3.6, "Состояние")}
+        {StrokaHeader(1.9, "Фаза")}
+        {StrokaHeader(5.5, "ДК")}
+      </Grid>
+    );
   };
 
   const styleToDo01 = {
-    
+    background: "linear-gradient(180deg, #F1F5FB 59%, #DEE8F5 )",
+    border: "1px solid #d4d4d4",
+    borderRadius: 1,
+    marginTop: 1,
+    boxShadow: 6,
+    //padding: "0px 0px 5px 0px",
   };
 
-  const styleModalMenu = {
-    
+  const styleServis01 = {
+    overflowX: "auto",
+    maxHeight: "82vh",
+    minHeight: "0vh",
+    //height: "82vh",
+    textShadow: "2px 2px 3px rgba(0,0,0,0.3)",
   };
+
+  //console.log("###:", datestat.massСounter, massfaz);
+
+  let kino = DEMO ? "(Демо)" : "";
 
   return (
-    <>
-      <Box sx={styleToDoMode}>
-        {/* {HeadingTabl(DEMO)} */}
-        <Box sx={styleToDo01}>
-          {/* {HeaderTabl()} */}
-          <Box sx={{ overflowX: "auto", height: hTabl, textShadow: tShadow }}>
-            {/* {StrokaTabl()} */}
-          </Box>
-        </Box>
-        <Box sx={{ marginTop: 0.5, textAlign: "center" }}>
-          <Button sx={styleModalMenu} onClick={() => ToDoMode(0)}>
-            Закончить исполнение
-          </Button>
-        </Box>
+    <Box sx={styleServis00}>
+      {/* {HeadingTabl(DEMO)} */}
+      <Box
+        sx={{
+          fontSize: 16,
+          fontWeight: 500,
+          textAlign: "center",
+          color: DEMO ? "red" : "#5B1080", // красный/сиреневый
+          margin: "3px 0 5px 0",
+          textShadow: "2px 2px 3px rgba(0,0,0,0.3)",
+        }}
+      >
+        Активные светофоры {kino}
       </Box>
-      {/* {openSoobErr && (
-        <GsErrorMessage setOpen={setOpenSoobErr} sErr={soobError} />
-      )} */}
-    </>
+      <Box sx={styleToDo01}>
+        {HeaderTabl()}
+        <Box sx={styleServis01}>{StrokaTabl()}</Box>
+      </Box>
+      <Box sx={{ marginTop: 0.5, textAlign: "center" }}>
+        <Button sx={styleServisMenu} onClick={() => ToDoMode(0)}>
+          Закрыть все светофоры
+        </Button>
+      </Box>
+    </Box>
   );
 };
 

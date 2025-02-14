@@ -341,3 +341,28 @@ export const styleSetPK06 = {
   textTransform: "unset !important",
   boxShadow: 4,
 };
+//=== SdsServisTable ==================================================
+export const styleServisMenu = {
+  marginTop: 0.5,
+  marginRight: 1,
+  maxHeight: "24px",
+  minHeight: "24px",
+  padding: "3px 8px 0px 8px",
+  backgroundColor: "#E6F5D6",
+  textTransform: "unset !important",
+  color: "black",
+  boxShadow: 2,
+};
+
+export const styleServis00 = {
+  position: "relative",
+  marginLeft: "auto",
+  marginRight: 1,
+  width: "96%",
+  bgcolor: "background.paper",
+  border: "3px solid #fff",
+  borderRadius: 1,
+  boxShadow: 24,
+  padding: "0px 10px 5px 10px",
+};
+//=====================================================================

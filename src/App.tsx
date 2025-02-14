@@ -2,11 +2,15 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { mapCreate, statsaveCreate } from "./redux/actions";
 import { coordinatesCreate, massfazCreate } from "./redux/actions";
+import { massdkCreate } from "./redux/actions";
 
 import Grid from "@mui/material/Grid";
 
 import MainMapSdc from "./components/MainMapSdc";
-//import AppSocketError from "./AppSocketError";
+
+import { MasskPoint } from "./components/SdcServiceFunctions";
+
+//import { SendSocketGetPhases } from "./components/SdcSocketFunctions";
 
 import { dataMap } from "./otladkaMaps";
 import { imgFaza } from "./otladkaPicFaza";
@@ -73,6 +77,19 @@ export let dateStat: Stater = {
   intervalFazaDop: 0, // Увеличениение длительности фазы ДУ (сек)
 };
 
+export interface Pointer {
+  ID: number;
+  coordinates: Array<number>;
+  nameCoordinates: string;
+  region: number;
+  area: number;
+  idevice: number;
+  phases: Array<number>;
+  phSvg: Array<string | null>;
+}
+
+export let massDk: Pointer[] = [];
+
 export interface Fazer {
   idx: number;
   area: number;
@@ -84,6 +101,8 @@ export interface Fazer {
   phases: Array<number>;
   idevice: number;
   coordinates: Array<number>;
+  name: string;
+  //img: Array<string | null>;
 }
 
 export let massFaz: Fazer[] = [];
@@ -98,6 +117,10 @@ let flagMap = false;
 
 const App = () => {
   //=== Piece of Redux =====================================
+  let massdk = useSelector((state: any) => {
+    const { massdkReducer } = state;
+    return massdkReducer.massdk;
+  });
   let massfaz = useSelector((state: any) => {
     const { massfazReducer } = state;
     return massfazReducer.massfaz;
@@ -116,7 +139,17 @@ const App = () => {
       coord[0] = dateMapGl.tflight[i].points.Y;
       coord[1] = dateMapGl.tflight[i].points.X;
       Coordinates.push(coord);
+      //let masskPoint = MasskPoint(deb, dateMapGl.tflight[i], imgFaza);
+      let masskPoint = MasskPoint(dateMapGl.tflight[i]);
+      massdk.push(masskPoint);
     }
+    dispatch(massdkCreate(massdk));
+    // // запросы на получение изображения фаз
+    // for (let i = 0; i < massdk.length; i++) {
+    //   let reg = massdk[i].region.toString();
+    //   let area = massdk[i].area.toString();
+    //   SendSocketGetPhases(deb, WS, reg, area, massdk[i].ID);
+    // }
 
     // достать тип отображаемых фаз на карте из LocalStorage
     if (window.localStorage.typeVert === undefined)
@@ -156,7 +189,7 @@ const App = () => {
 
     dispatch(coordinatesCreate(coordinates));
     dispatch(statsaveCreate(dateStat));
-    console.log("dateStat:",window.localStorage.counterFazaD, dateStat,);
+    console.log("dateStat:", window.localStorage.counterFazaD, dateStat);
   };
 
   const host =
@@ -218,8 +251,7 @@ const App = () => {
                   mf.fazaSistOld = JSON.parse(JSON.stringify(mf.fazaSist));
                 mf.fazaSist = data.phases[j].phase;
                 flagChange++;
-
-                console.log("1PH:", i, mf.idevice, mf.fazaSist, mf.fazaSistOld);
+                //console.log("1PH:", i, mf.idevice, mf.fazaSist, mf.fazaSistOld);
               }
             }
           }
@@ -245,18 +277,51 @@ const App = () => {
           dateStat.area = data.pos.area;
           dateStat.id = data.pos.id.toString();
           dateStat.phSvg = Array(8).fill(null);
-          if (data.phases)
+          if (data.phases) {
             for (let i = 0; i < data.phases.length; i++)
               dateStat.phSvg[i] = data.phases[i].phase;
+          } else {
+            dateStat.phSvg[0] = imgFaza; // костыль
+            dateStat.phSvg[1] = null;
+            dateStat.phSvg[2] = imgFaza;
+            dateStat.phSvg[3] = null;
+            dateStat.phSvg[4] = imgFaza;
+          }
+
           dateStat.readyFaza = true;
           dispatch(statsaveCreate(dateStat));
+
+          for (let i = 0; i < massdk.length; i++) {
+            if (
+              // massdk[i].region.toString() === data.pos.region &&
+              // massdk[i].area.toString() === data.pos.area &&
+              massdk[i].ID === data.pos.id
+            ) {
+              console.log("!!!getPhases:", i, data.phases);
+              if (data.phases) {
+                if (data.phases.length) {
+                  for (let j = 0; j < data.phases.length; j++)
+                    massdk[i].phSvg[j] = data.phases[j].phase;
+                  dispatch(massdkCreate(massdk));
+                }
+                break;
+              } else {
+                massdk[i].phSvg[0] = imgFaza; // костыль
+                massdk[i].phSvg[1] = null;
+                massdk[i].phSvg[2] = imgFaza;
+                massdk[i].phSvg[3] = null;
+                massdk[i].phSvg[4] = imgFaza;
+              }
+            }
+          }
+
           setTrigger(!trigger);
           break;
         default:
           console.log("data_default:", data);
       }
     };
-  }, [dispatch, massfaz, trigger]);
+  }, [dispatch, massfaz, massdk, trigger]);
 
   if (dateStat.debug && flagOpenDebug) {
     console.log("РЕЖИМ ОТЛАДКИ!!!");
