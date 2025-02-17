@@ -153,14 +153,11 @@ const SdcControlVertex = (props: {
     } else nomInMass = nomIn; // повторное открытие
 
     mF = massfaz[nomInMass];
-
-    console.log("0MASSDK:", massdk);
-
+    //console.log("0MASSDK:", massdk);
     if (!DEMO && !clinch) {
       for (let i = 0; i < massdk.length; i++) {
         if (massdk[i].idevice === mF.idevice && mF.idx !== -1) {
-          console.log("1MASSDK:",i, massdk[i].phSvg);
-
+          //console.log("1MASSDK:",i, massdk[i].phSvg);
           if (massdk[i].phSvg[0]) {
             datestat.phSvg = massdk[i].phSvg; // картинки были присланы ранее
           } else SendSocketDispatch(debug, ws, mF.idevice, 4, 1); // запрос на получение картинок фаз
@@ -536,7 +533,7 @@ const SdcControlVertex = (props: {
       <Box sx={styleTitleDEMO}>{titleDEMO}</Box>
       <Box sx={StyleTitle(17)}>
         <em>
-          [id{kluchGl}] <b>{map.tflight[props.idx].description}</b>
+          [id{kluchGl.trimEnd()}] <b>{map.tflight[props.idx].description}</b>
         </em>
       </Box>
       <Box sx={styleControl01}>

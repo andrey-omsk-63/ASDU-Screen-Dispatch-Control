@@ -141,6 +141,7 @@ const App = () => {
       Coordinates.push(coord);
       //let masskPoint = MasskPoint(deb, dateMapGl.tflight[i], imgFaza);
       let masskPoint = MasskPoint(dateMapGl.tflight[i]);
+      if (dateStat.debug) masskPoint.phSvg = dateStat.phSvg
       massdk.push(masskPoint);
     }
     dispatch(massdkCreate(massdk));

@@ -113,7 +113,7 @@ export const styleSetArea = {
 };
 
 export const styleSetID = {
-  border:  0,
+  border: 0,
   width: "230px",
   maxHeight: "3px",
   minHeight: "3px",
@@ -236,7 +236,6 @@ export const styleSetFazaNull = {
   bgcolor: "background.paper",
 };
 
-
 export const styleSetFaza = {
   position: "relative",
   marginTop: "1px",
@@ -289,7 +288,6 @@ export const styleSetPK01 = (wdth: number, hdth: number) => {
   };
   return hdth ? styleSetPK01 : styleSetPK02;
 };
-
 
 export const styleSetPK02 = {
   fontSize: 20,
@@ -364,5 +362,34 @@ export const styleServis00 = {
   borderRadius: 1,
   boxShadow: 24,
   padding: "0px 10px 5px 10px",
+};
+
+export const styleServis01 = {
+  overflowX: "auto",
+  maxHeight: "872vh",
+  minHeight: "0vh",
+  //height: "82vh",
+  textShadow: "2px 2px 3px rgba(0,0,0,0.3)",
+};
+
+export const styleToDo01 = {
+  background: "linear-gradient(180deg, #F1F5FB 59%, #DEE8F5 )",
+  border: "1px solid #d4d4d4",
+  borderRadius: 1,
+  marginTop: 1,
+  boxShadow: 6,
+  //padding: "0px 0px 5px 0px",
+};
+
+export const styleToDo02 = (DEMO: boolean) => {
+  const styleToDo = {
+    fontSize: 16,
+    fontWeight: 500,
+    textAlign: "center",
+    color: DEMO ? "red" : "#5B1080", // красный/сиреневый
+    margin: "3px 0 5px 0",
+    textShadow: "2px 2px 3px rgba(0,0,0,0.3)",
+  };
+  return styleToDo;
 };
 //=====================================================================
