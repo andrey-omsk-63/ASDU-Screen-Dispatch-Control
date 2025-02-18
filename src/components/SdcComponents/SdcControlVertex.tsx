@@ -11,7 +11,7 @@ import { StatusLine, MakeMassFaz } from "../SdcServiceFunctions";
 
 import { SendSocketDispatch } from "../SdcSocketFunctions";
 
-import { MaxFaz, CLINCH } from "./../MapConst";
+import { MaxFaz, CLINCH, BadCODE } from "./../MapConst";
 
 import { DEMO } from "./../MainMapSdc";
 
@@ -85,15 +85,10 @@ const SdcControlVertex = (props: {
 
   statusVertex = map.tflight[props.idx].tlsost.num;
   statusName = map.tflight[props.idx].tlsost.description;
+  // console.log("Name:", statusVertex, statusName);
   let clinch = CLINCH.indexOf(statusVertex) < 0 ? false : true;
+  let badCode = BadCODE.indexOf(statusVertex) < 0 ? false : true;
 
-  // if (window.localStorage.intervalFazaD === undefined)
-  //   window.localStorage.intervalFazaD = 0;
-  // INTERVAL = Number(window.localStorage.intervalFazaD);
-
-  // if (window.localStorage.intervalFazaDopD === undefined)
-  //   window.localStorage.intervalFazaDopD = 0;
-  // INTERVALDOP = Number(window.localStorage.intervalFazaDopD);
   INTERVAL = datestat.intervalFaza;
   INTERVALDOP = datestat.intervalFazaDop;
   //========================================================
@@ -103,7 +98,7 @@ const SdcControlVertex = (props: {
   //========================================================
   const handleCloseSet = React.useCallback(
     (mode: number) => {
-      if (!DEMO && !clinch && shippedKU[nomInMass]) {
+      if (!DEMO && !clinch && shippedKU[nomInMass] && mF.idevice > 0) {
         SendSocketDispatch(debug, ws, mF.idevice, 9, 9); // КУ
         SendSocketDispatch(debug, ws, mF.idevice, 4, 0); // закрытие id
       }
@@ -207,12 +202,11 @@ const SdcControlVertex = (props: {
       datestat.stopSwitch[nomInMass] = true;
       dispatch(massfazCreate(massfaz));
       shippedKU[nomInMass] = mode === 9 ? true : false;
-      !DEMO &&
-        !clinch &&
-        mode !== 9 &&
+      if (!DEMO && !clinch && mode !== 9)
         SendSocketDispatch(debug, ws, mF.idevice, 9, mode);
       if (mode > 8 || !mode) mF.fazaZU = 0; // ЖМ, ОС, ЛР или КУ (10,11,0,9)
       if (mode < 9 && mode > 0) {
+        mF.fazaZU = mF.faza;
         if (datestat.counterFaza) datestat.massСounter[nomInMass] = INTERVAL; // массив счётчиков отправки КУ на "запущенные" светофоры
         // передана фаза
         if (datestat.timerId[nomInMass] === null) {
@@ -268,7 +262,7 @@ const SdcControlVertex = (props: {
     if (!DEMO) {
       if (mF.fazaZU) {
         //============================ мёртвое место?
-        console.log("Отправлена фаза c id", mF.id, mF.faza);
+        console.log("Отправлена фаза c id", present, mF.id, mF.faza);
         !clinch && SendSocketDispatch(debug, ws, mF.idevice, 9, mF.faza);
       }
       //else console.log("Отправлена пустышка c id", mF.id);
@@ -525,6 +519,8 @@ const SdcControlVertex = (props: {
     setFlagPusk(!flagPusk);
   }
 
+  let clinchik = badCode ? true : clinch;
+
   return (
     <Box ref={boxer} sx={styleSetControl}>
       <Button sx={styleModalEnd} onClick={() => handleCloseSet(0)}>
@@ -552,7 +548,7 @@ const SdcControlVertex = (props: {
           </Grid>
         </Grid>
       </Box>
-      {StatusLine(statusName, clinch)}
+      {StatusLine(statusName, clinchik)}
     </Box>
   );
 };

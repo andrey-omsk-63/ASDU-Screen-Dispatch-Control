@@ -1,29 +1,29 @@
-import * as React from 'react';
+import * as React from "react";
 
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Modal from '@mui/material/Modal';
-import MenuItem from '@mui/material/MenuItem';
-import Typography from '@mui/material/Typography';
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
+import MenuItem from "@mui/material/MenuItem";
+import Typography from "@mui/material/Typography";
 
-import { FullscreenControl, GeolocationControl } from 'react-yandex-maps';
-import { RulerControl, SearchControl } from 'react-yandex-maps';
-import { TrafficControl, TypeSelector, ZoomControl } from 'react-yandex-maps';
+import { FullscreenControl, GeolocationControl } from "react-yandex-maps";
+import { RulerControl, SearchControl } from "react-yandex-maps";
+import { TrafficControl, TypeSelector, ZoomControl } from "react-yandex-maps";
 
-import { DEMO } from './MainMapSdc';
+import { DEMO } from "./MainMapSdc";
 //import { CLINCH } from "./MapConst";
 
-import { DateMAP } from './../interfaceMAP.d';
-import { Stater, Fazer, Pointer } from './../App';
+import { DateMAP } from "./../interfaceMAP.d";
+import { Stater, Fazer, Pointer } from "./../App";
 
-import { styleServis03, StyleTitle } from './SdcComponents/SdcComponentsStyle';
-import { styleServis04 } from './SdcComponents/SdcComponentsStyle';
-import { searchControl, styleModalEnd } from './MainMapStyle';
+import { styleServis03, StyleTitle } from "./SdcComponents/SdcComponentsStyle";
+import { styleServis04 } from "./SdcComponents/SdcComponentsStyle";
+import { searchControl, styleModalEnd } from "./MainMapStyle";
 
 export const handleKey = (event: any) => {
-  if (event.key === 'Enter') event.preventDefault();
+  if (event.key === "Enter") event.preventDefault();
 };
 
 export const CenterCoord = (aY: number, aX: number, bY: number, bX: number) => {
@@ -55,7 +55,7 @@ export const CenterCoordBegin = (map: any) => {
     mapp[nomMin].points.Y,
     mapp[nomMin].points.X,
     mapp[nomMax].points.Y,
-    mapp[nomMax].points.X,
+    mapp[nomMax].points.X
   );
 
   // return CenterCoord(
@@ -104,12 +104,12 @@ export const YandexServices = () => {
   return (
     <>
       <FullscreenControl />
-      <GeolocationControl options={{ float: 'left' }} />
-      <RulerControl options={{ float: 'right' }} />
+      <GeolocationControl options={{ float: "left" }} />
+      <RulerControl options={{ float: "right" }} />
       <SearchControl options={searchControl} />
-      <TrafficControl options={{ float: 'right' }} />
-      <TypeSelector options={{ float: 'right' }} />
-      <ZoomControl options={{ float: 'right' }} />
+      <TrafficControl options={{ float: "right" }} />
+      <TypeSelector options={{ float: "right" }} />
+      <ZoomControl options={{ float: "right" }} />
     </>
   );
 };
@@ -118,35 +118,45 @@ export const YandexServices = () => {
 export const MasskPoint = (rec: any) => {
   let masskPoint: Pointer = {
     ID: -1,
-    coordinates: [],
-    nameCoordinates: '',
-    region: 0,
-    area: 0,
+    // coordinates: [],
+    // nameCoordinates: '',
+    // region: 0,
+    // area: 0,
     idevice: -1,
-    phases: [],
+    //phases: [],
     phSvg: [],
+    readIt: false,
   };
   //let img = null;
   masskPoint.ID = rec.ID;
-  masskPoint.coordinates[0] = rec.points.Y;
-  masskPoint.coordinates[1] = rec.points.X;
-  masskPoint.nameCoordinates = rec.description;
-  masskPoint.region = Number(rec.region.num);
-  masskPoint.area = Number(rec.area.num);
+  // masskPoint.coordinates[0] = rec.points.Y;
+  // masskPoint.coordinates[1] = rec.points.X;
+  // masskPoint.nameCoordinates = rec.description;
+  // masskPoint.region = Number(rec.region.num);
+  // masskPoint.area = Number(rec.area.num);
   masskPoint.idevice = rec.idevice;
-  masskPoint.phases = rec.phases;
+  //masskPoint.phases = rec.phases;
   for (let i = 0; i < 8; i++) masskPoint.phSvg.push(null);
   return masskPoint;
 };
+
+
+export const HaveActivеVert = (datestat: any) => {
+  let have = 0;
+  for (let i = 0; i < datestat.massСounter.length; i++) {
+    if (datestat.massСounter[i] > 0) have++;
+  }
+  return have;
+};
 //=== Placemark =====================================
 export const GetPointData = (index: number, map: any, icContent: string) => {
-  let cont1 = '';
-  let cont2 = '';
-  let cont3 = '';
-  cont1 = map.tflight[index].description + '<br/>';
-  cont3 = map.tflight[index].tlsost.description + '<br/>';
-  cont2 = '[';
-  cont2 += map.tflight[index].ID + ', ' + map.tflight[index].idevice + ']';
+  let cont1 = "";
+  let cont2 = "";
+  let cont3 = "";
+  cont1 = map.tflight[index].description + "<br/>";
+  cont3 = map.tflight[index].tlsost.description + "<br/>";
+  cont2 = "[";
+  cont2 += map.tflight[index].ID + ", " + map.tflight[index].idevice + "]";
 
   return { hintContent: cont1 + cont3 + cont2, iconContent: icContent };
 };
@@ -154,7 +164,7 @@ export const GetPointData = (index: number, map: any, icContent: string) => {
 export const GetPointOptions1 = (Hoster: any) => {
   return {
     // данный тип макета
-    iconLayout: 'default#image',
+    iconLayout: "default#image",
     // изображение иконки метки
     iconImageHref: Hoster(),
     // размеры метки
@@ -164,26 +174,25 @@ export const GetPointOptions1 = (Hoster: any) => {
     //iconCaption: "подсказка",
   };
 };
-
 //=== Разное =======================================
 export const InputDirect = (func: any, otherWork: boolean) => {
   const styleSetNapr = {
-    width: '160px',
-    maxHeight: '2px',
-    minHeight: '2px',
-    bgcolor: '#BAE186', // салатовый
-    border: '1px solid #93D145', // тёмно салатовый
+    width: "160px",
+    maxHeight: "2px",
+    minHeight: "2px",
+    bgcolor: "#BAE186", // салатовый
+    border: "1px solid #93D145", // тёмно салатовый
     borderRadius: 1,
     p: 1.25,
-    textAlign: 'center',
+    textAlign: "center",
     boxShadow: 6,
   };
 
   const styleBoxFormNapr = {
-    '& > :not(style)': {
-      marginTop: '-10px',
-      marginLeft: '-12px',
-      width: '185px',
+    "& > :not(style)": {
+      marginTop: "-10px",
+      marginLeft: "-12px",
+      width: "185px",
     },
   };
 
@@ -214,7 +223,13 @@ export const InputDirect = (func: any, otherWork: boolean) => {
     }
   };
 
-  let dat = ['Режимы работы:', '● Режим управления', '● Настройки', '● Режим Демо', '● Фрагменты'];
+  let dat = [
+    "Режимы работы:",
+    "● Режим управления",
+    "● Настройки",
+    "● Режим Демо",
+    "● Фрагменты",
+  ];
   let massKey = [];
   let massDat: any[] = [];
   const currencies: any = [];
@@ -241,11 +256,12 @@ export const InputDirect = (func: any, otherWork: boolean) => {
             style: {
               fontSize: 15,
               fontWeight: 500,
-              color: currency === 3 ? 'red' : 'black',
+              color: currency === 3 ? "red" : "black",
             },
           }}
           variant="standard"
-          color="secondary">
+          color="secondary"
+        >
           {currencies.map((option: any) => (
             <MenuItem
               key={option.value}
@@ -253,14 +269,15 @@ export const InputDirect = (func: any, otherWork: boolean) => {
               sx={{
                 fontSize: 15,
                 color:
-                  option.label === '● Режим Демо'
-                    ? 'red'
-                    : option.label === 'Режимы работы:'
-                    ? 'blue'
-                    : 'black',
-                cursor: option.label === 'Режимы работы:' ? 'none' : 'pointer',
-                fontWeight: option.label === 'Режимы работы:' ? 800 : 350,
-              }}>
+                  option.label === "● Режим Демо"
+                    ? "red"
+                    : option.label === "Режимы работы:"
+                    ? "blue"
+                    : "black",
+                cursor: option.label === "Режимы работы:" ? "none" : "pointer",
+                fontWeight: option.label === "Режимы работы:" ? 800 : 350,
+              }}
+            >
               {option.label}
             </MenuItem>
           ))}
@@ -291,7 +308,7 @@ export const Inputer = (value: any, handleChange: any) => {
           onKeyPress={handleKey} //отключение Enter
           type="number"
           InputProps={{ disableUnderline: true }}
-          inputProps={{ style: { fontSize: 12, cursor: 'pointer' } }}
+          inputProps={{ style: { fontSize: 12, cursor: "pointer" } }}
           value={value}
           onChange={handleChange}
           variant="standard"
@@ -310,8 +327,13 @@ export const OutputFaza = (img: any, i: number) => {
         <svg
           xmlns="http://www.w3.org/2000/svg"
           xmlnsXlink="http://www.w3.org/1999/xlink"
-          style={{ width: window.innerHeight / 5.5, height: widthHeight }}>
-          <image width={'95%'} height={'100%'} xlinkHref={'data:image/png;base64,' + img} />
+          style={{ width: window.innerHeight / 5.5, height: widthHeight }}
+        >
+          <image
+            width={"95%"}
+            height={"100%"}
+            xlinkHref={"data:image/png;base64," + img}
+          />
         </svg>
       )}
       {!img && i >= 0 && <Box sx={{ fontSize: 41 }}>{i + 1}</Box>}
@@ -321,14 +343,14 @@ export const OutputFaza = (img: any, i: number) => {
 };
 //=== SdcControlVertex =============================
 export const StatusLine = (statusName: string, clinch: boolean) => {
-  let coler = clinch ? 'red' : '#5B1080'; // красный/сиреневый
+  let coler = clinch ? "red" : "#5B1080"; // красный/сиреневый
   return (
     <>
       {!DEMO && (
-        <Box sx={{ padding: '2px 0px 0px 0px' }}>
+        <Box sx={{ padding: "2px 0px 0px 0px" }}>
           <Box sx={StyleTitle(12.1)}>
-            cостояние:{' '}
-            <Box sx={{ display: 'inline-block', color: coler }}>
+            <Box sx={{ display: "inline-block", color: coler }}>
+              cостояние:{" "}
               <em>
                 <b>{statusName}</b>
               </em>
@@ -359,33 +381,33 @@ export const MakeMassFaz = (idx: number, datestat: Stater, map: DateMAP) => {
 //=== SdcSetup =====================================
 export const BadExit = (badExit: boolean, handleCloseEnd: Function) => {
   const styleSetPoint = {
-    outline: 'none',
-    position: 'absolute',
-    left: '50%',
-    top: '50%',
-    transform: 'translate(-50%, -50%)',
+    outline: "none",
+    position: "absolute",
+    left: "50%",
+    top: "50%",
+    transform: "translate(-50%, -50%)",
     width: 400,
     //bgcolor: "background.paper",
-    bgcolor: '#fff6d2', // светло-жёлтый
-    border: '1px solid #fff6d2', // светло-жёлтый
+    bgcolor: "#fff6d2", // светло-жёлтый
+    border: "1px solid #fff6d2", // светло-жёлтый
     borderRadius: 1,
-    textShadow: '1px 1px 2px rgba(0,0,0,0.3)',
+    textShadow: "1px 1px 2px rgba(0,0,0,0.3)",
     boxShadow: 24,
-    textAlign: 'center',
+    textAlign: "center",
     p: 1,
   };
 
   const styleModalMenu = {
     marginTop: 0.5,
-    maxHeight: '24px',
-    minHeight: '24px',
-    backgroundColor: '#E6F5D6',
-    border: '1px solid #d4d4d4', // серый
+    maxHeight: "24px",
+    minHeight: "24px",
+    backgroundColor: "#E6F5D6",
+    border: "1px solid #d4d4d4", // серый
     borderRadius: 1,
     boxShadow: 6,
-    textTransform: 'unset !important',
+    textTransform: "unset !important",
     lineHeight: 2.0,
-    color: 'black',
+    color: "black",
   };
 
   const handleClose = (mode: boolean) => handleCloseEnd(mode);
@@ -394,11 +416,13 @@ export const BadExit = (badExit: boolean, handleCloseEnd: Function) => {
     <Modal open={badExit} onClose={() => handleClose(false)}>
       <Box sx={styleSetPoint}>
         {ExitCross(() => handleClose(false))}
-        <Typography variant="h6" sx={{ color: 'red' }}>
+        <Typography variant="h6" sx={{ color: "red" }}>
           ⚠️Предупреждение
         </Typography>
         <Box sx={{ marginTop: 0.5 }}>
-          <Box sx={{ marginBottom: 1.2 }}>Будет произведён выход без сохранения. Продолжать?</Box>
+          <Box sx={{ marginBottom: 1.2 }}>
+            Будет произведён выход без сохранения. Продолжать?
+          </Box>
           <Button sx={styleModalMenu} onClick={() => handleClose(true)}>
             Да
           </Button>
@@ -422,32 +446,32 @@ export const ExitCross = (func: any) => {
 
 export const FooterContent = (SaveForm: Function) => {
   const styleFormPK03 = {
-    maxHeight: '24px',
-    minHeight: '24px',
-    backgroundColor: '#E6F5D6', // светло салатовый
-    border: '1px solid #d4d4d4', // серый
+    maxHeight: "24px",
+    minHeight: "24px",
+    backgroundColor: "#E6F5D6", // светло салатовый
+    border: "1px solid #d4d4d4", // серый
     borderRadius: 1,
-    textTransform: 'unset !important',
+    textTransform: "unset !important",
     boxShadow: 6,
-    textShadow: '2px 2px 3px rgba(0,0,0,0.3)',
-    color: 'black',
-    padding: '2px 8px 0px 8px',
+    textShadow: "2px 2px 3px rgba(0,0,0,0.3)",
+    color: "black",
+    padding: "2px 8px 0px 8px",
   };
 
   const styleSetPK04 = {
     marginTop: 1.2,
-    display: 'flex',
-    justifyContent: 'center',
+    display: "flex",
+    justifyContent: "center",
   };
 
   return (
     <Box sx={styleSetPK04}>
-      <Box sx={{ display: 'inline-block', margin: '0px 5px 0px 0px' }}>
+      <Box sx={{ display: "inline-block", margin: "0px 5px 0px 0px" }}>
         <Button sx={styleFormPK03} onClick={() => SaveForm(0)}>
           Выйти без сохранения
         </Button>
       </Box>
-      <Box sx={{ display: 'inline-block', margin: '0px 5px 0px 5px' }}>
+      <Box sx={{ display: "inline-block", margin: "0px 5px 0px 5px" }}>
         <Button sx={styleFormPK03} onClick={() => SaveForm(1)}>
           Сохранить изменения
         </Button>
@@ -456,8 +480,13 @@ export const FooterContent = (SaveForm: Function) => {
   );
 };
 
-export const StrTablVert = (mode: boolean, xss: number, recLeft: string, recRight: any) => {
-  let coler = mode ? 'black' : '#A8A8A8';
+export const StrTablVert = (
+  mode: boolean,
+  xss: number,
+  recLeft: string,
+  recRight: any
+) => {
+  let coler = mode ? "black" : "#A8A8A8";
   return (
     <>
       <Grid container sx={{ marginTop: 1 }}>
@@ -467,12 +496,12 @@ export const StrTablVert = (mode: boolean, xss: number, recLeft: string, recRigh
           <b>{recLeft}</b>
         </Grid>
 
-        {typeof recRight === 'object' ? (
+        {typeof recRight === "object" ? (
           <Grid item xs>
             {recRight}
           </Grid>
         ) : (
-          <Grid item xs sx={{ fontSize: 15, color: '#5B1080', border: 8 }}>
+          <Grid item xs sx={{ fontSize: 15, color: "#5B1080", border: 8 }}>
             <b>{recRight}</b>
           </Grid>
         )}
@@ -486,34 +515,34 @@ export const WaysInput = (
   VALUE: any,
   SetValue: Function,
   MIN: number,
-  MAX: number,
+  MAX: number
 ) => {
   let value = VALUE;
 
   const styleSetID = {
-    width: '33px',
-    maxHeight: '1px',
-    minHeight: '1px',
-    border: '1px solid #d4d4d4', // серый
+    width: "33px",
+    maxHeight: "1px",
+    minHeight: "1px",
+    border: "1px solid #d4d4d4", // серый
     borderRadius: 1,
-    bgcolor: '#FFFBE5', // топлёное молоко
+    bgcolor: "#FFFBE5", // топлёное молоко
     boxShadow: 6,
-    textAlign: 'center',
+    textAlign: "center",
     p: 1.5,
   };
 
   const styleBoxFormID = {
-    '& > :not(style)': {
-      marginTop: '3px',
-      marginLeft: '-9px',
-      width: '53px',
+    "& > :not(style)": {
+      marginTop: "3px",
+      marginLeft: "-9px",
+      width: "53px",
     },
   };
 
   const handleChange = (event: any) => {
-    let valueInp = event.target.value.replace(/^0+/, '');
+    let valueInp = event.target.value.replace(/^0+/, "");
     if (Number(valueInp) < MIN) valueInp = MIN;
-    if (valueInp === '') valueInp = MIN;
+    if (valueInp === "") valueInp = MIN;
     valueInp = Math.trunc(Number(valueInp));
     if (valueInp <= MAX) {
       value = valueInp.toString();
@@ -531,11 +560,11 @@ export const WaysInput = (
           InputProps={{ disableUnderline: true }}
           inputProps={{
             style: {
-              marginTop: '-16px',
-              padding: '4px 0px 0px 0px',
+              marginTop: "-16px",
+              padding: "4px 0px 0px 0px",
               fontSize: 14,
-              backgroundColor: '#FFFBE5', // топлёное молоко
-              cursor: 'pointer',
+              backgroundColor: "#FFFBE5", // топлёное молоко
+              cursor: "pointer",
             },
           }}
           value={value}
@@ -548,39 +577,43 @@ export const WaysInput = (
   );
 };
 
-export const ShiftOptimal = (mode: boolean, ChangeOptimal: Function, shift: number) => {
+export const ShiftOptimal = (
+  mode: boolean,
+  ChangeOptimal: Function,
+  shift: number
+) => {
   const styleOptimalNo = {
     marginTop: shift,
     marginRight: 1,
-    maxHeight: '27px',
-    minHeight: '27px',
+    maxHeight: "27px",
+    minHeight: "27px",
     maxWidth: 58,
     minWidth: 58,
-    backgroundColor: '#E6F5D6', // светло салатовый
-    border: '1px solid #d4d4d4', // серый
+    backgroundColor: "#E6F5D6", // светло салатовый
+    border: "1px solid #d4d4d4", // серый
     borderRadius: 1,
-    textTransform: 'unset !important',
+    textTransform: "unset !important",
     boxShadow: 2,
-    color: 'black',
+    color: "black",
   };
 
   const styleOptimalYes = {
     marginTop: shift,
     marginRight: 1,
-    maxHeight: '27px',
-    minHeight: '27px',
+    maxHeight: "27px",
+    minHeight: "27px",
     maxWidth: 58,
     minWidth: 58,
-    backgroundColor: '#bae186', // тёмно салатовый
-    border: '1px solid #bae186', // тёмно салатовый
+    backgroundColor: "#bae186", // тёмно салатовый
+    border: "1px solid #bae186", // тёмно салатовый
     borderRadius: 1,
-    textTransform: 'unset !important',
+    textTransform: "unset !important",
     boxShadow: 6,
-    color: 'black',
+    color: "black",
   };
 
   let illum = mode ? styleOptimalYes : styleOptimalNo;
-  let soob = mode ? 'Да' : 'Нет';
+  let soob = mode ? "Да" : "Нет";
 
   return (
     <Button sx={illum} onClick={() => ChangeOptimal()}>
@@ -591,23 +624,23 @@ export const ShiftOptimal = (mode: boolean, ChangeOptimal: Function, shift: numb
 
 export const InputFromList = (func: any, currency: any, currencies: any) => {
   const styleSet = {
-    width: '165px',
-    maxHeight: '6px',
-    minHeight: '6px',
-    bgcolor: '#FFFBE5',
-    border: '1px solid #d4d4d4', // серый
+    width: "165px",
+    maxHeight: "6px",
+    minHeight: "6px",
+    bgcolor: "#FFFBE5",
+    border: "1px solid #d4d4d4", // серый
     borderRadius: 1,
-    textAlign: 'left',
+    textAlign: "left",
     p: 1.45,
     boxShadow: 6,
   };
 
   const styleBoxForm = {
-    '& > :not(style)': {
-      marginTop: '-7px',
-      marginLeft: '-12px',
-      width: '175px',
-      padding: '0px 0px 0px 5px',
+    "& > :not(style)": {
+      marginTop: "-7px",
+      marginLeft: "-12px",
+      width: "175px",
+      padding: "0px 0px 0px 5px",
     },
   };
 
@@ -622,7 +655,8 @@ export const InputFromList = (func: any, currency: any, currencies: any) => {
           onChange={func}
           InputProps={{ disableUnderline: true, style: { fontSize: 14 } }}
           variant="standard"
-          color="secondary">
+          color="secondary"
+        >
           {currencies.map((option: any) => (
             <MenuItem key={option.value} value={option.value}>
               {option.label}
@@ -636,7 +670,7 @@ export const InputFromList = (func: any, currency: any, currencies: any) => {
 
 export const PreparCurrenciesDispVert = () => {
   const currencies: any = [];
-  let dat = ['значок светофора', 'картинка фазы', 'счётчик(номер фазы)'];
+  let dat = ["значок светофора", "картинка фазы", "счётчик(номер фазы)"];
   let massKey: any = [];
   let massDat: any = [];
   for (let key in dat) {
@@ -646,5 +680,32 @@ export const PreparCurrenciesDispVert = () => {
   for (let i = 0; i < massKey.length; i++)
     currencies.push({ value: massKey[i], label: massDat[i] });
   return currencies;
+};
+//=== SdsServisTable ===============================
+const StrokaHeader = (xss: number, soob: string) => {
+  return (
+    <>
+      {soob !== "id" ? (
+        <Grid item xs={xss} sx={{ fontWeight: 500, textAlign: "center" }}>
+          {soob}
+        </Grid>
+      ) : (
+        <Grid item xs={xss} sx={{ textAlign: "center" }}>
+          <em>[{soob}]</em>
+        </Grid>
+      )}
+    </>
+  );
+};
+
+export const HeaderTabl = () => {
+  return (
+    <Grid container sx={{ fontSize: 14, bgcolor: "#B8CBB9" }}>
+      {StrokaHeader(0.8, "id")}
+      {StrokaHeader(2.1, "Счётчик")}
+      {StrokaHeader(1.8, "Фаза")}
+      {StrokaHeader(6.0, "ДК")}
+    </Grid>
+  );
 };
 //=====================================================================

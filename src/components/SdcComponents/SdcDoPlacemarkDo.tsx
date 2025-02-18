@@ -5,6 +5,8 @@ import { Placemark, YMapsApi } from "react-yandex-maps";
 
 import { GetPointData } from "../SdcServiceFunctions";
 
+import { BadCODE } from "../MapConst";
+
 const SdcDoPlacemarkDo = (props: {
   ymaps: YMapsApi | null;
   coordinate: any;
@@ -52,6 +54,9 @@ const SdcDoPlacemarkDo = (props: {
     )
       haveСounter = false;
   }
+
+  let statusVertex = map.tflight[idx].tlsost.num;
+  let badCode = BadCODE.indexOf(statusVertex) < 0 ? false : true;
 
   const Hoster = React.useCallback(() => {
     let hostt =
@@ -184,7 +189,7 @@ const SdcDoPlacemarkDo = (props: {
         key={idx}
         geometry={props.coordinate}
         properties={GetPointData(idx, map, icContent)}
-        options={haveСounter ? getPointOptions2() : getPointOptions1()}
+        options={haveСounter && !badCode ? getPointOptions2() : getPointOptions1()}
         modules={["geoObject.addon.hint", "geoObject.addon.balloon"]}
         onClick={() => props.OnPlacemarkClickPoint(idx)}
       />

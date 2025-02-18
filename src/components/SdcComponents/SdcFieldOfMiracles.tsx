@@ -5,10 +5,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { AiTwotoneRightCircle } from "react-icons/ai";
 
-//import { hTabl } from "./RgsToDoMode";
-
 const SdcFieldOfMiracles = (props: {
-  //finish: boolean;
   idx: number;
   func: Function;
 }) => {
@@ -26,14 +23,13 @@ const SdcFieldOfMiracles = (props: {
   const intervalFazaDop = datestat.intervalFazaDop; // Увеличениение длительности фазы ДУ (сек)
   const [hint, setHint] = React.useState(false);
 
-  console.log("###:", props.idx, datestat.massСounter);
+  //console.log("###:", props.idx, datestat.massСounter);
 
   let intervalfaza = datestat.massСounter[props.idx]; // Задаваемая длительность фазы ДУ (сек)
 
   const styleField01 = {
     fontSize: 12,
     color: "#7620A2",
-    //padding: "1px 0 0 0",
     //border:1,
   };
 
@@ -46,6 +42,12 @@ const SdcFieldOfMiracles = (props: {
     color: "#E67641", // оранж
     textShadow: "0px 0px 0px rgba(0,0,0,0.3)",
     //border: 1,
+  };
+
+  const styleField03 = {
+    padding: "5px 0 0 0",
+    textAlign: "center",
+    cursor: "default",
   };
 
   return (
@@ -70,15 +72,7 @@ const SdcFieldOfMiracles = (props: {
               </>
             )}
           </Grid>
-          <Grid
-            item
-            xs
-            sx={{
-              padding: "5px 0 0 0",
-              textAlign: "center",
-              cursor: "default",
-            }}
-          >
+          <Grid item xs sx={styleField03}>
             {intervalfaza}
           </Grid>
         </Grid>
