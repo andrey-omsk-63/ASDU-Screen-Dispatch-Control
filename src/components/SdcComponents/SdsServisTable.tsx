@@ -102,7 +102,7 @@ const SdsServisTable = (props: {}) => {
           {datestat.massСounter[id] > 0 && massf.idx >= 0 && (
             <>
               <Grid item xs={0.8} sx={{ paddingTop: 0.3, textAlign: "center" }}>
-                {massf.idx}
+                {massf.id}
               </Grid>
               <SdcFieldOfMiracles idx={id} func={ClickAddition} />
               <Grid

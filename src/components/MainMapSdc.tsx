@@ -38,10 +38,12 @@ let idxObj = -1;
 let clicker = 0;
 let INT: Array<any> = [];
 
+const colerCommentMain = "#E6761B"; // оранж
+let colerComment = "";
 let helpComment = "";
-let resetCounter1 =
+const resetCounter1 =
   "Нажатием правой кнопкой мыши на счётчик можно его сбросить";
-let resetCounter2 =
+const resetCounter2 =
   "Нажатием правой кнопкой на метку светофора можно сбросить счётчик";
 
 const MainMapSdc = (props: { trigger: boolean }) => {
@@ -153,7 +155,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       let have = 0;
       for (let i = 0; i < massdk.length; i++) {
         if (massdk[i].ID === id && massdk[i].readIt) {
-          console.log("картинки фаз уже были присланы", i, massdk[i]);
+          //console.log("картинки фаз уже были присланы", i, massdk[i]);
           datestat.phSvg = massdk[i].phSvg; // картинки фаз уже были присланы
           have++;
         }
@@ -167,6 +169,15 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       setOpenSetErr(true);
     }
     setClick(!click);
+  };
+
+  const CloseCounter = (IDX: number) => {
+    !DEMO && SendSocketDispatch(debug, ws, massfaz[IDX].idevice, 9, 9);
+    !DEMO && SendSocketDispatch(debug, ws, massfaz[IDX].idevice, 4, 0);
+    massfaz[IDX].faza = 9;
+    datestat.massMem[IDX] = massfaz[IDX].idevice = massfaz[IDX].idx = -1; // затереть в massfaz и massMem
+    dispatch(massfazCreate(massfaz));
+    CloseInterval(datestat, IDX);
   };
   //=== вывод светофоров ===================================
   const PlacemarkDo = () => {
@@ -204,6 +215,12 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     if (nomInMass >= 0) {
       console.log("Нажали правой кнопкой на светофор", nomInMass);
       datestat.massСounter[nomInMass] = 1;
+      let index = massfaz[nomInMass].idx;
+      if (BadCODE.indexOf(map.tflight[index].tlsost.num) >= 0) {
+        CloseCounter(nomInMass);
+        datestat.massСounter[nomInMass] = -1;
+      }
+
       dispatch(statsaveCreate(datestat));
     }
   };
@@ -270,6 +287,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     setDemoSost(RandomNumber(1, 1000) + demoSost); // костыль
   };
 
+  
   const DoTimerRestart = () => {
     let have = 0;
     let oldNeedComent = { ...datestat.needComent };
@@ -285,23 +303,30 @@ const MainMapSdc = (props: { trigger: boolean }) => {
         have++;
         if (mF.fazaSist === mF.faza) datestat.massСounter[i]--; // норм запущен счётчик
         if (!datestat.massСounter[i]) {
-          !DEMO && SendSocketDispatch(debug, ws, mF.idevice, 9, 9);
-          !DEMO && SendSocketDispatch(debug, ws, mF.idevice, 4, 0);
-          massfaz[i].faza = 9;
-          datestat.massMem[i] = massfaz[i].idevice = massfaz[i].idx = -1; // затереть в massfaz и massMem
-          dispatch(massfazCreate(massfaz));
-
-          CloseInterval(datestat, i);
+          CloseCounter(i);
           datestat.massСounter[i]--;
         } else datestat.needComent = true;
       }
     }
     dispatch(statsaveCreate(datestat));
-    helpComment = !datestat.needComent
-      ? ""
-      : datestat.typeVert === 2
-      ? resetCounter1
-      : resetCounter2;
+
+    helpComment = "";
+    if (datestat.needComent) {
+      colerComment = colerCommentMain;
+      helpComment = datestat.typeVert === 2 ? resetCounter1 : resetCounter2;
+      for (let i = 0; i < massfaz.length; i++) {
+        if (massfaz[i].idx > 0) {
+          let idx = massfaz[i].idx;
+          if (BadCODE.indexOf(map.tflight[idx].tlsost.num) >= 0) {
+            helpComment = "⚠️Предупреждение! [id" + map.tflight[idx].ID + "] ";
+            helpComment += map.tflight[idx].tlsost.description;
+            //console.log("3###:", helpComment);
+            colerComment = "red";
+            break;
+          }
+        }
+      }
+    }
     if (oldNeedComent !== datestat.needComent) setTrigger(!trigger);
 
     if (have) {
@@ -315,7 +340,9 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       <Box sx={{ display: "flex" }}>
         {StrokaMenuGlob(PressButton, datestat.working)}
         <Box sx={styleHelpMain}>
-          <em>{helpComment}</em>
+          <Box sx={{ color: colerComment }}>
+            <em>{helpComment}</em>
+          </Box>
         </Box>
       </Box>
     );

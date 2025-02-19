@@ -117,7 +117,7 @@ export const YandexServices = () => {
 //export const MasskPoint = (debug: boolean, rec: any, imgFaza: string) => {
 export const MasskPoint = (rec: any) => {
   let masskPoint: Pointer = {
-    ID: -1,
+    ID: rec.ID,
     // coordinates: [],
     // nameCoordinates: '',
     // region: 0,
@@ -128,7 +128,7 @@ export const MasskPoint = (rec: any) => {
     readIt: false,
   };
   //let img = null;
-  masskPoint.ID = rec.ID;
+  // masskPoint.ID = rec.ID;
   // masskPoint.coordinates[0] = rec.points.Y;
   // masskPoint.coordinates[1] = rec.points.X;
   // masskPoint.nameCoordinates = rec.description;

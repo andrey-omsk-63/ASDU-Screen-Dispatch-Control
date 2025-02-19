@@ -40,6 +40,9 @@ const SdcDoPlacemarkDo = (props: {
   }
 
   const nomInMass = datestat.massMem.indexOf(props.idx);
+  let FAZASIST = -1;
+  if (nomInMass >= 0) FAZASIST = massfaz[nomInMass].fazaSist;
+
   let haveСounter = nomInMass < 0 ? false : true; // взведён ли счётчик?
   let icContent =
     nomInMass < 0
@@ -175,12 +178,82 @@ const SdcDoPlacemarkDo = (props: {
     }
   };
 
+  const GetPointOptions0 = React.useCallback(
+    (hoster: any) => {
+      //console.log("1######:", datestat.typeVert, props.idx, nomInMass)
+
+      let Hoster = hoster;
+      let imger = "";
+      let hostt = "";
+      let FZSIST = FAZASIST;
+      //let FZSIST = 2; // ======================================
+      // if (FAZASIST === 9 || !FAZASIST) {
+      //   FZSIST = massfaz[nomInMassfaz].fazaSistOld;
+      //   Hoster =
+      //     massfaz[nomInMassfaz].img[massfaz[nomInMassfaz].fazaSistOld - 1];
+      // }
+      let iconSize = Hoster ? 50 : 25;
+      let iconOffset = Hoster ? -25 : -12.5;
+      // //  typeVert - тип отображаемых CO на карте 0 - значки СО 1 - номер фаз 2 - картинка фаз
+      if (datestat.typeVert) {
+        // номер фазы или картнка фазы
+        if (Hoster) imger = "data:image/png;base64," + Hoster;
+        if (!Hoster) {
+          if (FZSIST > 0) {
+            hostt =
+              window.location.origin.slice(0, 22) === "https://localhost:3000"
+                ? "https://localhost:3000/phases/"
+                : "./phases/";
+            imger = debug
+              ? hostt + FZSIST + ".svg"
+              : "/file/static/img/buttons/" + FZSIST + ".svg";
+          }
+        }
+      }
+      // else {
+      //   // значёк светофоры
+      //   if (FZSIST > 0) {
+      //     iconSize = CalcSize() + 6; // размер метки светофора
+      //     iconOffset = -iconSize / 2;
+      //     hostt =
+      //       window.location.origin.slice(0, 22) === "https://localhost:3000"
+      //         ? "https://localhost:3000/"
+      //         : "./";
+      //     imger = debug ? hostt + "2.svg" : "/free/img/trafficLights/2.svg";
+      //   }
+      // }
+
+      return {
+        // данный тип макета
+        iconLayout: "default#image",
+        // изображение иконки метки
+        iconImageHref: imger,
+        // размеры метки
+        iconImageSize: [iconSize, iconSize],
+        // её "ножки" (точки привязки)
+        iconImageOffset: [iconOffset, iconOffset],
+      };
+    },
+    [debug, datestat.typeVert, FAZASIST]
+  );
+
   const getPointOptions1 = React.useCallback(() => {
+    //console.log("0######:", datestat.typeVert, props.idx, nomInMass);
+
+    //return nomInMass < 0 && !datestat.typeVert
+    //   ? { iconLayout: createChipsLayout(calculate, mappp.tlsost.num) }
+    //   : GetPointOptions0(null);
     return { iconLayout: createChipsLayout(calculate, mappp.tlsost.num) };
   }, [createChipsLayout, mappp.tlsost.num]);
 
   const getPointOptions2 = () => {
-    return { preset: "islands#darkOrangeStretchyIcon" };
+    console.log("3######:", datestat.typeVert, props.idx, nomInMass);
+
+    //return nomInMass < 0 && datestat.typeVert === 2
+    return datestat.typeVert === 2
+      ? { preset: "islands#darkOrangeStretchyIcon" }
+      : GetPointOptions0(null);
+    //return { preset: "islands#darkOrangeStretchyIcon" };
   };
 
   const MemoPlacemarkDo = React.useMemo(
@@ -189,12 +262,14 @@ const SdcDoPlacemarkDo = (props: {
         key={idx}
         geometry={props.coordinate}
         properties={GetPointData(idx, map, icContent)}
-        options={haveСounter && !badCode ? getPointOptions2() : getPointOptions1()}
+        options={
+          haveСounter && !badCode ? getPointOptions2() : getPointOptions1()
+        }
         modules={["geoObject.addon.hint", "geoObject.addon.balloon"]}
         onClick={() => props.OnPlacemarkClickPoint(idx)}
       />
     ),
-    [idx, map, getPointOptions1, props, haveСounter, icContent]
+    [idx, map, getPointOptions1, props, haveСounter, icContent, badCode]
   );
   return MemoPlacemarkDo;
 };

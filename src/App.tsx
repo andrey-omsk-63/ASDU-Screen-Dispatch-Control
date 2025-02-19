@@ -79,12 +79,7 @@ export let dateStat: Stater = {
 
 export interface Pointer {
   ID: number;
-  // coordinates: Array<number>;
-  // nameCoordinates: string;
-  // region: number;
-  // area: number;
   idevice: number;
-  // phases: Array<number>;
   phSvg: Array<string | null>;
   readIt: boolean;
 }
@@ -92,9 +87,9 @@ export interface Pointer {
 export let massDk: Pointer[] = [];
 
 export interface Fazer {
-  idx: number;
+  idx: number; // номер записи в опорном справочнике MAP
   area: number;
-  id: number;
+  id: number; // ID в системе
   faza: number;
   fazaSist: number;
   fazaSistOld: number;
@@ -103,7 +98,6 @@ export interface Fazer {
   idevice: number;
   coordinates: Array<number>;
   name: string;
-  //img: Array<string | null>;
 }
 
 export let massFaz: Fazer[] = [];
@@ -126,8 +120,7 @@ const App = () => {
     const { massfazReducer } = state;
     return massfazReducer.massfaz;
   });
-  //console.log("APPmassfaz", massfaz);
-  let coordinates = useSelector((state: any) => {
+    let coordinates = useSelector((state: any) => {
     const { coordinatesReducer } = state;
     return coordinatesReducer.coordinates;
   });
@@ -140,18 +133,11 @@ const App = () => {
       coord[0] = dateMapGl.tflight[i].points.Y;
       coord[1] = dateMapGl.tflight[i].points.X;
       Coordinates.push(coord);
-      //let masskPoint = MasskPoint(deb, dateMapGl.tflight[i], imgFaza);
       let masskPoint = MasskPoint(dateMapGl.tflight[i]);
       if (dateStat.debug) masskPoint.phSvg = dateStat.phSvg;
       massdk.push(masskPoint);
     }
     dispatch(massdkCreate(massdk));
-    // // запросы на получение изображения фаз
-    // for (let i = 0; i < massdk.length; i++) {
-    //   let reg = massdk[i].region.toString();
-    //   let area = massdk[i].area.toString();
-    //   SendSocketGetPhases(deb, WS, reg, area, massdk[i].ID);
-    // }
 
     // достать тип отображаемых фаз на карте из LocalStorage
     if (window.localStorage.typeVert === undefined)
@@ -297,7 +283,7 @@ const App = () => {
           for (let i = 0; i < massdk.length; i++) {
             if (massdk[i].ID === data.pos.id) {
               console.log("!!!getPhases:", i, data.phases);
-              massdk[i].readIt = true
+              massdk[i].readIt = true;
               if (data.phases) {
                 if (data.phases.length) {
                   for (let j = 0; j < data.phases.length; j++)
@@ -305,7 +291,7 @@ const App = () => {
                   dispatch(massdkCreate(massdk));
                 }
                 break;
-              } 
+              }
               // else {
               //   massdk[i].phSvg[0] = imgFaza; // костыль
               //   massdk[i].phSvg[1] = null;
