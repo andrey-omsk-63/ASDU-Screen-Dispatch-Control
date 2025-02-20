@@ -22,7 +22,7 @@ import { SendSocketGetPhases } from "./SdcSocketFunctions";
 import { SendSocketDispatch } from "./SdcSocketFunctions";
 
 import { YMapsModul, MyYandexKey, Restart, Aura, zoomStart } from "./MapConst";
-import { BadCODE } from "./MapConst";
+import { CLINCH, BadCODE } from "./MapConst";
 
 import { styleHelpMain, styleServisTable } from "./MainMapStyle";
 
@@ -136,6 +136,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   const OnPlacemarkClickPoint = (index: number) => {
     if (!datestat.working) {
       let statusVertex = map.tflight[index].tlsost.num;
+      let clinch = CLINCH.indexOf(statusVertex) < 0 ? false : true;
       let badCode = BadCODE.indexOf(statusVertex) < 0 ? false : true;
       let nomIn = datestat.massMem.indexOf(index); // запускался ли светофор ранее?
       if (nomIn >= 0) {
@@ -149,18 +150,18 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       }
       let area = map.tflight[index].area.num;
       let id = map.tflight[index].ID;
+
       datestat.area = area;
       datestat.id = id;
       if (!debug) datestat.phSvg = Array(8).fill(null);
       let have = 0;
       for (let i = 0; i < massdk.length; i++) {
         if (massdk[i].ID === id && massdk[i].readIt) {
-          //console.log("картинки фаз уже были присланы", i, massdk[i]);
           datestat.phSvg = massdk[i].phSvg; // картинки фаз уже были присланы
           have++;
         }
       }
-      !have && SendSocketGetPhases(debug, ws, homeRegion, area, id);
+      !have && !clinch && SendSocketGetPhases(debug, ws, homeRegion, area, id);
       dispatch(statsaveCreate(datestat));
       idxObj = index;
       setControl(true);
@@ -287,7 +288,6 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     setDemoSost(RandomNumber(1, 1000) + demoSost); // костыль
   };
 
-  
   const DoTimerRestart = () => {
     let have = 0;
     let oldNeedComent = { ...datestat.needComent };
@@ -320,7 +320,6 @@ const MainMapSdc = (props: { trigger: boolean }) => {
           if (BadCODE.indexOf(map.tflight[idx].tlsost.num) >= 0) {
             helpComment = "⚠️Предупреждение! [id" + map.tflight[idx].ID + "] ";
             helpComment += map.tflight[idx].tlsost.description;
-            //console.log("3###:", helpComment);
             colerComment = "red";
             break;
           }

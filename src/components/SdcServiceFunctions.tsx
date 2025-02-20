@@ -114,28 +114,13 @@ export const YandexServices = () => {
   );
 };
 
-//export const MasskPoint = (debug: boolean, rec: any, imgFaza: string) => {
 export const MasskPoint = (rec: any) => {
   let masskPoint: Pointer = {
     ID: rec.ID,
-    // coordinates: [],
-    // nameCoordinates: '',
-    // region: 0,
-    // area: 0,
-    idevice: -1,
-    //phases: [],
+    idevice: rec.idevice,
     phSvg: [],
     readIt: false,
   };
-  //let img = null;
-  // masskPoint.ID = rec.ID;
-  // masskPoint.coordinates[0] = rec.points.Y;
-  // masskPoint.coordinates[1] = rec.points.X;
-  // masskPoint.nameCoordinates = rec.description;
-  // masskPoint.region = Number(rec.region.num);
-  // masskPoint.area = Number(rec.area.num);
-  masskPoint.idevice = rec.idevice;
-  //masskPoint.phases = rec.phases;
   for (let i = 0; i < 8; i++) masskPoint.phSvg.push(null);
   return masskPoint;
 };
@@ -143,9 +128,9 @@ export const MasskPoint = (rec: any) => {
 
 export const HaveActivеVert = (datestat: any) => {
   let have = 0;
-  for (let i = 0; i < datestat.massСounter.length; i++) {
+  for (let i = 0; i < datestat.massСounter.length; i++) 
     if (datestat.massСounter[i] > 0) have++;
-  }
+  
   return have;
 };
 //=== Placemark =====================================
@@ -161,19 +146,19 @@ export const GetPointData = (index: number, map: any, icContent: string) => {
   return { hintContent: cont1 + cont3 + cont2, iconContent: icContent };
 };
 
-export const GetPointOptions1 = (Hoster: any) => {
-  return {
-    // данный тип макета
-    iconLayout: "default#image",
-    // изображение иконки метки
-    iconImageHref: Hoster(),
-    // размеры метки
-    iconImageSize: [30, 38],
-    // её "ножки" (точки привязки)
-    iconImageOffset: [-15, -38],
-    //iconCaption: "подсказка",
-  };
-};
+// export const GetPointOptions1 = (Hoster: any) => {
+//   return {
+//     // данный тип макета
+//     iconLayout: "default#image",
+//     // изображение иконки метки
+//     iconImageHref: Hoster(),
+//     // размеры метки
+//     iconImageSize: [30, 38],
+//     // её "ножки" (точки привязки)
+//     iconImageOffset: [-15, -38],
+//     //iconCaption: "подсказка",
+//   };
+// };
 //=== Разное =======================================
 export const InputDirect = (func: any, otherWork: boolean) => {
   const styleSetNapr = {

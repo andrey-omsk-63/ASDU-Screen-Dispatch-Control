@@ -5,10 +5,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { AiTwotoneRightCircle } from "react-icons/ai";
 
-const SdcFieldOfMiracles = (props: {
-  idx: number;
-  func: Function;
-}) => {
+const SdcFieldOfMiracles = (props: { idx: number; func: Function }) => {
   //== Piece of Redux =======================================
   let massfaz = useSelector((state: any) => {
     const { massfazReducer } = state;
@@ -30,7 +27,6 @@ const SdcFieldOfMiracles = (props: {
   const styleField01 = {
     fontSize: 12,
     color: "#7620A2",
-    //border:1,
   };
 
   const styleField02 = {
@@ -41,7 +37,6 @@ const SdcFieldOfMiracles = (props: {
     fontSize: 12.5,
     color: "#E67641", // оранж
     textShadow: "0px 0px 0px rgba(0,0,0,0.3)",
-    //border: 1,
   };
 
   const styleField03 = {
