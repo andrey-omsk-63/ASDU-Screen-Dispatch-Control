@@ -14,6 +14,7 @@ import { SendSocketDispatch } from "../SdcSocketFunctions";
 
 import { styleServisMenu, styleServis00 } from "../MainMapStyle";
 import { styleToDo01, styleToDo02, styleServis01 } from "../MainMapStyle";
+import { styleToDo03, styleToDo05 } from "../MainMapStyle";
 
 const SdsServisTable = (props: {}) => {
   //== Piece of Redux ======================================
@@ -34,10 +35,8 @@ const SdsServisTable = (props: {}) => {
   const ws = datestat.ws;
   const DEMO = datestat.demo;
   //========================================================
-  const Сlosing = () => {
-    console.log("Принудительный Финиш!!!"); // принудительное закрытие
-
-    for (let i = 0; i < massfaz.length; i++) {
+  const Сlosing = (idx: number) => {
+    const СloseIdx = (i: number) => {
       if (massfaz[i].idx !== -1) {
         CloseInterval(datestat, i);
         if (!DEMO) {
@@ -47,11 +46,16 @@ const SdsServisTable = (props: {}) => {
         massfaz[i].idx = massfaz[i].idevice = datestat.massMem[i] = -1;
         datestat.massСounter[i] = 0; // массив счётчиков отправки КУ на "запущенные" светофоры
       }
-    }
+    };
+
+    if (idx < 0) {
+      console.log("Принудительный Финиш всех светофоров!!!"); // принудительное закрытие
+      for (let i = 0; i < massfaz.length; i++) СloseIdx(i);
+    } else СloseIdx(idx);
     dispatch(massfazCreate(massfaz));
     dispatch(statsaveCreate(datestat));
   };
-  //====== ИНИЦИАЛИЗАЦИЯ ====================================================================
+  //====== ИНИЦИАЛИЗАЦИЯ ==================================
 
   //====== Компоненты =====================================
   const OutputFazaImg = (img: any, i: number) => {
@@ -90,9 +94,8 @@ const SdsServisTable = (props: {}) => {
       let takt: any = massf.faza;
       let fazaImg: null | string = null;
       for (let i = 0; i < massdk.length - 1; i++) {
-        if (massdk[i].idevice === massf.idevice) {
+        if (massdk[i].idevice === massf.idevice)
           fazaImg = massdk[i].phSvg[takt - 1];
-        }
       }
       let pictImg: any = "";
       if (massf.faza) pictImg = OutputFazaImg(fazaImg, massf.faza);
@@ -115,9 +118,14 @@ const SdsServisTable = (props: {}) => {
               <Grid item xs={2} sx={{ border: 0, textAlign: "center" }}>
                 {pictImg}
               </Grid>
-              <Grid item xs sx={{ fontSize: 14, padding: "3px 2px 3px 0px" }}>
+              <Grid item xs sx={{ fontSize: 14, padding: "3px 2px 3px 0" }}>
                 {massf.name}
               </Grid>
+              <Box sx={styleToDo03}>
+                <Box sx={styleToDo05} onClick={() => Сlosing(id)}>
+                  &nbsp;&times;&nbsp;
+                </Box>
+              </Box>
             </>
           )}
         </Grid>
@@ -135,7 +143,7 @@ const SdsServisTable = (props: {}) => {
         <Box sx={styleServis01}>{StrokaTabl()}</Box>
       </Box>
       <Box sx={{ marginTop: 0.5, textAlign: "center" }}>
-        <Button sx={styleServisMenu} onClick={() => Сlosing()}>
+        <Button sx={styleServisMenu} onClick={() => Сlosing(-1)}>
           Закрыть все светофоры
         </Button>
       </Box>
@@ -144,3 +152,4 @@ const SdsServisTable = (props: {}) => {
 };
 
 export default SdsServisTable;
+//<Box sx={{marginTop: "-3px",}}>&nbsp;&times;&thinsp;</Box>

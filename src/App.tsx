@@ -269,13 +269,13 @@ const App = () => {
             for (let i = 0; i < data.phases.length; i++)
               dateStat.phSvg[i] = data.phases[i].phase;
           }
-           else {
-            dateStat.phSvg[0] = imgFaza; // костыль
-            dateStat.phSvg[1] = null;
-            dateStat.phSvg[2] = imgFaza;
-            dateStat.phSvg[3] = null;
-            dateStat.phSvg[4] = imgFaza;
-          }
+          //  else {
+          //   dateStat.phSvg[0] = imgFaza; // костыль
+          //   dateStat.phSvg[1] = null;
+          //   dateStat.phSvg[2] = imgFaza;
+          //   dateStat.phSvg[3] = null;
+          //   dateStat.phSvg[4] = imgFaza;
+          // }
 
           dateStat.readyFaza = true;
           dispatch(statsaveCreate(dateStat));
@@ -292,13 +292,13 @@ const App = () => {
                 }
                 break;
               }
-              else {
-                massdk[i].phSvg[0] = imgFaza; // костыль
-                massdk[i].phSvg[1] = null;
-                massdk[i].phSvg[2] = imgFaza;
-                massdk[i].phSvg[3] = null;
-                massdk[i].phSvg[4] = imgFaza;
-              }
+              // else {
+              //   massdk[i].phSvg[0] = imgFaza; // костыль
+              //   massdk[i].phSvg[1] = null;
+              //   massdk[i].phSvg[2] = imgFaza;
+              //   massdk[i].phSvg[3] = null;
+              //   massdk[i].phSvg[4] = imgFaza;
+              // }
             }
           }
 

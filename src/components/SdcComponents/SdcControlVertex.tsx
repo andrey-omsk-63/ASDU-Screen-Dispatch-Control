@@ -261,7 +261,6 @@ const SdcControlVertex = (props: {
     let mF = massfaz[present];
     if (!DEMO) {
       if (mF.fazaZU) {
-        //============================ мёртвое место?
         console.log("Отправлена фаза c id", present, mF.id, mF.faza);
         !clinch && SendSocketDispatch(debug, ws, mF.idevice, 9, mF.faza);
       }
@@ -292,7 +291,7 @@ const SdcControlVertex = (props: {
     }
 
     if ((DEMO && mF.fazaSist === 10) || (DEMO && mF.fazaSist === 11)) {
-      console.log("id:", mF.id, "DEMO ЖМ или ОС");
+      //console.log("id:", mF.id, "DEMO ЖМ или ОС");
       if (mF.fazaSist === 10) datestat.demoTlsost[present] = 7; // ЖМ
       if (mF.fazaSist === 11) datestat.demoTlsost[present] = 12; // ОС
       // } else {

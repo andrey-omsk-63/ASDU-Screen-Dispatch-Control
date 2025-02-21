@@ -139,7 +139,7 @@ export const styleServis00 = {
   border: "3px solid #fff",
   borderRadius: 1,
   boxShadow: 24,
-  padding: "0px 10px 5px 10px",
+  padding: "0px 14px 5px 10px",
 };
 
 export const styleServis01 = {
@@ -168,5 +168,23 @@ export const styleToDo02 = (DEMO: boolean) => {
     textShadow: "2px 2px 3px rgba(0,0,0,0.3)",
   };
   return styleToDo;
+};
+
+export const styleToDo03 = {
+  position: "absolute",
+  marginTop: "3px",
+  marginLeft: "380px",
+  background: "red",
+  height: "18px",
+  border: "1px solid #d4d4d4", // серый
+  borderRadius: "50%",
+  cursor: "pointer",
+  color: "#fff", // белый
+  boxShadow: 3,
+};
+
+export const styleToDo05 = {
+  fontSize: 15,
+  marginTop: "-3px",
 };
 //=====================================================================
