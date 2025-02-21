@@ -126,7 +126,7 @@ const SdcSetup = (props: { close: Function }) => {
     return (
       <>
         <Box sx={{ fontSize: 12, marginTop: 0.5, color: "#5B1080" }}>
-          Отображение светофорных объектов на маршруте
+          Отображение светофорных объектов на карте
         </Box>
         {StrTablVert(
           true,
