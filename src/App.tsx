@@ -120,7 +120,7 @@ const App = () => {
     const { massfazReducer } = state;
     return massfazReducer.massfaz;
   });
-    let coordinates = useSelector((state: any) => {
+  let coordinates = useSelector((state: any) => {
     const { coordinatesReducer } = state;
     return coordinatesReducer.coordinates;
   });
@@ -229,21 +229,24 @@ const App = () => {
           setTrigger(!trigger);
           break;
         case "phases":
-          //console.log("0PH:", data.phases, dateStat.massMem, massfaz);
+          //console.log("0PH:", data.phases, massfaz);
           let flagChange = 0;
           for (let j = 0; j < data.phases.length; j++) {
             for (let i = 0; i < massfaz.length; i++) {
               let mf = massfaz[i];
               if (mf.idevice === data.phases[j].device && !dateStat.demo) {
-                if (mf.fazaSist !== 9)
+                console.log("1PH:", j, i, mf.fazaSist, data.phases[j].phase);
+
+                if (mf.fazaSist !== 9 && mf.fazaSist !== data.phases[j].phase)
                   mf.fazaSistOld = JSON.parse(JSON.stringify(mf.fazaSist));
+                if (mf.fazaSist !== data.phases[j].phase) flagChange++;
                 mf.fazaSist = data.phases[j].phase;
-                flagChange++;
-                //console.log("1PH:", i, mf.idevice, mf.fazaSist, mf.fazaSistOld);
               }
             }
           }
           if (flagChange) {
+            console.log("3PH:", flagChange);
+
             dispatch(massfazCreate(massfaz));
             setTrigger(!trigger);
           }
@@ -268,8 +271,8 @@ const App = () => {
           if (data.phases) {
             for (let i = 0; i < data.phases.length; i++)
               dateStat.phSvg[i] = data.phases[i].phase;
-          }
-          //  else {
+          } 
+          // else {
           //   dateStat.phSvg[0] = imgFaza; // костыль
           //   dateStat.phSvg[1] = null;
           //   dateStat.phSvg[2] = imgFaza;
@@ -282,7 +285,7 @@ const App = () => {
 
           for (let i = 0; i < massdk.length; i++) {
             if (massdk[i].ID === data.pos.id) {
-              console.log("!!!getPhases:", i, data.phases);
+              //console.log("!!!getPhases:", i, data.phases);
               massdk[i].readIt = true;
               if (data.phases) {
                 if (data.phases.length) {
@@ -291,7 +294,7 @@ const App = () => {
                   dispatch(massdkCreate(massdk));
                 }
                 break;
-              }
+              } 
               // else {
               //   massdk[i].phSvg[0] = imgFaza; // костыль
               //   massdk[i].phSvg[1] = null;

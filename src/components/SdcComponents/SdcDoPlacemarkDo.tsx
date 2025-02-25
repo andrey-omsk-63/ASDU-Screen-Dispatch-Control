@@ -59,12 +59,15 @@ const SdcDoPlacemarkDo = (props: {
   }
 
   let fazaImg: null | string = null;
-  if (nomInMass >= 0 && haveСounter) {
+  //if (nomInMass >= 0 && haveСounter) {
+  if (nomInMass >= 0 && datestat.typeVert === 1) {
     for (let i = 0; i < massdk.length - 1; i++) {
       if (massdk[i].idevice === massfaz[nomInMass].idevice)
         fazaImg = massdk[i].phSvg[massfaz[nomInMass].faza - 1];
     }
   }
+
+  let numer = datestat.typeVert && !fazaImg && nomInMass >= 0;
 
   let counterFaza = datestat.counterFaza; // наличие счётчика длительность фазы ДУ
   let intervalFaza = datestat.intervalFaza; // Задаваемая длительность фазы ДУ (сек)
@@ -72,6 +75,8 @@ const SdcDoPlacemarkDo = (props: {
   let badCode = BadCODE.indexOf(statusVertex) < 0 ? false : true;
 
   const Hoster = React.useCallback(() => {
+    //if (numer) console.log("0Layout:", idx, mappp.ID, FAZASIST);
+
     let hostt =
       window.location.origin.slice(0, 22) === "https://localhost:3000"
         ? "https://localhost:3000/"
@@ -97,6 +102,18 @@ const SdcDoPlacemarkDo = (props: {
         }
       }
     }
+
+    if (numer && FAZASIST > 0) {
+      // картинка с номером фазы
+      let hostt =
+        window.location.origin.slice(0, 22) === "https://localhost:3000"
+          ? "https://localhost:3000/phases/"
+          : "./phases/";
+      host = debug
+        ? hostt + FAZASIST + ".svg"
+        : "/file/static/img/buttons/" + FAZASIST + ".svg";
+    }
+
     return host;
   }, [
     mapp,
@@ -106,6 +123,8 @@ const SdcDoPlacemarkDo = (props: {
     datestat.demoTlsost,
     datestat.demoLR,
     nomInMass,
+    FAZASIST,
+    numer,
   ]);
 
   const createChipsLayout = React.useCallback(
@@ -190,6 +209,8 @@ const SdcDoPlacemarkDo = (props: {
 
   const GetPointOptions0 = React.useCallback(
     (hoster: any) => {
+      //console.log("getPointOptions0", numer);
+
       let Hoster = hoster;
       let imger = "";
       let hostt = "";
@@ -210,6 +231,7 @@ const SdcDoPlacemarkDo = (props: {
               ? hostt + FAZASIST + ".svg"
               : "/file/static/img/buttons/" + FAZASIST + ".svg";
           }
+          console.log("GetPointOptions0:", datestat.typeVert, imger);
         }
       }
 
@@ -228,22 +250,38 @@ const SdcDoPlacemarkDo = (props: {
   );
 
   const getPointOptions1 = React.useCallback(() => {
-    return { iconLayout: createChipsLayout(calculate, mappp.tlsost.num) };
-  }, [createChipsLayout, mappp.tlsost.num]);
+    //if (numer) console.log("0Options1:");
+
+    return nomInMass < 0 || FAZASIST < 0 || !datestat.typeVert || numer
+      ? { iconLayout: createChipsLayout(calculate, mappp.tlsost.num) }
+      : GetPointOptions0(fazaImg);
+  }, [
+    createChipsLayout,
+    mappp.tlsost.num,
+    FAZASIST,
+    GetPointOptions0,
+    datestat.typeVert,
+    fazaImg,
+    nomInMass,
+    numer,
+  ]);
 
   const getPointOptions2 = React.useCallback(() => {
-    // console.log(
-    //   "2######:",
-    //   datestat.typeVert,
-    //   props.idx,
-    //   nomInMass,
-    //   datestat.massСounter
-    // );
+    //if (numer) console.log("0Options2:", numer);
 
     return datestat.typeVert === 2
       ? { preset: "islands#darkOrangeStretchyIcon" }
+      : numer
+      ? { iconLayout: createChipsLayout(calculate, mappp.tlsost.num) }
       : GetPointOptions0(fazaImg);
-  }, [GetPointOptions0, datestat.typeVert, fazaImg]);
+  }, [
+    GetPointOptions0,
+    datestat.typeVert,
+    fazaImg,
+    createChipsLayout,
+    mappp.tlsost.num,
+    numer,
+  ]);
 
   const MemoPlacemarkDo = React.useMemo(
     () => (

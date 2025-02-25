@@ -22,7 +22,7 @@ import { SendSocketGetPhases } from "./SdcSocketFunctions";
 import { SendSocketDispatch } from "./SdcSocketFunctions";
 
 import { YMapsModul, MyYandexKey, Restart, Aura, zoomStart } from "./MapConst";
-import { CLINCH, BadCODE } from "./MapConst";
+import { BadCODE } from "./MapConst";
 
 import { styleHelpMain, styleServisTable } from "./MainMapStyle";
 
@@ -134,9 +134,9 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   };
 
   const OnPlacemarkClickPoint = (index: number) => {
-    if (!datestat.working) {
+    //if (!datestat.working) {
       let statusVertex = map.tflight[index].tlsost.num;
-      let clinch = CLINCH.indexOf(statusVertex) < 0 ? false : true;
+      //let clinch = CLINCH.indexOf(statusVertex) < 0 ? false : true;
       let badCode = BadCODE.indexOf(statusVertex) < 0 ? false : true;
       let nomIn = datestat.massMem.indexOf(index); // запускался ли светофор ранее?
       if (nomIn >= 0) {
@@ -148,9 +148,10 @@ const MainMapSdc = (props: { trigger: boolean }) => {
           return;
         }
       }
+
+      // проверка наличия картинок фаз
       let area = map.tflight[index].area.num;
       let id = map.tflight[index].ID;
-
       datestat.area = area;
       datestat.id = id;
       if (!debug) datestat.phSvg = Array(8).fill(null);
@@ -161,14 +162,17 @@ const MainMapSdc = (props: { trigger: boolean }) => {
           have++;
         }
       }
-      !have && !clinch && SendSocketGetPhases(debug, ws, homeRegion, area, id);
+
+      // !have && !clinch && SendSocketGetPhases(debug, ws, homeRegion, area, id);
+      !have && SendSocketGetPhases(debug, ws, homeRegion, area, id);
+
       dispatch(statsaveCreate(datestat));
       idxObj = index;
       setControl(true);
-    } else {
-      soobErr = "В данный момент происходит управление другим перекрёстком";
-      setOpenSetErr(true);
-    }
+    // } else {
+    //   soobErr = "В данный момент происходит управление другим перекрёстком";
+    //   setOpenSetErr(true);
+    // }
     setClick(!click);
   };
 
@@ -328,10 +332,13 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     }
     if (oldNeedComent !== datestat.needComent) setTrigger(!trigger);
 
+    //if (have && datestat.typeVert === 2) {
     if (have) {
       clicker++;
       setClicka(clicker);
     }
+    // clicker++;
+    // console.log("clicker++", clicker);
   };
   //========================================================
   const MainMenu = () => {
@@ -432,7 +439,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
           </Grid>
         </Grid>
       </Grid>
-      {typeVert !== 2 && !!HaveActivеVert(datestat) && (
+      {typeVert !== 2 && !!HaveActivеVert(datestat) && clicker && (
         <Box sx={styleServisTable}>
           <SdsServisTable />
         </Box>
