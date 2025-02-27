@@ -125,12 +125,11 @@ export const MasskPoint = (rec: any) => {
   return masskPoint;
 };
 
-
 export const HaveActivеVert = (datestat: any) => {
   let have = 0;
-  for (let i = 0; i < datestat.massСounter.length; i++) 
+  for (let i = 0; i < datestat.massСounter.length; i++)
     if (datestat.massСounter[i] > 0) have++;
-  
+
   return have;
 };
 //=== Placemark =====================================

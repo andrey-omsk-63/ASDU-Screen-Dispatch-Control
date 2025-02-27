@@ -135,40 +135,40 @@ const MainMapSdc = (props: { trigger: boolean }) => {
 
   const OnPlacemarkClickPoint = (index: number) => {
     //if (!datestat.working) {
-      let statusVertex = map.tflight[index].tlsost.num;
-      //let clinch = CLINCH.indexOf(statusVertex) < 0 ? false : true;
-      let badCode = BadCODE.indexOf(statusVertex) < 0 ? false : true;
-      let nomIn = datestat.massMem.indexOf(index); // запускался ли светофор ранее?
-      if (nomIn >= 0) {
-        // ранее запускался
-        let INTERVALDOP = datestat.intervalFazaDop;
-        if (datestat.massСounter[nomIn] > 0 && INTERVALDOP && !badCode) {
-          datestat.massСounter[nomIn] += INTERVALDOP; // подкачка счётчика
-          dispatch(statsaveCreate(datestat));
-          return;
-        }
+    let statusVertex = map.tflight[index].tlsost.num;
+    //let clinch = CLINCH.indexOf(statusVertex) < 0 ? false : true;
+    let badCode = BadCODE.indexOf(statusVertex) < 0 ? false : true;
+    let nomIn = datestat.massMem.indexOf(index); // запускался ли светофор ранее?
+    if (nomIn >= 0) {
+      // ранее запускался
+      let INTERVALDOP = datestat.intervalFazaDop;
+      if (datestat.massСounter[nomIn] > 0 && INTERVALDOP && !badCode) {
+        datestat.massСounter[nomIn] += INTERVALDOP; // подкачка счётчика
+        dispatch(statsaveCreate(datestat));
+        return;
       }
+    }
 
-      // проверка наличия картинок фаз
-      let area = map.tflight[index].area.num;
-      let id = map.tflight[index].ID;
-      datestat.area = area;
-      datestat.id = id;
-      if (!debug) datestat.phSvg = Array(8).fill(null);
-      let have = 0;
-      for (let i = 0; i < massdk.length; i++) {
-        if (massdk[i].ID === id && massdk[i].readIt) {
-          datestat.phSvg = massdk[i].phSvg; // картинки фаз уже были присланы
-          have++;
-        }
+    // проверка наличия картинок фаз
+    let area = map.tflight[index].area.num;
+    let id = map.tflight[index].ID;
+    datestat.area = area;
+    datestat.id = id;
+    if (!debug) datestat.phSvg = Array(8).fill(null);
+    let have = 0;
+    for (let i = 0; i < massdk.length; i++) {
+      if (massdk[i].ID === id && massdk[i].readIt) {
+        datestat.phSvg = massdk[i].phSvg; // картинки фаз уже были присланы
+        have++;
       }
+    }
 
-      // !have && !clinch && SendSocketGetPhases(debug, ws, homeRegion, area, id);
-      !have && SendSocketGetPhases(debug, ws, homeRegion, area, id);
+    // !have && !clinch && SendSocketGetPhases(debug, ws, homeRegion, area, id);
+    !have && SendSocketGetPhases(debug, ws, homeRegion, area, id);
 
-      dispatch(statsaveCreate(datestat));
-      idxObj = index;
-      setControl(true);
+    dispatch(statsaveCreate(datestat));
+    idxObj = index;
+    setControl(true);
     // } else {
     //   soobErr = "В данный момент происходит управление другим перекрёстком";
     //   setOpenSetErr(true);
@@ -405,7 +405,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       <Grid item xs={12}>
         {MainMenu()}
         {/* Яндекс карта */}
-        <Grid container sx={{ height: "95vh" }}>
+        <Grid container sx={{ height: "96.9vh" }}>
           <Grid item xs>
             {Object.keys(map.tflight).length && (
               <YMaps query={{ apikey: MyYandexKey, lang: "ru_RU" }}>
