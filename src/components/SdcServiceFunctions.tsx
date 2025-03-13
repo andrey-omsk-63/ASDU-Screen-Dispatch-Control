@@ -654,7 +654,7 @@ export const InputFromList = (func: any, currency: any, currencies: any) => {
 
 export const PreparCurrenciesDispVert = () => {
   const currencies: any = [];
-  let dat = ["значок светофора", "картинка фазы", "счётчик(номер фазы)"];
+  let dat = ["значок светофора", "изображение фазы", "счётчик(номер фазы)"];
   let massKey: any = [];
   let massDat: any = [];
   for (let key in dat) {
