@@ -169,10 +169,6 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     dispatch(statsaveCreate(datestat));
     idxObj = index;
     setControl(true);
-    // } else {
-    //   soobErr = "В данный момент происходит управление другим перекрёстком";
-    //   setOpenSetErr(true);
-    // }
     setClick(!click);
   };
 
@@ -225,7 +221,6 @@ const MainMapSdc = (props: { trigger: boolean }) => {
         CloseCounter(nomInMass);
         datestat.massСounter[nomInMass] = -1;
       }
-
       dispatch(statsaveCreate(datestat));
     }
   };
@@ -337,8 +332,6 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       clicker++;
       setClicka(clicker);
     }
-    // clicker++;
-    // console.log("clicker++", clicker);
   };
   //========================================================
   const MainMenu = () => {

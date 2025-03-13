@@ -42,6 +42,7 @@ let INTERVAL = 0;
 let INTERVALDOP = 0;
 
 const colorNormal = "#E9F5D8"; // светло-салатовый
+const colorNormalZU = "#FCFEFA"; // светло-светло-салатовый - Цвет Шампанского (Шампань)
 //const colorExtra = "#96CD8F"; // тёмно-салатовый
 //const colorExtra = "#76ff03"; // светлый лайм
 const colorExtra = "#82e94a"; // средний лайм
@@ -85,7 +86,6 @@ const SdcControlVertex = (props: {
 
   statusVertex = map.tflight[props.idx].tlsost.num;
   statusName = map.tflight[props.idx].tlsost.description;
-  // console.log("Name:", statusVertex, statusName);
   let clinch = CLINCH.indexOf(statusVertex) < 0 ? false : true;
   let badCode = BadCODE.indexOf(statusVertex) < 0 ? false : true;
 
@@ -360,8 +360,10 @@ const SdcControlVertex = (props: {
           Knop2 = -1;
         if (needDopKnop[nomInMass] && i >= kolFaz[nomInMass] - 1 && i + 1 < ii)
           Knop2 = -2;
+        // if (needDopKnop[nomInMass] && Knop2 === -1)
+        //   colorKnop = !clinch || DEMO ? colorNormal : colorBad;
         if (needDopKnop[nomInMass] && Knop2 === -1)
-          colorKnop = !clinch || DEMO ? colorNormal : colorBad;
+          colorKnop = !clinch || DEMO ? colorNormalZU : colorBad;
         bShadow = !clinch || DEMO ? bShadow : 0;
         let styleMenu = StyleModalMenuVar(colorKnop, bShadow);
         let num =
