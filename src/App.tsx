@@ -235,7 +235,7 @@ const App = () => {
             for (let i = 0; i < massfaz.length; i++) {
               let mf = massfaz[i];
               if (mf.idevice === data.phases[j].device && !dateStat.demo) {
-                console.log("1PH:", j, i, mf.fazaSist, data.phases[j].phase);
+                //console.log("1PH:", j, i, mf.fazaSist, data.phases[j].phase);
 
                 if (mf.fazaSist !== 9 && mf.fazaSist !== data.phases[j].phase)
                   mf.fazaSistOld = JSON.parse(JSON.stringify(mf.fazaSist));
@@ -245,8 +245,7 @@ const App = () => {
             }
           }
           if (flagChange) {
-            console.log("3PH:", flagChange);
-
+            //console.log("3PH:", flagChange);
             dispatch(massfazCreate(massfaz));
             setTrigger(!trigger);
           }
@@ -254,10 +253,11 @@ const App = () => {
         case "mapInfo":
           dateMapGl = JSON.parse(JSON.stringify(data));
           dispatch(mapCreate(dateMapGl));
-          let massRegion = [];
-          for (let key in dateMapGl.regionInfo)
-            if (!isNaN(Number(key))) massRegion.push(Number(key));
-          homeRegion = massRegion[0].toString();
+          // let massRegion = [];
+          // for (let key in dateMapGl.regionInfo)
+          //   if (!isNaN(Number(key))) massRegion.push(Number(key));
+          // homeRegion = massRegion[0].toString();
+          homeRegion = dateMapGl.tflight[0].region.num
           dateStat.region = homeRegion;
           dispatch(statsaveCreate(dateStat));
           flagMap = true;
