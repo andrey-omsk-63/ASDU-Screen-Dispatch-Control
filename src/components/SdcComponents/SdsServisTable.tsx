@@ -16,6 +16,8 @@ import { styleServisMenu, styleServis00 } from "../MainMapStyle";
 import { styleToDo01, styleToDo02, styleServis01 } from "../MainMapStyle";
 import { styleToDo03, styleToDo05 } from "../MainMapStyle";
 
+let takt: any = 0;
+
 const SdsServisTable = (props: {}) => {
   //== Piece of Redux ======================================
   let massdk = useSelector((state: any) => {
@@ -81,6 +83,11 @@ const SdsServisTable = (props: {}) => {
     );
   };
 
+  const ServisFaza = (faza: string) => {
+    takt = "";
+    return <Box sx={{ color: "#7620a2", fontSize: 27 }}>{faza}</Box>;
+  };
+
   const StrokaTabl = () => {
     const ClickAddition = (idx: number) => {
       let INTERVALDOP = datestat.intervalFazaDop;
@@ -91,14 +98,33 @@ const SdsServisTable = (props: {}) => {
     };
 
     return massfaz.map((massf: any, id: number) => {
-      let takt: any = massf.faza;
+      takt = massf.faza;
       let fazaImg: null | string = null;
       for (let i = 0; i < massdk.length - 1; i++) {
         if (massdk[i].idevice === massf.idevice)
           fazaImg = massdk[i].phSvg[takt - 1];
       }
+
       let pictImg: any = "";
-      if (massf.faza) pictImg = OutputFazaImg(fazaImg, massf.faza);
+      switch (massf.faza) {
+        case 0:
+          pictImg = ServisFaza("ЛР");
+          break;
+        case 10:
+          pictImg = ServisFaza("ЖМ");
+          break;
+        case 11:
+          pictImg = ServisFaza("ОС");
+          break;
+        case 14:
+          pictImg = ServisFaza("ЖМ");
+          break;
+        case 15:
+          pictImg = ServisFaza("ОС");
+          break;
+        default:
+          pictImg = OutputFazaImg(fazaImg, massf.faza);
+      }
 
       return (
         <Grid key={id} container sx={{ fontSize: 14 }}>

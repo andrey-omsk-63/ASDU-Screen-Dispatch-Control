@@ -65,8 +65,7 @@ export const StyleModalMenuConst = (colorKnop: string, bShadow: number) => {
     backgroundColor: colorKnop,
     color: "black",
     textTransform: "unset !important",
-    border: "1px solid #000",
-    borderColor: "#d4d4d4", // серый
+    border: "1px solid #d4d4d4", // серый
     borderRadius: 2,
     lineHeight: 1.7,
     boxShadow: bShadow,

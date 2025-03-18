@@ -292,6 +292,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     let oldNeedComent = { ...datestat.needComent };
     datestat.needComent = false;
     for (let i = 0; i < datestat.massСounter.length; i++) {
+      //console.log("###:", datestat.massСounter, massfaz[i].fazaZU, massfaz);
       if (!datestat.massСounter[i]) {
         // смена номерной фазы на ЖМ, ОС или ЛР
         have++;
@@ -300,7 +301,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       if (datestat.massСounter[i] > 0) {
         let mF = massfaz[i];
         have++;
-        if (mF.fazaSist === mF.faza) datestat.massСounter[i]--; // норм запущен счётчик
+        if (mF.fazaSist === mF.faza || !mF.fazaZU) datestat.massСounter[i]--; // норм запущен счётчик
         if (!datestat.massСounter[i]) {
           CloseCounter(i);
           datestat.massСounter[i]--;

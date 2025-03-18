@@ -45,13 +45,20 @@ const SdcDoPlacemarkDo = (props: {
 
   const nomInMass = datestat.massMem.indexOf(props.idx);
   let FAZASIST = -1;
-  if (nomInMass >= 0) FAZASIST = massfaz[nomInMass].faza;
+  //if (nomInMass >= 0) FAZASIST = massfaz[nomInMass].faza;
+  let fazer: any = 0;
 
   let haveСounter = nomInMass < 0 ? false : true; // взведён ли счётчик?
+  if (nomInMass >= 0) {
+    FAZASIST = massfaz[nomInMass].faza;
+    let fz = massfaz[nomInMass].faza;
+    fazer = JSON.parse(JSON.stringify(massfaz[nomInMass].faza));
+    if (fz === 0) fazer = "ЛР";
+    if (fz === 10 || fz === 14) fazer = "ЖМ";
+    if (fz === 11 || fz === 15) fazer = "ОС";
+  }
   let icContent =
-    nomInMass < 0
-      ? ""
-      : datestat.massСounter[nomInMass] + "(" + massfaz[nomInMass].faza + ")";
+    nomInMass < 0 ? "" : datestat.massСounter[nomInMass] + "(" + fazer + ")";
 
   if (nomInMass >= 0) {
     if (!datestat.typeVert || datestat.massСounter[nomInMass] <= 0)
@@ -59,13 +66,17 @@ const SdcDoPlacemarkDo = (props: {
   }
 
   let fazaImg: null | string = null;
-  //if (nomInMass >= 0 && haveСounter) {
   if (nomInMass >= 0 && datestat.typeVert === 1) {
     for (let i = 0; i < massdk.length - 1; i++) {
-      if (massdk[i].idevice === massfaz[nomInMass].idevice)
+      if (massdk[i].idevice === massfaz[nomInMass].idevice) {
         fazaImg = massdk[i].phSvg[massfaz[nomInMass].faza - 1];
+        //fazaImg = massdk[i].phSvg[massfaz[nomInMass].fazaSist - 1];
+        if (!fazaImg) fazaImg = null;
+      }
     }
   }
+
+  //if (mappp.ID === 139) console.log("3###:", nomInMass, fazaImg, massfaz);
 
   let numer = datestat.typeVert && !fazaImg && nomInMass >= 0;
 
@@ -75,7 +86,7 @@ const SdcDoPlacemarkDo = (props: {
   let badCode = BadCODE.indexOf(statusVertex) < 0 ? false : true;
 
   const Hoster = React.useCallback(() => {
-    //if (numer) console.log("0Layout:", idx, mappp.ID, FAZASIST);
+    //if (mappp.ID === 139) console.log("5###:", numer);
 
     let hostt =
       window.location.origin.slice(0, 22) === "https://localhost:3000"
@@ -103,7 +114,14 @@ const SdcDoPlacemarkDo = (props: {
       }
     }
 
-    if (numer && FAZASIST > 0) {
+    if (
+      numer &&
+      FAZASIST > 0 &&
+      FAZASIST !== 10 && // ЖМ
+      FAZASIST !== 14 && // ЖМ
+      FAZASIST !== 11 && // ОС
+      FAZASIST !== 15 // ОС
+    ) {
       // картинка с номером фазы
       let hostt =
         window.location.origin.slice(0, 22) === "https://localhost:3000"
@@ -113,6 +131,8 @@ const SdcDoPlacemarkDo = (props: {
         ? hostt + FAZASIST + ".svg"
         : "/file/static/img/buttons/" + FAZASIST + ".svg";
     }
+
+    //if (mappp.ID === 139) console.log("51###:", FAZASIST, host);
 
     return host;
   }, [
@@ -250,8 +270,6 @@ const SdcDoPlacemarkDo = (props: {
   );
 
   const getPointOptions1 = React.useCallback(() => {
-    //if (numer) console.log("0Options1:");
-
     return nomInMass < 0 || FAZASIST < 0 || !datestat.typeVert || numer
       ? { iconLayout: createChipsLayout(calculate, mappp.tlsost.num) }
       : GetPointOptions0(fazaImg);
@@ -267,8 +285,6 @@ const SdcDoPlacemarkDo = (props: {
   ]);
 
   const getPointOptions2 = React.useCallback(() => {
-    //if (numer) console.log("0Options2:", numer);
-
     return datestat.typeVert === 2
       ? { preset: "islands#darkOrangeStretchyIcon" }
       : numer

@@ -331,7 +331,7 @@ export const StatusLine = (statusName: string, clinch: boolean) => {
   return (
     <>
       {!DEMO && (
-        <Box sx={{ padding: "2px 0px 0px 0px" }}>
+        <Box sx={{height: "40px",padding: "2px 0px 0px 0px" }}>
           <Box sx={StyleTitle(12.1)}>
             <Box sx={{ display: "inline-block", color: coler }}>
               cостояние:{" "}
@@ -351,7 +351,7 @@ export const MakeMassFaz = (idx: number, datestat: Stater, map: DateMAP) => {
     idx: idx,
     area: Number(datestat.area),
     id: Number(datestat.id),
-    faza: -1,
+    faza: 0,
     fazaSist: -1,
     fazaSistOld: -1,
     fazaZU: 0, // 0 - отправлено ЖМ, ОС, ЛР или КУ (10,11,0,9)
@@ -405,7 +405,7 @@ export const BadExit = (badExit: boolean, handleCloseEnd: Function) => {
         </Typography>
         <Box sx={{ marginTop: 0.5 }}>
           <Box sx={{ marginBottom: 1.2 }}>
-            Будет произведён выход без сохранения. Продолжать?
+            Будет произведён выход без сохранения. Продолжить?
           </Box>
           <Button sx={styleModalMenu} onClick={() => handleClose(true)}>
             Да

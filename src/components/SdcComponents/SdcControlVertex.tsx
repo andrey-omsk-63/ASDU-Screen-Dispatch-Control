@@ -206,7 +206,8 @@ const SdcControlVertex = (props: {
       if (!DEMO && !clinch && mode !== 9)
         SendSocketDispatch(debug, ws, mF.idevice, 9, mode);
       if (mode > 8 || !mode) mF.fazaZU = 0; // ЖМ, ОС, ЛР или КУ (10,11,0,9)
-      if (mode < 9 && mode > 0) {
+      // if (mode < 9 && mode > 0) {
+      if (mode !== 9) {
         mF.fazaZU = mF.faza;
         if (datestat.counterFaza) datestat.massСounter[nomInMass] = INTERVAL; // массив счётчиков отправки КУ на "запущенные" светофоры
         // передана фаза
@@ -281,9 +282,10 @@ const SdcControlVertex = (props: {
     if (DEMO) {
       if ((!mF.fazaSist && !mF.faza) || (mF.fazaSist === 9 && mF.faza === 9)) {
         if (!mF.fazaSist && !mF.faza) datestat.demoTlsost[present] = 5; // ЛР
-        if (mF.fazaSist === 9 && mF.faza === 9)
+        if (mF.fazaSist === 9 && mF.faza === 9) {
           datestat.demoTlsost[present] = 1; // КУ
-        mF.fazaSist = 1;
+          mF.fazaSist = 1;
+        }
         needRend = true;
         datestat.stopSwitch[present] = false;
         setFlagPusk(!flagPusk);
@@ -292,10 +294,17 @@ const SdcControlVertex = (props: {
       }
     }
 
-    if ((DEMO && mF.fazaSist === 10) || (DEMO && mF.fazaSist === 11)) {
+    if (
+      (DEMO && mF.fazaSist === 10) || // ЖМ
+      (DEMO && mF.fazaSist === 14) || // ЖМ
+      (DEMO && mF.fazaSist === 11) || // ОС
+      (DEMO && mF.fazaSist === 15) // ОС
+    ) {
       //console.log("id:", mF.id, "DEMO ЖМ или ОС");
-      if (mF.fazaSist === 10) datestat.demoTlsost[present] = 7; // ЖМ
-      if (mF.fazaSist === 11) datestat.demoTlsost[present] = 12; // ОС
+      if (mF.fazaSist === 10 || mF.fazaSist === 14)
+        datestat.demoTlsost[present] = 7; // ЖМ
+      if (mF.fazaSist === 11 || mF.fazaSist === 15)
+        datestat.demoTlsost[present] = 12; // ОС
       // } else {
       //   if (!DEMO && mF.faza && mF.faza !== 9) {
       //     // console.log("1massInt[present][i]",datestat.massInt);
