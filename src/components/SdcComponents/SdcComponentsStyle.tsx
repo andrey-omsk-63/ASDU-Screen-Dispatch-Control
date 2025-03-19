@@ -46,8 +46,7 @@ export const StyleModalMenuVar = (colorKnop: string, bShadow: number) => {
     backgroundColor: colorKnop,
     color: "black",
     textTransform: "unset !important",
-    border: "1px solid #000",
-    borderColor: "#d4d4d4", // серый
+    border: "1px solid #d4d4d4", // серый
     borderRadius: 2,
     boxShadow: bShadow,
     lineHeight: 1.7,
@@ -107,24 +106,6 @@ export const styleServis01 = {
   height: "69px",
   margin: "9px 0px 5px 2px",
 };
-
-// export const StyleServis02 = (wdth: any) => {
-//   const styleServis02 = {
-//     fontSize: 11.0,
-//     maxHeight: "21px",
-//     minHeight: "21px",
-//     maxWidth: wdth,
-//     minWidth: wdth,
-//     backgroundColor: "#E9F5D8", // светло-салатовый
-//     border: "1px solid #d4d4d4", // серый
-//     color: "black",
-//     textTransform: "unset !important",
-//     marginBottom: 0.5,
-//     marginTop: 0.2,
-//     boxShadow: 6,
-//   };
-//   return styleServis02;
-// };
 
 export const styleServis03 = {
   width: "50px",
