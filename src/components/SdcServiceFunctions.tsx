@@ -66,6 +66,73 @@ export const CenterCoordBegin = (map: any) => {
   // );
 };
 
+export const CompareArrays = (arr1: any, arr2: any) => {
+  if (arr1.length !== arr2.length) return false;
+  for (let i = 0; i < arr1.length; i++) {
+    if (arr1[i] !== arr2[i]) return false;
+  }
+  return true;
+};
+
+export const Zoomer = (zoom: number) => {
+  //console.log("Zoomer:", zoom);
+  switch (zoom) {
+    case 10:
+      return 2000;
+    case 11:
+      return 1200;
+    case 12:
+      return 600;
+    case 13:
+      return 300;
+    case 14:
+      return 180;
+    case 15:
+      return 90;
+    case 16:
+      return 60;
+    case 17:
+      return 35;
+    case 18:
+      return 20;
+    case 19:
+      return 10;
+    default:
+      return 3000;
+  }
+};
+
+export const DrawCircle = (ymaps: any, mapp: any, massfaz: any) => {
+  const CircleDrawer = (massCoord: any, i: number) => {
+    let myCircle = new ymaps.Circle(
+      [
+        massCoord, // Координаты центра круга
+        Zoomer(mapp.current.getZoom()), // Радиус круга в метрах
+      ],
+      {},
+      {
+        fillColor: "#9B59DA33", // Цвет заливки  Последний байт (77) определяет прозрачность.
+        strokeColor: "#9B59DA", // Цвет обводки
+        strokeOpacity: 0.5, // Прозрачность обводки
+        strokeWidth: 1, // Ширина обводки в пикселях
+      }
+    );
+    mapp.current.geoObjects.add(myCircle);
+  };
+
+  mapp.current.geoObjects.removeAll(); // удаление старой коллекции связей и окружностей
+  // нарисовать новые окружности
+  for (let i = 0; i < massfaz.length; i++) {
+    if (
+      massfaz[i].idx >= 0 &&
+      massfaz[i].faza &&
+      massfaz[i].faza === massfaz[i].fazaZU
+    ) {
+      CircleDrawer(massfaz[i].coordinates, i);
+    }
+  }
+};
+
 export const SaveZoom = (zoom: number, pointCenter: Array<number>) => {
   window.localStorage.ZoomDU = zoom;
   window.localStorage.PointCenterDU0 = pointCenter[0];
@@ -331,7 +398,7 @@ export const StatusLine = (statusName: string, clinch: boolean) => {
   return (
     <>
       {!DEMO && (
-        <Box sx={{height: "40px",padding: "2px 0px 0px 0px" }}>
+        <Box sx={{ height: "40px", padding: "2px 0px 0px 0px" }}>
           <Box sx={StyleTitle(12.1)}>
             <Box sx={{ display: "inline-block", color: coler }}>
               cостояние:{" "}

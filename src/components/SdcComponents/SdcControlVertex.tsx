@@ -67,10 +67,6 @@ const SdcControlVertex = (props: {
     const { mapReducer } = state;
     return mapReducer.map.dateMap;
   });
-  // let massdk = useSelector((state: any) => {
-  //   const { massdkReducer } = state;
-  //   return massdkReducer.massdk;
-  // });
   let massfaz = useSelector((state: any) => {
     const { massfazReducer } = state;
     return massfazReducer.massfaz;

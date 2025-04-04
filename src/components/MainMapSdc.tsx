@@ -16,7 +16,8 @@ import SdsServisTable from "./SdcComponents/SdsServisTable";
 
 import { StrokaMenuGlob, CenterCoordBegin } from "./SdcServiceFunctions";
 import { CloseInterval, Distance, YandexServices } from "./SdcServiceFunctions";
-import { SaveZoom, HaveActivеVert } from "./SdcServiceFunctions";
+import { SaveZoom, HaveActivеVert, DrawCircle } from "./SdcServiceFunctions";
+import { CompareArrays } from "./SdcServiceFunctions";
 
 import { SendSocketGetPhases } from "./SdcSocketFunctions";
 import { SendSocketDispatch } from "./SdcSocketFunctions";
@@ -30,6 +31,7 @@ export let DEMO = false;
 
 let flagOpen = false;
 let zoom = zoomStart;
+let zoomOld = 0;
 let pointCenter: any = 0;
 let funcBound: any = null;
 let funcContex: any = null;
@@ -37,6 +39,8 @@ let soobErr = "";
 let idxObj = -1;
 let clicker = 0;
 let INT: Array<any> = [];
+let massMemOld: Array<number> = [];
+let needDrawCircle = false; // нужно перерисовать окружности вокруг светофора
 
 const colerCommentMain = "#E6761B"; // оранж
 let colerComment = "";
@@ -72,7 +76,8 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   const ws = datestat.ws;
   const homeRegion = datestat.region;
   DEMO = datestat.demo;
-  const typeVert = datestat.typeVert;
+  const typeVert = datestat.typeVert; // тип отображаемых CO на карте: 0 - значки СО 1 - картинка фаз 2 - номер фаз(счётчик)
+  const backlight = datestat.backlight; // подсветка запущенных светофоров
   const dispatch = useDispatch();
   //===========================================================
   const [control, setControl] = React.useState(false);
@@ -85,6 +90,23 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   const [trigger, setTrigger] = React.useState(false);
   const [ymaps, setYmaps] = React.useState<YMapsApi | null>(null);
   const mapp = React.useRef<any>(null);
+
+  if (!CompareArrays(datestat.massMem, massMemOld) || needDrawCircle) {
+    console.log(
+      "0DrawCircle:",
+      JSON.parse(JSON.stringify(needDrawCircle)),
+      JSON.parse(JSON.stringify(datestat.massMem)),
+      JSON.parse(JSON.stringify(massMemOld)),
+      massfaz
+    );
+    massMemOld = JSON.parse(JSON.stringify(datestat.massMem));
+    needDrawCircle = false;
+
+    if (backlight) {
+      console.log("нужно рисовать:", massfaz);
+      DrawCircle(ymaps, mapp, massfaz); // нарисовать окружности на запущенных светофорах
+    }
+  }
 
   const StatusQuo = (mode: boolean) => {
     for (let i = 0; i < datestat.timerId.length; i++) {
@@ -100,7 +122,8 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       datestat.massInt = [];
       datestat.first = true;
       datestat.working = false;
-      datestat.massMem = []; // массив "запущенных" светофоров
+      datestat.massMem = []; // массив "запущенных"
+      massMemOld = [];
       datestat.massСounter.splice(0, datestat.massСounter.length);
       //datestat.massСounter = [], // массив счётчиков отправки КУ на "запущенные" светофоры
       datestat.demoIdx = [];
@@ -163,7 +186,6 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       }
     }
 
-    // !have && !clinch && SendSocketGetPhases(debug, ws, homeRegion, area, id);
     !have && SendSocketGetPhases(debug, ws, homeRegion, area, id);
 
     dispatch(statsaveCreate(datestat));
@@ -240,6 +262,11 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       funcBound = function () {
         pointCenter = mapp.current.getCenter();
         zoom = mapp.current.getZoom(); // покрутили колёсико мыши
+        if (zoomOld !== zoom) {
+          needDrawCircle = true;
+          zoomOld = zoom;
+          setTrigger(!trigger);
+        }
         SaveZoom(zoom, pointCenter);
       };
       mapp.current.events.add("boundschange", funcBound);
@@ -284,6 +311,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   };
 
   const ChangeDemoSost = (mode: number) => {
+    needDrawCircle = true; // перерисовать окружности
     setDemoSost(RandomNumber(1, 1000) + demoSost); // костыль
   };
 
@@ -292,7 +320,6 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     let oldNeedComent = { ...datestat.needComent };
     datestat.needComent = false;
     for (let i = 0; i < datestat.massСounter.length; i++) {
-      //console.log("###:", datestat.massСounter, massfaz[i].fazaZU, massfaz);
       if (!datestat.massСounter[i]) {
         // смена номерной фазы на ЖМ, ОС или ЛР
         have++;
@@ -328,7 +355,6 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     }
     if (oldNeedComent !== datestat.needComent) setTrigger(!trigger);
 
-    //if (have && datestat.typeVert === 2) {
     if (have) {
       clicker++;
       setClicka(clicker);
@@ -360,20 +386,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     clicker = clicka; // костылик
   }
   //=== Закрытие или перезапуск вкладки ====================
-  React.useEffect(() => {
-    window.addEventListener("beforeunload", alertUser);
-    window.addEventListener("unload", handleTabClosing);
-
-    return () => {
-      window.removeEventListener("beforeunload", alertUser);
-      window.removeEventListener("unload", handleTabClosing);
-    };
-  });
-
-  const handleTabClosing = () => {
-    //console.log("3пришло:");
-    removePlayerFromGame();
-  };
+  const handleTabClosing = () => removePlayerFromGame();
 
   const alertUser = (event: any) => {
     //console.log("2пришло:", event);
@@ -386,13 +399,21 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   function removePlayerFromGame() {
     throw new Error("Function not implemented.");
   }
+
+  React.useEffect(() => {
+    window.addEventListener("beforeunload", alertUser);
+    window.addEventListener("unload", handleTabClosing);
+
+    return () => {
+      window.removeEventListener("beforeunload", alertUser);
+      window.removeEventListener("unload", handleTabClosing);
+    };
+  });
   //========================================================
   let mapState: any = {
     center: pointCenter,
     zoom,
   };
-
-  //console.log('typeVert',typeVert,datestat.massСounter)
 
   return (
     <Grid container sx={{ height: "99.9vh" }}>

@@ -16,9 +16,11 @@ let flagInput = true;
 let HAVE = 0;
 
 let counterFaza = true; // наличие счётчика длительность фазы ДУ
+let backlight = false; // подсветка запущенных светофоров
 let typeVert = 0; // тип отображаемых CO на карте: 0 - значки СО 1 - картинка фаз 2 - номер фаз(счётчик)
 let intervalFaza = 0; // Задаваемая длительность фазы ДУ (сек)
 let intervalFazaDop = 0; // Увеличениение длительности фазы ДУ (сек)
+
 let currenciesDV: any = [];
 
 const SdcSetup = (props: { close: Function }) => {
@@ -36,6 +38,7 @@ const SdcSetup = (props: { close: Function }) => {
   if (flagInput) {
     HAVE = 0;
     typeVert = datestat.typeVert;
+    backlight = datestat.backlight;
     counterFaza = datestat.counterFaza;
     intervalFaza = datestat.intervalFaza;
     intervalFazaDop = datestat.intervalFazaDop;
@@ -71,6 +74,8 @@ const SdcSetup = (props: { close: Function }) => {
     if (mode) {
       //записать в LocalStorage и datestat
       window.localStorage.typeVert = datestat.typeVert = typeVert;
+      window.localStorage.backLight = backlight ? 1 : 0; // наличие подсветки запущенных светофоро
+      datestat.backlight = backlight;
       window.localStorage.counterFazaD = counterFaza ? 1 : 0; // наличие счётчика длительность фазы ДУ
       datestat.counterFaza = counterFaza;
       window.localStorage.intervalFazaD = datestat.intervalFaza = intervalFaza; // задаваемая длительность фазы ДУ (сек)
@@ -90,6 +95,11 @@ const SdcSetup = (props: { close: Function }) => {
   const Haver = () => {
     HAVE++;
     setTrigger(!trigger); // ререндер
+  };
+
+  const ChangeBacklight = () => {
+    backlight = !backlight;
+    Haver();
   };
 
   const ChangeCounter = () => {
@@ -121,7 +131,6 @@ const SdcSetup = (props: { close: Function }) => {
     padding: "3px 0px 0px 3px",
   };
 
-  
   const SetupContent = () => {
     return (
       <>
@@ -134,6 +143,13 @@ const SdcSetup = (props: { close: Function }) => {
           "Запущенные светофоры отображаются",
           InputFromList(handleChangeDV, currencyDV, currenciesDV)
         )}
+        {StrTablVert(
+          true,
+          7.7,
+          "Подсвечивать запущенные светофоры",
+          ShiftOptimal(backlight, ChangeBacklight, -0.1)
+        )}
+
         <Box sx={{ fontSize: 12, marginTop: 0.5, color: "#5B1080" }}>
           Параметры перекрёстков
         </Box>
@@ -170,7 +186,7 @@ const SdcSetup = (props: { close: Function }) => {
   return (
     <>
       <Modal open={open} onClose={CloseEnd} hideBackdrop={false}>
-        <Box sx={styleSetPK01(580, 304)}>
+        <Box sx={styleSetPK01(580, 337)}>
           {ExitCross(handleCloseBad)}
           <Box sx={styleSetPK02}>
             <b>Системные параметры по умолчанию</b>

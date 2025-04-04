@@ -44,6 +44,7 @@ export interface Stater {
   tekDemoTlsost: Array<number>;
   needComent: boolean;
   typeVert: number; // тип отображаемых CO на карте: 0 - значки СО 1 - картинка фаз 2 - номер фаз(счётчик)
+  backlight: boolean; // подсветка запущенных светофоров
   counterFaza: boolean; // наличие счётчика длительность фазы ДУ
   intervalFaza: number; // Задаваемая длительность фазы ДУ (сек)
   intervalFazaDop: number; // Увеличениение длительности фазы ДУ (сек)
@@ -72,6 +73,7 @@ export let dateStat: Stater = {
   tekDemoTlsost: [],
   needComent: false,
   typeVert: 0, // тип отображаемых CO на карте: 0 - значки СО 1 - картинка фаз 2 - номер фаз(счётчик)
+  backlight: false, // подсветка запущенных светофоров
   counterFaza: true, // наличие счётчика длительность фазы ДУ
   intervalFaza: 0, // Задаваемая длительность фазы ДУ (сек)
   intervalFazaDop: 0, // Увеличениение длительности фазы ДУ (сек)
@@ -143,6 +145,13 @@ const App = () => {
     if (window.localStorage.typeVert === undefined)
       window.localStorage.typeVert = 0;
     dateStat.typeVert = Number(window.localStorage.typeVert);
+
+    // достать наличие подсветки запущенных светофоров из LocalStorage
+    if (window.localStorage.backLight === undefined)
+      window.localStorage.backLight = "0";
+    dateStat.backlight = Number(window.localStorage.backLight)
+      ? true
+      : false;
 
     // достать наличие счётчика длительность фазы ДУ из LocalStorage
     if (window.localStorage.counterFazaD === undefined)
