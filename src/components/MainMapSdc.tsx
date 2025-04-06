@@ -91,31 +91,16 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   const [ymaps, setYmaps] = React.useState<YMapsApi | null>(null);
   const mapp = React.useRef<any>(null);
 
-  if (!CompareArrays(datestat.massMem, massMemOld) || needDrawCircle) {
-    console.log(
-      "0DrawCircle:",
-      JSON.parse(JSON.stringify(needDrawCircle)),
-      JSON.parse(JSON.stringify(datestat.massMem)),
-      JSON.parse(JSON.stringify(massMemOld)),
-      massfaz
-    );
-    massMemOld = JSON.parse(JSON.stringify(datestat.massMem));
-    needDrawCircle = false;
-
-    if (backlight) {
-      console.log("нужно рисовать:", massfaz);
-      DrawCircle(ymaps, mapp, massfaz); // нарисовать окружности на запущенных светофорах
-    }
-  }
-
   const StatusQuo = (mode: boolean) => {
     for (let i = 0; i < datestat.timerId.length; i++) {
       if (!DEMO && datestat.timerId[i] !== null && massfaz[i].idevice > 0) {
+        //if (datestat.timerId[i] !== null && massfaz[i].idevice > 0) {
         SendSocketDispatch(debug, ws, massfaz[i].idevice, 9, 9); // КУ
         SendSocketDispatch(debug, ws, massfaz[i].idevice, 4, 0); // закрытие id
       }
       mode && CloseInterval(datestat, i);
     }
+
     if (mode) {
       clearInterval(INT[0]);
       datestat.timerId = [];
@@ -386,15 +371,12 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     clicker = clicka; // костылик
   }
   //=== Закрытие или перезапуск вкладки ====================
-  const handleTabClosing = () => removePlayerFromGame();
-
-  const alertUser = (event: any) => {
-    //console.log("2пришло:", event);
-    // ev = JSON.parse(JSON.stringify(event));
+  const handleTabClosing = () => {
     StatusQuo(false);
-    //  event.preventDefault();
-    //  event.returnValue = "";
+    removePlayerFromGame();
   };
+
+  const alertUser = (event: any) => StatusQuo(false);
 
   function removePlayerFromGame() {
     throw new Error("Function not implemented.");
@@ -415,11 +397,16 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     zoom,
   };
 
+  if (!CompareArrays(datestat.massMem, massMemOld) || needDrawCircle) {
+    massMemOld = JSON.parse(JSON.stringify(datestat.massMem));
+    needDrawCircle = false;
+    if (backlight) DrawCircle(ymaps, mapp, massfaz, datestat.demoLR); // нарисовать окружности на запущенных светофорах
+  }
+
   return (
     <Grid container sx={{ height: "99.9vh" }}>
       <Grid item xs={12}>
         {MainMenu()}
-        {/* Яндекс карта */}
         <Grid container sx={{ height: "96.9vh" }}>
           <Grid item xs>
             {Object.keys(map.tflight).length && (

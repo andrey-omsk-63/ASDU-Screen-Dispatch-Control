@@ -102,7 +102,12 @@ export const Zoomer = (zoom: number) => {
   }
 };
 
-export const DrawCircle = (ymaps: any, mapp: any, massfaz: any) => {
+export const DrawCircle = (
+  ymaps: any,
+  mapp: any,
+  massfaz: any,
+  demoLR: Array<boolean>
+) => {
   const CircleDrawer = (massCoord: any, i: number) => {
     let myCircle = new ymaps.Circle(
       [
@@ -125,8 +130,7 @@ export const DrawCircle = (ymaps: any, mapp: any, massfaz: any) => {
   for (let i = 0; i < massfaz.length; i++) {
     if (
       massfaz[i].idx >= 0 &&
-      massfaz[i].faza &&
-      massfaz[i].faza === massfaz[i].fazaZU
+      ((massfaz[i].faza && massfaz[i].faza === massfaz[i].fazaZU) || demoLR[i])
     ) {
       CircleDrawer(massfaz[i].coordinates, i);
     }

@@ -159,9 +159,9 @@ const SdcControlVertex = (props: {
     setSentParam(-1);
     if (nomIn < 0) {
       // светофор ранее не запускался
+      datestat.demoLR.push(false);
       if (DEMO) {
         datestat.demoIdx.push(props.idx);
-        datestat.demoLR.push(false);
         datestat.demoTlsost.push(1);
         mF.fazaSist = 1;
       }
@@ -226,13 +226,12 @@ const SdcControlVertex = (props: {
           return;
         }
       }
-      if (DEMO) {
-        // проверка режима ЛР
-        if (mode === 0) {
-          datestat.demoLR[nomInMass] = true;
-        } else if (datestat.demoLR[nomInMass])
-          datestat.demoLR[nomInMass] = false;
-      }
+      //if (DEMO) {
+      // проверка режима ЛР
+      if (mode === 0) {
+        datestat.demoLR[nomInMass] = true;
+      } else if (datestat.demoLR[nomInMass]) datestat.demoLR[nomInMass] = false;
+      //}
       dispatch(statsaveCreate(datestat));
       setSentParam(mode);
       props.change(5); // костыль для ререндера
@@ -422,7 +421,10 @@ const SdcControlVertex = (props: {
       case "ОС":
         handleMode = 11;
         if (sentParam === 11) OnColorSent();
-        if (mF === 11 || mF.fazaSist === 15) {
+
+        console.log("MF:", mF);
+
+        if (mF.fazaSist === 11 || mF.fazaSist === 15) {
           colorKnop = colorExtra;
           bShadow = 12;
         }
