@@ -13,7 +13,7 @@ import { SendSocketDispatch } from "../SdcSocketFunctions";
 
 import { MaxFaz, CLINCH, BadCODE } from "./../MapConst";
 
-import { DEMO } from "./../MainMapSdc";
+import { DEMO } from "./../MainMapSdc"; // режим Демо
 
 import { styleModalEnd } from "../MainMapStyle";
 
@@ -84,6 +84,9 @@ const SdcControlVertex = (props: {
   statusName = map.tflight[props.idx].tlsost.description;
   let clinch = CLINCH.indexOf(statusVertex) < 0 ? false : true;
   let badCode = BadCODE.indexOf(statusVertex) < 0 ? false : true;
+  let titleDEMO = DEMO ? "( Демонстрационный режим )" : "";
+  let styleSetControl = StyleSetControl(DEMO);
+  let clinchik = badCode ? true : clinch;
 
   INTERVAL = datestat.intervalFaza;
   INTERVALDOP = datestat.intervalFazaDop;
@@ -91,6 +94,7 @@ const SdcControlVertex = (props: {
   const [sentParam, setSentParam] = React.useState(-1);
   const [flagPusk, setFlagPusk] = React.useState(false);
   const [trigger, setTrigger] = React.useState(false);
+  const boxer = React.useRef(null);
   //========================================================
   const handleCloseSet = React.useCallback(
     (mode: number) => {
@@ -144,18 +148,7 @@ const SdcControlVertex = (props: {
     } else nomInMass = nomIn; // повторное открытие
 
     mF = massfaz[nomInMass];
-    //console.log("0MASSDK:", massdk);
-    if (!DEMO && !clinch) {
-      SendSocketDispatch(debug, ws, mF.idevice, 4, 1); // начало работы
-      // for (let i = 0; i < massdk.length; i++) {
-      //   if (massdk[i].idevice === mF.idevice && mF.idx !== -1) {
-      //     //console.log("1MASSDK:",i, massdk[i].phSvg);
-      //     if (massdk[i].phSvg[0]) {
-      //       datestat.phSvg = massdk[i].phSvg; // картинки были присланы ранее
-      //     } else SendSocketDispatch(debug, ws, mF.idevice, 4, 1); // запрос на получение картинок фаз
-      //   }
-      // }
-    }
+    if (!DEMO && !clinch) SendSocketDispatch(debug, ws, mF.idevice, 4, 1); // начало работы
     setSentParam(-1);
     if (nomIn < 0) {
       // светофор ранее не запускался
@@ -202,7 +195,6 @@ const SdcControlVertex = (props: {
       if (!DEMO && !clinch && mode !== 9)
         SendSocketDispatch(debug, ws, mF.idevice, 9, mode);
       if (mode > 8 || !mode) mF.fazaZU = 0; // ЖМ, ОС, ЛР или КУ (10,11,0,9)
-      // if (mode < 9 && mode > 0) {
       if (mode !== 9) {
         mF.fazaZU = mF.faza;
         if (datestat.counterFaza) datestat.massСounter[nomInMass] = INTERVAL; // массив счётчиков отправки КУ на "запущенные" светофоры
@@ -226,12 +218,10 @@ const SdcControlVertex = (props: {
           return;
         }
       }
-      //if (DEMO) {
       // проверка режима ЛР
       if (mode === 0) {
         datestat.demoLR[nomInMass] = true;
       } else if (datestat.demoLR[nomInMass]) datestat.demoLR[nomInMass] = false;
-      //}
       dispatch(statsaveCreate(datestat));
       setSentParam(mode);
       props.change(5); // костыль для ререндера
@@ -261,8 +251,7 @@ const SdcControlVertex = (props: {
       if (mF.fazaZU) {
         console.log("Отправлена фаза c id", present, mF.id, mF.faza);
         !clinch && SendSocketDispatch(debug, ws, mF.idevice, 9, mF.faza);
-      }
-      //else console.log("Отправлена пустышка c id", mF.id);
+      } else console.log("Отправлена пустышка c id", mF.id);
     } else {
       datestat.demoTlsost[present] = 1;
       if (!datestat.stopSwitch[present]) {
@@ -272,7 +261,6 @@ const SdcControlVertex = (props: {
       needRend = true;
       setFlagPusk(!flagPusk);
     }
-
     if (DEMO && mF.faza < 9 && mF.faza > 0) datestat.demoTlsost[present] = 2; // Передана фаза
     if (DEMO) {
       if ((!mF.fazaSist && !mF.faza) || (mF.fazaSist === 9 && mF.faza === 9)) {
@@ -288,33 +276,16 @@ const SdcControlVertex = (props: {
         dispatch(statsaveCreate(datestat));
       }
     }
-
     if (
       (DEMO && mF.fazaSist === 10) || // ЖМ
       (DEMO && mF.fazaSist === 14) || // ЖМ
       (DEMO && mF.fazaSist === 11) || // ОС
       (DEMO && mF.fazaSist === 15) // ОС
     ) {
-      //console.log("id:", mF.id, "DEMO ЖМ или ОС");
       if (mF.fazaSist === 10 || mF.fazaSist === 14)
         datestat.demoTlsost[present] = 7; // ЖМ
       if (mF.fazaSist === 11 || mF.fazaSist === 15)
         datestat.demoTlsost[present] = 12; // ОС
-      // } else {
-      //   if (!DEMO && mF.faza && mF.faza !== 9) {
-      //     // console.log("1massInt[present][i]",datestat.massInt);
-      //     // for (let i = 0; i < datestat.massInt.length - 1; i++) {
-      //     //   console.log("2massInt[present][i]", i, datestat.massInt[present][i]);
-      //     //   if (datestat.massInt[present][i]) {
-      //     //     clearInterval(datestat.massInt[present][i]);
-      //     //     datestat.massInt[present][i] = null;
-      //     //   }
-      //     // }
-      //     console.log(":", present, datestat.massInt);
-      //     // datestat.massInt[present] = datestat.massInt[present].filter(function (el: any) {
-      //     //   return el !== null;
-      //     // });
-      //   }
     }
     if (datestat.tekDemoTlsost[present] !== datestat.demoTlsost[present]) {
       if (datestat.demoLR[present]) {
@@ -364,8 +335,6 @@ const SdcControlVertex = (props: {
           Knop2 = -1;
         if (needDopKnop[nomInMass] && i >= kolFaz[nomInMass] - 1 && i + 1 < ii)
           Knop2 = -2;
-        // if (needDopKnop[nomInMass] && Knop2 === -1)
-        //   colorKnop = !clinch || DEMO ? colorNormal : colorBad;
         if (needDopKnop[nomInMass] && Knop2 === -1)
           colorKnop = !clinch || DEMO ? colorNormalZU : colorBad;
         bShadow = !clinch || DEMO ? bShadow : 0;
@@ -421,9 +390,6 @@ const SdcControlVertex = (props: {
       case "ОС":
         handleMode = 11;
         if (sentParam === 11) OnColorSent();
-
-        console.log("MF:", mF);
-
         if (mF.fazaSist === 11 || mF.fazaSist === 15) {
           colorKnop = colorExtra;
           bShadow = 12;
@@ -438,7 +404,6 @@ const SdcControlVertex = (props: {
         handleMode = 9;
     }
     bShadow = !clinch || DEMO ? bShadow : 0;
-
     let styleMenu = StyleModalMenuConst(colorKnop, bShadow);
 
     return (
@@ -483,8 +448,6 @@ const SdcControlVertex = (props: {
     );
   };
   //=== отслеживания клика мышом за пределами рамки ========
-  const boxer = React.useRef(null);
-
   const ClickLeftKnop = (ref: any) => {
     const handleClickOutside = React.useCallback(
       (event: any) => {
@@ -518,18 +481,13 @@ const SdcControlVertex = (props: {
       };
     }, [handleClickRight]);
   };
-
+  //========================================================
   ClickLeftKnop(boxer);
   ClickRightKnop(boxer);
-  //========================================================
-  let titleDEMO = DEMO ? "( Демонстрационный режим )" : "";
-  let styleSetControl = StyleSetControl(DEMO);
   if (needRend) {
     needRend = false;
     setFlagPusk(!flagPusk);
   }
-
-  let clinchik = badCode ? true : clinch;
 
   return (
     <Box ref={boxer} sx={styleSetControl}>
@@ -544,7 +502,7 @@ const SdcControlVertex = (props: {
       </Box>
       <Box sx={styleControl01}>
         <Grid container sx={{}}>
-          <Grid item xs={8} sx={{ border: 0, padding: "0px 6px 0px 1px" }}>
+          <Grid item xs={8} sx={{ padding: "0px 6px 0px 1px" }}>
             <Grid container>{StrokaFazaKnop()} </Grid>
           </Grid>
           <Grid item xs sx={{ paddingRight: 1 }}>

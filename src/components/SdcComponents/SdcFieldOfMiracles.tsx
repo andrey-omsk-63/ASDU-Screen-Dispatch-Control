@@ -16,11 +16,8 @@ const SdcFieldOfMiracles = (props: { idx: number; func: Function }) => {
     return statsaveReducer.datestat;
   });
   //========================================================
-  //const DEMO = datestat.demo;
   const intervalFazaDop = datestat.intervalFazaDop; // Увеличениение длительности фазы ДУ (сек)
   const [hint, setHint] = React.useState(false);
-
-  //console.log("###:", props.idx, datestat.massСounter);
 
   let intervalfaza = datestat.massСounter[props.idx]; // Задаваемая длительность фазы ДУ (сек)
 

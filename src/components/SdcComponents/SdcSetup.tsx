@@ -131,6 +131,8 @@ const SdcSetup = (props: { close: Function }) => {
     padding: "3px 0px 0px 3px",
   };
 
+  let light = '"' + "Подсвечивать" + '" ' + "запущенные светофоры";
+
   const SetupContent = () => {
     return (
       <>
@@ -146,7 +148,7 @@ const SdcSetup = (props: { close: Function }) => {
         {StrTablVert(
           true,
           7.7,
-          "Подсвечивать запущенные светофоры",
+          light,
           ShiftOptimal(backlight, ChangeBacklight, -0.1)
         )}
 

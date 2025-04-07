@@ -26,6 +26,11 @@ export const handleKey = (event: any) => {
   if (event.key === "Enter") event.preventDefault();
 };
 
+export const RandomNumber = (min: number, max: number) => {
+  let rand = Math.random() * (max - min) + min;
+  return Math.floor(rand);
+};
+
 export const CenterCoord = (aY: number, aX: number, bY: number, bX: number) => {
   let coord0 = (aY - bY) / 2 + bY;
   if (aY < bY) coord0 = (bY - aY) / 2 + aY;
@@ -125,7 +130,6 @@ export const DrawCircle = (
     mapp.current.geoObjects.add(myCircle);
   };
 
-  mapp.current.geoObjects.removeAll(); // удаление старой коллекции связей и окружностей
   // нарисовать новые окружности
   for (let i = 0; i < massfaz.length; i++) {
     if (
@@ -134,6 +138,23 @@ export const DrawCircle = (
     ) {
       CircleDrawer(massfaz[i].coordinates, i);
     }
+  }
+};
+
+export const UseFragments = (ymaps: any, mapp: any, map: any, idx: number) => {
+  if (idx >= 0 && ymaps) {
+    mapp.current.geoObjects.removeAll(); // удаление старой коллекции связей
+    let multiRoute: any = [];
+    multiRoute = new ymaps.multiRouter.MultiRoute(
+      { referencePoints: map.fragments[idx].bounds },
+      {
+        boundsAutoApply: true, // вписать в границы
+        routeActiveStrokeWidth: 0, // толщина линии
+        routeStrokeWidth: 0, // толщина линии альтернативного маршрута
+        wayPointVisible: false,
+      }
+    );
+    mapp.current.geoObjects.add(multiRoute);
   }
 };
 

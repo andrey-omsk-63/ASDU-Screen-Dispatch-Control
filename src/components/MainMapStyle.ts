@@ -146,7 +146,6 @@ export const styleServis01 = {
   overflowX: "auto",
   maxHeight: "83vh",
   minHeight: "83vh",
-  //height: "82vh",
   textShadow: "2px 2px 3px rgba(0,0,0,0.3)",
 };
 

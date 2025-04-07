@@ -149,9 +149,7 @@ const App = () => {
     // достать наличие подсветки запущенных светофоров из LocalStorage
     if (window.localStorage.backLight === undefined)
       window.localStorage.backLight = "0";
-    dateStat.backlight = Number(window.localStorage.backLight)
-      ? true
-      : false;
+    dateStat.backlight = Number(window.localStorage.backLight) ? true : false;
 
     // достать наличие счётчика длительность фазы ДУ из LocalStorage
     if (window.localStorage.counterFazaD === undefined)
@@ -228,7 +226,6 @@ const App = () => {
       //console.log("пришло:", allData.type, data);
       switch (allData.type) {
         case "tflight":
-          //console.log("Tflight:", data, data.tflight);
           for (let j = 0; j < data.tflight.length; j++) {
             for (let i = 0; i < dateMapGl.tflight.length; i++)
               if (data.tflight[j].idevice === dateMapGl.tflight[i].idevice)
@@ -238,14 +235,11 @@ const App = () => {
           setTrigger(!trigger);
           break;
         case "phases":
-          //console.log("0PH:", data.phases, massfaz);
           let flagChange = 0;
           for (let j = 0; j < data.phases.length; j++) {
             for (let i = 0; i < massfaz.length; i++) {
               let mf = massfaz[i];
               if (mf.idevice === data.phases[j].device && !dateStat.demo) {
-                //console.log("1PH:", j, i, mf.fazaSist, data.phases[j].phase);
-
                 if (mf.fazaSist !== 9 && mf.fazaSist !== data.phases[j].phase)
                   mf.fazaSistOld = JSON.parse(JSON.stringify(mf.fazaSist));
                 if (mf.fazaSist !== data.phases[j].phase) flagChange++;
@@ -254,7 +248,6 @@ const App = () => {
             }
           }
           if (flagChange) {
-            //console.log("3PH:", flagChange);
             dispatch(massfazCreate(massfaz));
             setTrigger(!trigger);
           }
@@ -262,11 +255,7 @@ const App = () => {
         case "mapInfo":
           dateMapGl = JSON.parse(JSON.stringify(data));
           dispatch(mapCreate(dateMapGl));
-          // let massRegion = [];
-          // for (let key in dateMapGl.regionInfo)
-          //   if (!isNaN(Number(key))) massRegion.push(Number(key));
-          // homeRegion = massRegion[0].toString();
-          homeRegion = dateMapGl.tflight[0].region.num
+          homeRegion = dateMapGl.tflight[0].region.num;
           dateStat.region = homeRegion;
           dispatch(statsaveCreate(dateStat));
           flagMap = true;
@@ -280,7 +269,7 @@ const App = () => {
           if (data.phases) {
             for (let i = 0; i < data.phases.length; i++)
               dateStat.phSvg[i] = data.phases[i].phase;
-          } 
+          }
           // else {
           //   dateStat.phSvg[0] = imgFaza; // костыль
           //   dateStat.phSvg[1] = null;
@@ -294,7 +283,6 @@ const App = () => {
 
           for (let i = 0; i < massdk.length; i++) {
             if (massdk[i].ID === data.pos.id) {
-              //console.log("!!!getPhases:", i, data.phases);
               massdk[i].readIt = true;
               if (data.phases) {
                 if (data.phases.length) {
@@ -303,7 +291,7 @@ const App = () => {
                   dispatch(massdkCreate(massdk));
                 }
                 break;
-              } 
+              }
               // else {
               //   massdk[i].phSvg[0] = imgFaza; // костыль
               //   massdk[i].phSvg[1] = null;

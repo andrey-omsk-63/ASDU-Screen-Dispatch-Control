@@ -6,7 +6,7 @@ export const SendSocketDispatch = (
   cmdd: number,
   faza: number
 ) => {
-  console.log('Dispatch:', idevice, cmdd, faza);
+  //console.log('Dispatch:', idevice, cmdd, faza);
   const handleSendOpen = () => {
     if (!debug) {
       if (ws.readyState === WebSocket.OPEN) {
@@ -36,7 +36,7 @@ export const SendSocketGetPhases = (
   area: string,
   id: number
 ) => {
-  console.log("getPhases:", region, area, id);
+  //console.log("getPhases:", region, area, id);
   const handleSendOpen = () => {
     if (!debug) {
       if (ws.readyState === WebSocket.OPEN) {

@@ -17,7 +17,8 @@ import SdsServisTable from "./SdcComponents/SdsServisTable";
 import { StrokaMenuGlob, CenterCoordBegin } from "./SdcServiceFunctions";
 import { CloseInterval, Distance, YandexServices } from "./SdcServiceFunctions";
 import { SaveZoom, HaveActivеVert, DrawCircle } from "./SdcServiceFunctions";
-import { CompareArrays } from "./SdcServiceFunctions";
+import { CompareArrays, UseFragments } from "./SdcServiceFunctions";
+import { RandomNumber } from "./SdcServiceFunctions";
 
 import { SendSocketGetPhases } from "./SdcSocketFunctions";
 import { SendSocketDispatch } from "./SdcSocketFunctions";
@@ -27,7 +28,7 @@ import { BadCODE } from "./MapConst";
 
 import { styleHelpMain, styleServisTable } from "./MainMapStyle";
 
-export let DEMO = false;
+export let DEMO = false; // режим Демо
 
 let flagOpen = false;
 let zoom = zoomStart;
@@ -94,7 +95,6 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   const StatusQuo = (mode: boolean) => {
     for (let i = 0; i < datestat.timerId.length; i++) {
       if (!DEMO && datestat.timerId[i] !== null && massfaz[i].idevice > 0) {
-        //if (datestat.timerId[i] !== null && massfaz[i].idevice > 0) {
         SendSocketDispatch(debug, ws, massfaz[i].idevice, 9, 9); // КУ
         SendSocketDispatch(debug, ws, massfaz[i].idevice, 4, 0); // закрытие id
       }
@@ -120,31 +120,18 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       massfaz = [];
       dispatch(massfazCreate(massfaz));
       INT[0] = setInterval(() => DoTimerRestart(), Restart); // запуск счетчиков отправки КУ
+      mapp.current.geoObjects.removeAll(); // удаление старой коллекции связей и окружностей
+      needDrawCircle = true; // нужно перерисовать окружности вокруг светофора
     }
   };
 
   const SetFragments = (idx: number) => {
-    if (idx >= 0 && ymaps) {
-      mapp.current.geoObjects.removeAll(); // удаление старой коллекции связей
-      let multiRoute: any = [];
-      multiRoute = new ymaps.multiRouter.MultiRoute(
-        { referencePoints: map.fragments[idx].bounds },
-        {
-          boundsAutoApply: true, // вписать в границы
-          routeActiveStrokeWidth: 0, // толщина линии
-          routeStrokeWidth: 0, // толщина линии альтернативного маршрута
-          wayPointVisible: false,
-        }
-      );
-      mapp.current.geoObjects.add(multiRoute);
-    }
+    UseFragments(ymaps, mapp, map, idx);
     setFragments(false);
   };
 
   const OnPlacemarkClickPoint = (index: number) => {
-    //if (!datestat.working) {
     let statusVertex = map.tflight[index].tlsost.num;
-    //let clinch = CLINCH.indexOf(statusVertex) < 0 ? false : true;
     let badCode = BadCODE.indexOf(statusVertex) < 0 ? false : true;
     let nomIn = datestat.massMem.indexOf(index); // запускался ли светофор ранее?
     if (nomIn >= 0) {
@@ -156,7 +143,6 @@ const MainMapSdc = (props: { trigger: boolean }) => {
         return;
       }
     }
-
     // проверка наличия картинок фаз
     let area = map.tflight[index].area.num;
     let id = map.tflight[index].ID;
@@ -170,9 +156,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
         have++;
       }
     }
-
     !have && SendSocketGetPhases(debug, ws, homeRegion, area, id);
-
     dispatch(statsaveCreate(datestat));
     idxObj = index;
     setControl(true);
@@ -290,14 +274,14 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     }
   };
   //=== Функции - обработчики ==============================
-  const RandomNumber = (min: number, max: number) => {
-    let rand = Math.random() * (max - min) + min;
-    return Math.floor(rand);
-  };
-
   const ChangeDemoSost = (mode: number) => {
     needDrawCircle = true; // перерисовать окружности
     setDemoSost(RandomNumber(1, 1000) + demoSost); // костыль
+  };
+
+  const SetNeedSetup = (mode: boolean) => {
+    needDrawCircle = true;
+    setNeedSetup(false);
   };
 
   const DoTimerRestart = () => {
@@ -321,7 +305,6 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       }
     }
     dispatch(statsaveCreate(datestat));
-
     helpComment = "";
     if (datestat.needComent) {
       colerComment = colerCommentMain;
@@ -339,7 +322,6 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       }
     }
     if (oldNeedComent !== datestat.needComent) setTrigger(!trigger);
-
     if (have) {
       clicker++;
       setClicka(clicker);
@@ -400,7 +382,8 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   if (!CompareArrays(datestat.massMem, massMemOld) || needDrawCircle) {
     massMemOld = JSON.parse(JSON.stringify(datestat.massMem));
     needDrawCircle = false;
-    if (backlight) DrawCircle(ymaps, mapp, massfaz, datestat.demoLR); // нарисовать окружности на запущенных светофорах
+    mapp.current.geoObjects.removeAll(); // удаление старой коллекции связей и окружностей
+    backlight && DrawCircle(ymaps, mapp, massfaz, datestat.demoLR); // нарисовать окружности на запущенных светофорах
   }
 
   return (
@@ -446,7 +429,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
           <SdsServisTable />
         </Box>
       )}
-      {needSetup && <SdcSetup close={setNeedSetup} />}
+      {needSetup && <SdcSetup close={SetNeedSetup} />}
     </Grid>
   );
 };

@@ -45,7 +45,6 @@ const SdcDoPlacemarkDo = (props: {
 
   const nomInMass = datestat.massMem.indexOf(props.idx);
   let FAZASIST = -1;
-  //if (nomInMass >= 0) FAZASIST = massfaz[nomInMass].faza;
   let fazer: any = 0;
 
   let haveСounter = nomInMass < 0 ? false : true; // взведён ли счётчик?
@@ -70,7 +69,6 @@ const SdcDoPlacemarkDo = (props: {
     for (let i = 0; i < massdk.length - 1; i++) {
       if (massdk[i].idevice === massfaz[nomInMass].idevice) {
         fazaImg = massdk[i].phSvg[massfaz[nomInMass].faza - 1];
-        //fazaImg = massdk[i].phSvg[massfaz[nomInMass].fazaSist - 1];
         if (!fazaImg) fazaImg = null;
       }
     }
@@ -86,8 +84,6 @@ const SdcDoPlacemarkDo = (props: {
   let badCode = BadCODE.indexOf(statusVertex) < 0 ? false : true;
 
   const Hoster = React.useCallback(() => {
-    //if (mappp.ID === 139) console.log("5###:", numer);
-
     let hostt =
       window.location.origin.slice(0, 22) === "https://localhost:3000"
         ? "https://localhost:3000/"
@@ -131,8 +127,6 @@ const SdcDoPlacemarkDo = (props: {
         ? hostt + FAZASIST + ".svg"
         : "/file/static/img/buttons/" + FAZASIST + ".svg";
     }
-
-    //if (mappp.ID === 139) console.log("51###:", FAZASIST, host);
 
     return host;
   }, [
