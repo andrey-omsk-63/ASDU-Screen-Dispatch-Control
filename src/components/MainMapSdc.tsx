@@ -100,7 +100,6 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       }
       mode && CloseInterval(datestat, i);
     }
-
     if (mode) {
       clearInterval(INT[0]);
       datestat.timerId = [];
@@ -198,8 +197,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
         let corFromMap = [massfaz[i].coordinates[0], massfaz[i].coordinates[1]];
         let dister = Distance(coord, corFromMap);
         if (dister <= Aura && minDist > dister) {
-          // нажали правой кнопкой на светофор
-          minDist = dister;
+          minDist = dister; // нажали правой кнопкой на светофор
           nomInMass = i;
         }
       }
@@ -219,15 +217,13 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   const InstanceRefDo = (ref: React.Ref<any>) => {
     if (ref) {
       mapp.current = ref;
-      //=== правая кнопка =========
-      mapp.current.events.remove("contextmenu", funcContex);
+      mapp.current.events.remove("contextmenu", funcContex); //=== правая кнопка =========
       funcContex = function (e: any) {
         if (mapp.current.hint && !datestat.working)
           FindNearVertex(e.get("coords")); // нажата правая кнопка мыши
       };
       mapp.current.events.add("contextmenu", funcContex);
-      //=== колёсико мыши =========
-      mapp.current.events.remove("boundschange", funcBound);
+      mapp.current.events.remove("boundschange", funcBound); //=== колёсико мыши =========
       funcBound = function () {
         pointCenter = mapp.current.getCenter();
         zoom = mapp.current.getZoom(); // покрутили колёсико мыши
@@ -367,7 +363,6 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   React.useEffect(() => {
     window.addEventListener("beforeunload", alertUser);
     window.addEventListener("unload", handleTabClosing);
-
     return () => {
       window.removeEventListener("beforeunload", alertUser);
       window.removeEventListener("unload", handleTabClosing);

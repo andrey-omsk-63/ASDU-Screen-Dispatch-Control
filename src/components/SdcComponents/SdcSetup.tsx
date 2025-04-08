@@ -131,7 +131,8 @@ const SdcSetup = (props: { close: Function }) => {
     padding: "3px 0px 0px 3px",
   };
 
-  let light = '"' + "Подсвечивать" + '" ' + "запущенные светофоры";
+  let kv = '"'
+  let light: string = kv + 'Подсвечивать' + kv + ' запущенные светофоры';
 
   const SetupContent = () => {
     return (

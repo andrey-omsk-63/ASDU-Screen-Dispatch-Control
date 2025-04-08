@@ -669,6 +669,7 @@ export const ShiftOptimal = (
     border: "1px solid #d4d4d4", // серый
     borderRadius: 1,
     textTransform: "unset !important",
+    padding: "2px 0 0 0",
     boxShadow: 2,
     color: "black",
   };
@@ -684,6 +685,7 @@ export const ShiftOptimal = (
     border: "1px solid #bae186", // тёмно салатовый
     borderRadius: 1,
     textTransform: "unset !important",
+    padding: "2px 0 0 0",
     boxShadow: 6,
     color: "black",
   };
