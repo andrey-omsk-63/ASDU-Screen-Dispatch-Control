@@ -23,7 +23,6 @@ import { StyleSetControl, styleControl01 } from "./SdcComponentsStyle";
 import { StyleTitle, styleTitleDEMO } from "./SdcComponentsStyle";
 import { StyleModalMenuVar, StyleModalMenuConst } from "./SdcComponentsStyle";
 
-//import { DateMAP } from "./../../interfaceMAP.d";
 import { Fazer } from "./../../App";
 
 let oldIdx = -1;
