@@ -143,10 +143,10 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       }
     }
     // проверка наличия картинок фаз
-    let area = map.tflight[index].area.num;
-    let id = map.tflight[index].ID;
-    datestat.area = area;
-    datestat.id = id;
+    let area = datestat.area = map.tflight[index].area.num;
+    let id = datestat.id = map.tflight[index].ID;
+    //datestat.area = area;
+    //datestat.id = id;
     if (!debug) datestat.phSvg = Array(8).fill(null);
     let have = 0;
     for (let i = 0; i < massdk.length; i++) {
@@ -242,17 +242,14 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     switch (mode) {
       case 61: // режим управления
         StatusQuo(true);
-        datestat.finish = false;
-        datestat.demo = false;
+        datestat.finish = datestat.demo = false;
         dispatch(statsaveCreate(datestat));
         DEMO = false;
         break;
       case 62: // режим Демо
-        StatusQuo(true);
+        StatusQuo((datestat.demo = DEMO = true));
         datestat.finish = false;
-        datestat.demo = true;
         dispatch(statsaveCreate(datestat));
-        DEMO = true;
         break;
       case 63: // настройки
         setNeedSetup(true);
