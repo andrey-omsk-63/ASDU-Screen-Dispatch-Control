@@ -74,7 +74,6 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     return statsaveReducer.datestat;
   });
   const debug = datestat.debug;
-  const ws = datestat.ws;
   const homeRegion = datestat.region;
   DEMO = datestat.demo;
   const typeVert = datestat.typeVert; // тип отображаемых CO на карте: 0 - значки СО 1 - картинка фаз 2 - номер фаз(счётчик)
@@ -95,8 +94,8 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   const StatusQuo = (mode: boolean) => {
     for (let i = 0; i < datestat.timerId.length; i++) {
       if (!DEMO && datestat.timerId[i] !== null && massfaz[i].idevice > 0) {
-        SendSocketDispatch(debug, ws, massfaz[i].idevice, 9, 9); // КУ
-        SendSocketDispatch(debug, ws, massfaz[i].idevice, 4, 0); // закрытие id
+        SendSocketDispatch(massfaz[i].idevice, 9, 9); // КУ
+        SendSocketDispatch(massfaz[i].idevice, 4, 0); // закрытие id
       }
       mode && CloseInterval(datestat, i);
     }
@@ -145,8 +144,6 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     // проверка наличия картинок фаз
     let area = datestat.area = map.tflight[index].area.num;
     let id = datestat.id = map.tflight[index].ID;
-    //datestat.area = area;
-    //datestat.id = id;
     if (!debug) datestat.phSvg = Array(8).fill(null);
     let have = 0;
     for (let i = 0; i < massdk.length; i++) {
@@ -155,7 +152,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
         have++;
       }
     }
-    !have && SendSocketGetPhases(debug, ws, homeRegion, area, id);
+    !have && SendSocketGetPhases(homeRegion, area, id);
     dispatch(statsaveCreate(datestat));
     idxObj = index;
     setControl(true);
@@ -163,8 +160,8 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   };
 
   const CloseCounter = (IDX: number) => {
-    !DEMO && SendSocketDispatch(debug, ws, massfaz[IDX].idevice, 9, 9);
-    !DEMO && SendSocketDispatch(debug, ws, massfaz[IDX].idevice, 4, 0);
+    !DEMO && SendSocketDispatch(massfaz[IDX].idevice, 9, 9);
+    !DEMO && SendSocketDispatch(massfaz[IDX].idevice, 4, 0);
     massfaz[IDX].faza = 9;
     datestat.massMem[IDX] = massfaz[IDX].idevice = massfaz[IDX].idx = -1; // затереть в massfaz и massMem
     dispatch(massfazCreate(massfaz));
@@ -273,7 +270,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   };
 
   const SetNeedSetup = (mode: boolean) => {
-    needDrawCircle = true;
+    needDrawCircle = true; // перерисовать окружности
     setNeedSetup(false);
   };
 

@@ -23,7 +23,7 @@ import { StyleSetControl, styleControl01 } from "./SdcComponentsStyle";
 import { StyleTitle, styleTitleDEMO } from "./SdcComponentsStyle";
 import { StyleModalMenuVar, StyleModalMenuConst } from "./SdcComponentsStyle";
 
-import { Fazer } from "./../../App";
+import { Fazer, debug } from "./../../App";
 
 let oldIdx = -1;
 let needRend = false;
@@ -74,8 +74,7 @@ const SdcControlVertex = (props: {
     const { statsaveReducer } = state;
     return statsaveReducer.datestat;
   });
-  const debug = datestat.debug;
-  const ws = datestat.ws;
+  //const debug = datestat.debug;
   const dispatch = useDispatch();
   let timer = debug || DEMO ? 10000 : 60000;
 
@@ -98,8 +97,8 @@ const SdcControlVertex = (props: {
   const handleCloseSet = React.useCallback(
     (mode: number) => {
       if (!DEMO && !clinch && shippedKU[nomInMass] && mF.idevice > 0) {
-        SendSocketDispatch(debug, ws, mF.idevice, 9, 9); // КУ
-        SendSocketDispatch(debug, ws, mF.idevice, 4, 0); // закрытие id
+        SendSocketDispatch(mF.idevice, 9, 9); // КУ
+        SendSocketDispatch(mF.idevice, 4, 0); // закрытие id
       }
       if (mode) datestat.massMem[nomInMass] = mF.idevice = mF.idx = -1;
       datestat.working = false; // свободно
@@ -108,7 +107,7 @@ const SdcControlVertex = (props: {
       oldIdx = -1;
       props.setOpen(false);
     },
-    [datestat, clinch, debug, ws, props, massfaz, dispatch]
+    [datestat, clinch, props, massfaz, dispatch]
   );
   //=== инициализация ======================================
   if (datestat.first) {
@@ -147,7 +146,7 @@ const SdcControlVertex = (props: {
     } else nomInMass = nomIn; // повторное открытие
 
     mF = massfaz[nomInMass];
-    if (!DEMO && !clinch) SendSocketDispatch(debug, ws, mF.idevice, 4, 1); // начало работы
+    if (!DEMO && !clinch) SendSocketDispatch(mF.idevice, 4, 1); // начало работы
     setSentParam(-1);
     if (nomIn < 0) {
       // светофор ранее не запускался
@@ -192,7 +191,7 @@ const SdcControlVertex = (props: {
       dispatch(massfazCreate(massfaz));
       shippedKU[nomInMass] = mode === 9 ? true : false;
       if (!DEMO && !clinch && mode !== 9)
-        SendSocketDispatch(debug, ws, mF.idevice, 9, mode);
+        SendSocketDispatch(mF.idevice, 9, mode);
       if (mode > 8 || !mode) mF.fazaZU = 0; // ЖМ, ОС, ЛР или КУ (10,11,0,9)
       if (mode !== 9) {
         mF.fazaZU = mF.faza;
@@ -249,7 +248,7 @@ const SdcControlVertex = (props: {
     if (!DEMO) {
       if (mF.fazaZU) {
         console.log("Отправлена фаза c id", present, mF.id, mF.faza);
-        !clinch && SendSocketDispatch(debug, ws, mF.idevice, 9, mF.faza);
+        !clinch && SendSocketDispatch(mF.idevice, 9, mF.faza);
       } else console.log("Отправлена пустышка c id", mF.id);
     } else {
       datestat.demoTlsost[present] = 1;

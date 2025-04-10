@@ -33,17 +33,16 @@ const SdsServisTable = (props: {}) => {
     return statsaveReducer.datestat;
   });
   const dispatch = useDispatch();
-  const debug = datestat.debug;
-  const ws = datestat.ws;
   const DEMO = datestat.demo;
+  const LastEntryRef: any = React.useRef(null);
   //========================================================
   const Сlosing = (idx: number) => {
     const СloseIdx = (i: number) => {
       if (massfaz[i].idx !== -1) {
         CloseInterval(datestat, i);
         if (!DEMO) {
-          SendSocketDispatch(debug, ws, massfaz[i].idevice, 9, 9); // КУ
-          SendSocketDispatch(debug, ws, massfaz[i].idevice, 4, 0); // закрытие id
+          SendSocketDispatch(massfaz[i].idevice, 9, 9); // КУ
+          SendSocketDispatch(massfaz[i].idevice, 4, 0); // закрытие id
         }
         massfaz[i].idx = massfaz[i].idevice = datestat.massMem[i] = -1;
         datestat.massСounter[i] = 0; // массив счётчиков отправки КУ на "запущенные" светофоры
@@ -144,14 +143,20 @@ const SdsServisTable = (props: {}) => {
               <Grid item xs={2} sx={{ border: 0, textAlign: "center" }}>
                 {pictImg}
               </Grid>
-              <Grid item xs sx={{ fontSize: 14, padding: "3px 2px 3px 0" }}>
+              <Grid
+                item
+                xs={5.9}
+                sx={{ fontSize: 14, padding: "3px 2px 3px 0" }}
+              >
                 {massf.name}
               </Grid>
-              <Box sx={styleToDo03}>
-                <Box sx={styleToDo05} onClick={() => Сlosing(id)}>
-                  &nbsp;&times;&nbsp;
+              <Grid item xs={0.7} sx={{ border: 0 }}>
+                <Box sx={styleToDo03}>
+                  <Box sx={styleToDo05} onClick={() => Сlosing(id)}>
+                    &nbsp;&times;&nbsp;
+                  </Box>
                 </Box>
-              </Box>
+              </Grid>
             </>
           )}
         </Grid>
@@ -160,13 +165,18 @@ const SdsServisTable = (props: {}) => {
   };
 
   let kino = DEMO ? "(Демо)" : "";
+  // 👇️ scroll to bottom
+  LastEntryRef.current && LastEntryRef.current.scrollIntoView();
 
   return (
     <Box sx={styleServis00}>
       <Box sx={styleToDo02(DEMO)}>Активные светофоры {kino}</Box>
       <Box sx={styleToDo01}>
         {HeaderTabl()}
-        <Box sx={styleServis01}>{StrokaTabl()}</Box>
+        <Box sx={styleServis01}>
+          {StrokaTabl()}
+          <div ref={LastEntryRef} />
+        </Box>
       </Box>
       <Box sx={{ marginTop: 0.5, textAlign: "center" }}>
         <Button sx={styleServisMenu} onClick={() => Сlosing(-1)}>
@@ -178,4 +188,3 @@ const SdsServisTable = (props: {}) => {
 };
 
 export default SdsServisTable;
-//<Box sx={{marginTop: "-3px",}}>&nbsp;&times;&thinsp;</Box>

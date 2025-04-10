@@ -10,8 +10,6 @@ import MainMapSdc from "./components/MainMapSdc";
 
 import { MasskPoint } from "./components/SdcServiceFunctions";
 
-//import { SendSocketGetPhases } from "./components/SdcSocketFunctions";
-
 import { dataMap } from "./otladkaMaps";
 import { imgFaza } from "./otladkaPicFaza";
 
@@ -105,10 +103,11 @@ export interface Fazer {
 export let massFaz: Fazer[] = [];
 
 export let Coordinates: Array<Array<number>> = []; // массив координат
+export let debug = false;
+export let WS: any = null;
 
 let flagOpenDebug = true;
 let flagOpenWS = true;
-let WS: any = null;
 let homeRegion: string = "0";
 let flagMap = false;
 
@@ -140,44 +139,36 @@ const App = () => {
       massdk.push(masskPoint);
     }
     dispatch(massdkCreate(massdk));
-
     // достать тип отображаемых фаз на карте из LocalStorage
     if (window.localStorage.typeVert === undefined)
       window.localStorage.typeVert = 0;
     dateStat.typeVert = Number(window.localStorage.typeVert);
-
     // достать наличие подсветки запущенных светофоров из LocalStorage
     if (window.localStorage.backLight === undefined)
       window.localStorage.backLight = "0";
     dateStat.backlight = Number(window.localStorage.backLight) ? true : false;
-
     // достать наличие счётчика длительность фазы ДУ из LocalStorage
     if (window.localStorage.counterFazaD === undefined)
       window.localStorage.counterFazaD = "0";
     dateStat.counterFaza = Number(window.localStorage.counterFazaD)
       ? true
       : false;
-
     // достать длительность фазы ДУ из LocalStorage
     if (window.localStorage.intervalFazaD === undefined)
       window.localStorage.intervalFazaD = "0";
     dateStat.intervalFaza = Number(window.localStorage.intervalFazaD);
-
     // достать увеличениение длительности фазы ДУ из LocalStorage
     if (window.localStorage.intervalFazaDopD === undefined)
       window.localStorage.intervalFazaDopD = "0";
     dateStat.intervalFazaDop = !dateStat.intervalFaza
       ? 0
       : Number(window.localStorage.intervalFazaDopD);
-
     // достать начальный zoom Yandex-карты ДУ из LocalStorage
     if (window.localStorage.ZoomDU === undefined)
       window.localStorage.ZoomDU = zoomStart;
-
     // достать центр координат [0] Yandex-карты ДУ из LocalStorage
     if (window.localStorage.PointCenterDU0 === undefined)
       window.localStorage.PointCenterDU0 = 0;
-
     // достать центр координат [1] Yandex-карты ДУ из LocalStorage
     if (window.localStorage.PointCenterDU1 === undefined)
       window.localStorage.PointCenterDU1 = 0;
@@ -205,7 +196,7 @@ const App = () => {
       WS.url.slice(0, 20) === "wss://localhost:3000" ||
       WS.url.slice(0, 27) === "wss://andrey-omsk-63.github"
     )
-      dateStat.debug = true;
+      dateStat.debug = debug = true;
     dispatch(statsaveCreate(dateStat));
     flagOpenWS = false;
   }
@@ -301,7 +292,6 @@ const App = () => {
               // }
             }
           }
-
           setTrigger(!trigger);
           break;
         default:

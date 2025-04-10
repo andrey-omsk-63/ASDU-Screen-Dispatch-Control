@@ -221,7 +221,6 @@ export const HaveActivеVert = (datestat: any) => {
   let have = 0;
   for (let i = 0; i < datestat.massСounter.length; i++)
     if (datestat.massСounter[i] > 0) have++;
-
   return have;
 };
 //=== Placemark =====================================
@@ -236,20 +235,6 @@ export const GetPointData = (index: number, map: any, icContent: string) => {
 
   return { hintContent: cont1 + cont3 + cont2, iconContent: icContent };
 };
-
-// export const GetPointOptions1 = (Hoster: any) => {
-//   return {
-//     // данный тип макета
-//     iconLayout: "default#image",
-//     // изображение иконки метки
-//     iconImageHref: Hoster(),
-//     // размеры метки
-//     iconImageSize: [30, 38],
-//     // её "ножки" (точки привязки)
-//     iconImageOffset: [-15, -38],
-//     //iconCaption: "подсказка",
-//   };
-// };
 //=== Разное =======================================
 export const InputDirect = (func: any, otherWork: boolean) => {
   const styleSetNapr = {
@@ -463,7 +448,6 @@ export const BadExit = (badExit: boolean, handleCloseEnd: Function) => {
     top: "50%",
     transform: "translate(-50%, -50%)",
     width: 400,
-    //bgcolor: "background.paper",
     bgcolor: "#fff6d2", // светло-жёлтый
     border: "1px solid #fff6d2", // светло-жёлтый
     borderRadius: 1,
@@ -705,7 +689,7 @@ export const InputFromList = (func: any, currency: any, currencies: any) => {
     width: "165px",
     maxHeight: "6px",
     minHeight: "6px",
-    bgcolor: "#FFFBE5",
+    bgcolor: "#FFFBE5", // топлёное молоко 
     border: "1px solid #d4d4d4", // серый
     borderRadius: 1,
     textAlign: "left",
@@ -718,7 +702,7 @@ export const InputFromList = (func: any, currency: any, currencies: any) => {
       marginTop: "-7px",
       marginLeft: "-12px",
       width: "175px",
-      padding: "0px 0px 0px 5px",
+      padding: "0 0 0 5px",
     },
   };
 

@@ -1,7 +1,9 @@
+import { debug, WS } from "./../App";
+
 //=== GsSetPhase ===================================
 export const SendSocketDispatch = (
-  debug: boolean,
-  ws: WebSocket,
+  // debug: boolean,
+  // ws: WebSocket,
   idevice: number,
   cmdd: number,
   faza: number
@@ -9,8 +11,8 @@ export const SendSocketDispatch = (
   //console.log('Dispatch:', idevice, cmdd, faza);
   const handleSendOpen = () => {
     if (!debug) {
-      if (ws.readyState === WebSocket.OPEN) {
-        ws.send(
+      if (WS.readyState === WebSocket.OPEN) {
+        WS.send(
           JSON.stringify({
             type: "dispatch",
             id: idevice,
@@ -30,8 +32,8 @@ export const SendSocketDispatch = (
 //=== App ==========================================
 //=== MainMapRgs ====-----==========================
 export const SendSocketGetPhases = (
-  debug: boolean,
-  ws: WebSocket,
+  // debug: boolean,
+  // ws: WebSocket,
   region: string,
   area: string,
   id: number
@@ -39,8 +41,8 @@ export const SendSocketGetPhases = (
   //console.log("getPhases:", region, area, id);
   const handleSendOpen = () => {
     if (!debug) {
-      if (ws.readyState === WebSocket.OPEN) {
-        ws.send(
+      if (WS.readyState === WebSocket.OPEN) {
+        WS.send(
           JSON.stringify({
             type: "getPhases",
             pos: { region, area, id },
