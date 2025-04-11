@@ -14,7 +14,6 @@ const SdcErrorMessage = (props: { sErr: string; setOpen: any }) => {
     marginTop: "15vh",
     marginLeft: "24vh",
     width: 380,
-    //bgcolor: 'background.paper', // белый
     bgcolor: "#FFDB4D", // жёлтый
     border: "1px solid #FFEDA6",
     borderRadius: 1,
