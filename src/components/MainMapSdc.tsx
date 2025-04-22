@@ -93,7 +93,12 @@ const MainMapSdc = (props: { trigger: boolean }) => {
 
   const StatusQuo = (mode: boolean) => {
     for (let i = 0; i < datestat.timerId.length; i++) {
-      if (!DEMO && datestat.timerId[i] !== null && massfaz[i].idevice > 0) {
+      if (
+        !DEMO &&
+        datestat.timerId[i] !== null &&
+        massfaz[i].idevice > 0 &&
+        massfaz[i].fazaSist > 0
+      ) {
         SendSocketDispatch(massfaz[i].idevice, 9, 9); // КУ
         SendSocketDispatch(massfaz[i].idevice, 4, 0); // закрытие id
       }
@@ -142,8 +147,8 @@ const MainMapSdc = (props: { trigger: boolean }) => {
       }
     }
     // проверка наличия картинок фаз
-    let area = datestat.area = map.tflight[index].area.num;
-    let id = datestat.id = map.tflight[index].ID;
+    let area = (datestat.area = map.tflight[index].area.num);
+    let id = (datestat.id = map.tflight[index].ID);
     if (!debug) datestat.phSvg = Array(8).fill(null);
     let have = 0;
     for (let i = 0; i < massdk.length; i++) {
