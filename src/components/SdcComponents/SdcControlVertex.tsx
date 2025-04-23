@@ -11,7 +11,7 @@ import { StatusLine, MakeMassFaz } from "../SdcServiceFunctions";
 
 import { SendSocketDispatch } from "../SdcSocketFunctions";
 
-import { MaxFaz, CLINCH, BadCODE } from "./../MapConst";
+import { MaxFaz, CLINCH, BadCODE, GoodCODE } from "./../MapConst";
 
 import { DEMO } from "./../MainMapSdc"; // режим Демо
 
@@ -82,6 +82,7 @@ const SdcControlVertex = (props: {
   statusName = map.tflight[props.idx].tlsost.description;
   let clinch = CLINCH.indexOf(statusVertex) < 0 ? false : true;
   let badCode = BadCODE.indexOf(statusVertex) < 0 ? false : true;
+  let goodCode = GoodCODE.indexOf(statusVertex) < 0 ? false : true;
   let titleDEMO = DEMO ? "( Демонстрационный режим )" : "";
   let styleSetControl = StyleSetControl(DEMO);
   let clinchik = badCode ? true : clinch;
@@ -145,8 +146,10 @@ const SdcControlVertex = (props: {
       needDopKnop.push(sumFaz === MaxFaz ? false : true);
     } else nomInMass = nomIn; // повторное открытие
 
+    console.log('Зашли',nomInMass)
+
     mF = massfaz[nomInMass];
-    if (!DEMO && !clinch) SendSocketDispatch(mF.idevice, 4, 1); // начало работы
+    if (!DEMO && !clinch && !massFaz.busy) SendSocketDispatch(mF.idevice, 4, 1); // начало работы
     setSentParam(-1);
     if (nomIn < 0) {
       // светофор ранее не запускался
@@ -351,7 +354,7 @@ const SdcControlVertex = (props: {
             <Grid item xs={11.5} justifyContent="center" sx={styleKnop}>
               {Knop2 !== -2 && (
                 <Box sx={styleOutputFaza}>
-                  {!clinch || DEMO ? (
+                  {(!clinch && !massfaz[nomInMass].busy) || DEMO ? (
                     <Button
                       sx={styleMenu}
                       onClick={() => handleClick(I, Knop2)}

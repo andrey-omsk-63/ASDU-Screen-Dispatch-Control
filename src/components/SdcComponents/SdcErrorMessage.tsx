@@ -8,14 +8,16 @@ import Typography from "@mui/material/Typography";
 const SdcErrorMessage = (props: { sErr: string; setOpen: any }) => {
   const [openSet, setOpenSet] = React.useState(true);
 
+  let coler = props.sErr.slice(0, 3) === "⚠️П" ? "#fff6d2" : "#ffe16e"; // светло-жёлтый/жёлтый
+
   const styleSetInf = {
     outline: "none",
     position: "absolute",
     marginTop: "15vh",
     marginLeft: "24vh",
     width: 380,
-    bgcolor: "#FFDB4D", // жёлтый
-    border: "1px solid #FFEDA6",
+    bgcolor: coler,
+    border: "1px solid #FFEDA6", // блендно-жёлтый
     borderRadius: 1,
     color: "black",
     textShadow: "1px 1px 2px rgba(0,0,0,0.3)",

@@ -98,6 +98,7 @@ export interface Fazer {
   idevice: number;
   coordinates: Array<number>;
   name: string;
+  busy: boolean; // светофор занят другим пользователем
 }
 
 export let massFaz: Fazer[] = [];

@@ -24,7 +24,7 @@ import { SendSocketGetPhases } from "./SdcSocketFunctions";
 import { SendSocketDispatch } from "./SdcSocketFunctions";
 
 import { YMapsModul, MyYandexKey, Restart, Aura, zoomStart } from "./MapConst";
-import { BadCODE } from "./MapConst";
+import { GoodCODE, BadCODE } from "./MapConst";
 
 import { styleHelpMain, styleServisTable } from "./MainMapStyle";
 
@@ -134,18 +134,31 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   };
 
   const OnPlacemarkClickPoint = (index: number) => {
+    const SoobBusy = () => {
+      soobErr =
+        "⚠️Предупреждение\xa0\xa0\xa0Перекрёсток ID" +
+        map.tflight[index].ID +
+        " управляется другим пользователем";
+      setOpenSetErr(true);
+    };
+
     let statusVertex = map.tflight[index].tlsost.num;
     let badCode = BadCODE.indexOf(statusVertex) < 0 ? false : true;
     let nomIn = datestat.massMem.indexOf(index); // запускался ли светофор ранее?
+    let goodCode = GoodCODE.indexOf(statusVertex) < 0 ? false : true; // светофор занят другим пользователем?
     if (nomIn >= 0) {
       // ранее запускался
-      let INTERVALDOP = datestat.intervalFazaDop;
-      if (datestat.massСounter[nomIn] > 0 && INTERVALDOP && !badCode) {
-        datestat.massСounter[nomIn] += INTERVALDOP; // подкачка счётчика
-        dispatch(statsaveCreate(datestat));
-        return;
+      if (massfaz[nomIn].busy) {
+        SoobBusy();
+      } else {
+        let INTERVALDOP = datestat.intervalFazaDop;
+        if (datestat.massСounter[nomIn] > 0 && INTERVALDOP && !badCode) {
+          datestat.massСounter[nomIn] += INTERVALDOP; // подкачка счётчика
+          dispatch(statsaveCreate(datestat));
+          return;
+        }
       }
-    }
+    } else goodCode && SoobBusy();
     // проверка наличия картинок фаз
     let area = (datestat.area = map.tflight[index].area.num);
     let id = (datestat.id = map.tflight[index].ID);
@@ -349,15 +362,15 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   }
   //=== Закрытие или перезапуск вкладки ====================
   const handleTabClosing = () => {
-    StatusQuo(false);
-    removePlayerFromGame();
+    for (let i = 0; i < massfaz.length; i++) {
+      if (!DEMO && massfaz[i].idevice > 0 && massfaz[i].fazaSistOld > 0) {
+        SendSocketDispatch(massfaz[i].idevice, 9, 9); // КУ
+        SendSocketDispatch(massfaz[i].idevice, 4, 0); // закрытие id
+      }
+    }
   };
 
-  const alertUser = (event: any) => StatusQuo(false);
-
-  function removePlayerFromGame() {
-    throw new Error("Function not implemented.");
-  }
+  const alertUser = (event: any) => handleTabClosing();
 
   React.useEffect(() => {
     window.addEventListener("beforeunload", alertUser);

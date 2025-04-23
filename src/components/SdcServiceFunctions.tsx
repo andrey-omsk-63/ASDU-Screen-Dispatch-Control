@@ -13,7 +13,7 @@ import { RulerControl, SearchControl } from "react-yandex-maps";
 import { TrafficControl, TypeSelector, ZoomControl } from "react-yandex-maps";
 
 import { DEMO } from "./MainMapSdc";
-//import { CLINCH } from "./MapConst";
+import { GoodCODE } from "./MapConst";
 
 import { DateMAP } from "./../interfaceMAP.d";
 import { Stater, Fazer, Pointer } from "./../App";
@@ -436,7 +436,14 @@ export const MakeMassFaz = (idx: number, datestat: Stater, map: DateMAP) => {
     idevice: map.tflight[idx].idevice,
     coordinates: [map.tflight[idx].points.Y, map.tflight[idx].points.X],
     name: map.tflight[idx].description,
+    busy: false, // светофор занят другим пользователем
   };
+  if (!DEMO) {
+    let statusVertex = map.tflight[idx].tlsost.num;
+    massFaz.busy = GoodCODE.indexOf(statusVertex) < 0 ? false : true; // светофор занят другим пользователем?
+
+    massFaz.busy && console.log("ID занят:", massFaz.id);
+  }
   return massFaz;
 };
 //=== SdcSetup =====================================
@@ -689,7 +696,7 @@ export const InputFromList = (func: any, currency: any, currencies: any) => {
     width: "165px",
     maxHeight: "6px",
     minHeight: "6px",
-    bgcolor: "#FFFBE5", // топлёное молоко 
+    bgcolor: "#FFFBE5", // топлёное молоко
     border: "1px solid #d4d4d4", // серый
     borderRadius: 1,
     textAlign: "left",
