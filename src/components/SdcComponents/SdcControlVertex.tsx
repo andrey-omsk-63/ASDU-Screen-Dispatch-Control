@@ -97,16 +97,21 @@ const SdcControlVertex = (props: {
   //========================================================
   const handleCloseSet = React.useCallback(
     (mode: number) => {
-      if (!DEMO && !clinch && shippedKU[nomInMass] && mF.idevice > 0) {
-        SendSocketDispatch(mF.idevice, 9, 9); // КУ
-        SendSocketDispatch(mF.idevice, 4, 0); // закрытие id
+      if (datestat.busy) {
+        datestat.busy = false;
+      } else {
+        if (!DEMO && !clinch && shippedKU[nomInMass] && mF.idevice > 0) {
+          SendSocketDispatch(mF.idevice, 9, 9); // КУ
+          SendSocketDispatch(mF.idevice, 4, 0); // закрытие id
+        }
+        if (mode) datestat.massMem[nomInMass] = mF.idevice = mF.idx = -1;
+        datestat.working = false; // свободно
+        mF.active = false; // светофор деактивирован
+        dispatch(massfazCreate(massfaz));
+        oldIdx = -1;
+        props.setOpen(false);
       }
-      if (mode) datestat.massMem[nomInMass] = mF.idevice = mF.idx = -1;
-      datestat.working = false; // свободно
       dispatch(statsaveCreate(datestat));
-      dispatch(massfazCreate(massfaz));
-      oldIdx = -1;
-      props.setOpen(false);
     },
     [datestat, clinch, props, massfaz, dispatch]
   );
@@ -129,6 +134,7 @@ const SdcControlVertex = (props: {
     let sumFaz = map.tflight[props.idx].phases.length;
     kluchGl = map.tflight[props.idx].ID + " ";
     let nomIn = datestat.massMem.indexOf(props.idx); // запускался ли светофор ранее?
+
     if (nomIn < 0) {
       // светофор ранее не запускался
       massfaz.push(massFaz);
@@ -144,12 +150,16 @@ const SdcControlVertex = (props: {
       oldSistFaza.push(-1);
       kolFaz.push(sumFaz < MaxFaz ? sumFaz + 1 : MaxFaz);
       needDopKnop.push(sumFaz === MaxFaz ? false : true);
-    } else nomInMass = nomIn; // повторное открытие
-
-    console.log('Зашли',nomInMass)
+    } else {
+      nomInMass = nomIn; // повторное открытие
+      if (massfaz[nomInMass].busy && !goodCode && !clinch && !badCode) {
+        massfaz[nomInMass].busy = false;
+      }
+    }
+    console.log("Зашли", nomInMass, massfaz);
 
     mF = massfaz[nomInMass];
-    if (!DEMO && !clinch && !massFaz.busy) SendSocketDispatch(mF.idevice, 4, 1); // начало работы
+    if (!DEMO && !clinch) SendSocketDispatch(mF.idevice, 4, 1); // начало работы
     setSentParam(-1);
     if (nomIn < 0) {
       // светофор ранее не запускался
@@ -175,6 +185,10 @@ const SdcControlVertex = (props: {
       handleCloseSet(9);
     } else {
       if (mF.fazaSist !== 9 && mF.fazaSist !== 12) {
+        if (mF.busy && !goodCode) {
+          mF.busy = false; // светофор освободился
+          dispatch(massfazCreate(massfaz));
+        }
         if (oldSistFaza[nomInMass] !== mF.fazaSist) {
           if (mF.fazaSist !== 9 && mF.fazaSist === sentParam) setSentParam(-1);
           oldSistFaza[nomInMass] = mF.fazaSist;
@@ -190,6 +204,7 @@ const SdcControlVertex = (props: {
       setTrigger(!trigger); // ререндер
     } else {
       mF.faza = mode;
+      mF.active = true; // светофор активирован
       datestat.stopSwitch[nomInMass] = true;
       dispatch(massfazCreate(massfaz));
       shippedKU[nomInMass] = mode === 9 ? true : false;
@@ -310,7 +325,10 @@ const SdcControlVertex = (props: {
     if (map.tflight[props.idx].phases.length > 0) {
       let ii = kolFaz[nomInMass] < 5 ? 5 : kolFaz[nomInMass];
       for (let i = 0; i < ii; i++) {
-        colorKnop = !clinch || DEMO ? colorNormal : colorBad;
+        colorKnop =
+          (!clinch && !massfaz[nomInMass].busy) || DEMO
+            ? colorNormal
+            : colorBad;
         bShadow = 4;
         if (sentParam === i + 1) OnColorSent();
         if (mF.fazaSist === i + 1) {
@@ -346,6 +364,8 @@ const SdcControlVertex = (props: {
             : (i + 1).toString();
         let I = i + 1;
 
+        //console.log('@@@:',clinch,(!clinch && !massfaz[nomInMass].busy),DEMO,massfaz[nomInMass])
+
         resStr.push(
           <Grid container key={i}>
             <Grid item xs={0.5} sx={styleVarKnopNum}>
@@ -375,7 +395,8 @@ const SdcControlVertex = (props: {
   };
 
   const OutputConstFaza = (mode: string) => {
-    colorKnop = !clinch || DEMO ? colorNormal : colorBad;
+    colorKnop =
+      (!clinch && !massfaz[nomInMass].busy) || DEMO ? colorNormal : colorBad;
     bShadow = 4;
     let handleMode = 0;
 
@@ -410,7 +431,7 @@ const SdcControlVertex = (props: {
     return (
       <Grid item xs={12} sx={styleKnop}>
         <Box sx={styleOutputFaza}>
-          {!clinch || DEMO ? (
+          {(!clinch && !massfaz[nomInMass].busy) || DEMO ? (
             <Button sx={styleMenu} onClick={() => handleClick(handleMode, 0)}>
               <b>{mode}</b>
             </Button>

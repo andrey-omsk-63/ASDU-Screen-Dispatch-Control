@@ -437,6 +437,7 @@ export const MakeMassFaz = (idx: number, datestat: Stater, map: DateMAP) => {
     coordinates: [map.tflight[idx].points.Y, map.tflight[idx].points.X],
     name: map.tflight[idx].description,
     busy: false, // светофор занят другим пользователем
+    active: false, // светофор активирован/деактивирован
   };
   if (!DEMO) {
     let statusVertex = map.tflight[idx].tlsost.num;

@@ -93,12 +93,8 @@ const MainMapSdc = (props: { trigger: boolean }) => {
 
   const StatusQuo = (mode: boolean) => {
     for (let i = 0; i < datestat.timerId.length; i++) {
-      if (
-        !DEMO &&
-        datestat.timerId[i] !== null &&
-        massfaz[i].idevice > 0 &&
-        massfaz[i].fazaSist > 0
-      ) {
+      let mf = massfaz[i];
+      if (!DEMO && datestat.timerId[i] !== null && mf.idevice > 0 && !mf.busy) {
         SendSocketDispatch(massfaz[i].idevice, 9, 9); // КУ
         SendSocketDispatch(massfaz[i].idevice, 4, 0); // закрытие id
       }
@@ -135,10 +131,11 @@ const MainMapSdc = (props: { trigger: boolean }) => {
 
   const OnPlacemarkClickPoint = (index: number) => {
     const SoobBusy = () => {
+      datestat.busy = true;
       soobErr =
         "⚠️Предупреждение\xa0\xa0\xa0Перекрёсток ID" +
         map.tflight[index].ID +
-        " управляется другим пользователем";
+        " управляется другим пользователем. Работа с ним возможна только после того как он освободится";
       setOpenSetErr(true);
     };
 
@@ -149,7 +146,9 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     if (nomIn >= 0) {
       // ранее запускался
       if (massfaz[nomIn].busy) {
-        SoobBusy();
+        if (!goodCode) {
+          massfaz[nomIn].busy = false;
+        } else SoobBusy();
       } else {
         let INTERVALDOP = datestat.intervalFazaDop;
         if (datestat.massСounter[nomIn] > 0 && INTERVALDOP && !badCode) {
@@ -363,7 +362,8 @@ const MainMapSdc = (props: { trigger: boolean }) => {
   //=== Закрытие или перезапуск вкладки ====================
   const handleTabClosing = () => {
     for (let i = 0; i < massfaz.length; i++) {
-      if (!DEMO && massfaz[i].idevice > 0 && massfaz[i].fazaSistOld > 0) {
+      let mf = massfaz[i];
+      if (!DEMO && mf.idevice > 0 && mf.fazaSistOld > 0 && !mf.busy) {
         SendSocketDispatch(massfaz[i].idevice, 9, 9); // КУ
         SendSocketDispatch(massfaz[i].idevice, 4, 0); // закрытие id
       }

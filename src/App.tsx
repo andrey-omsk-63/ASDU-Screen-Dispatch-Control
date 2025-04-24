@@ -13,7 +13,7 @@ import { MasskPoint } from "./components/SdcServiceFunctions";
 import { dataMap } from "./otladkaMaps";
 import { imgFaza } from "./otladkaPicFaza";
 
-import { zoomStart } from "./components/MapConst";
+import { zoomStart, CLINCH, GoodCODE } from "./components/MapConst";
 
 import { DateMAP } from "./interfaceMAP.d";
 
@@ -46,6 +46,7 @@ export interface Stater {
   counterFaza: boolean; // наличие счётчика длительность фазы ДУ
   intervalFaza: number; // Задаваемая длительность фазы ДУ (сек)
   intervalFazaDop: number; // Увеличениение длительности фазы ДУ (сек)
+  busy: boolean; // надо/не надо закрывать рамку управления светофором
 }
 
 export let dateStat: Stater = {
@@ -75,6 +76,7 @@ export let dateStat: Stater = {
   counterFaza: true, // наличие счётчика длительность фазы ДУ
   intervalFaza: 0, // Задаваемая длительность фазы ДУ (сек)
   intervalFazaDop: 0, // Увеличениение длительности фазы ДУ (сек)
+  busy: false, // надо/не надо закрывать рамку управления светофором
 };
 
 export interface Pointer {
@@ -99,6 +101,7 @@ export interface Fazer {
   coordinates: Array<number>;
   name: string;
   busy: boolean; // светофор занят другим пользователем
+  active: boolean; // светофор активирован/деактивирован
 }
 
 export let massFaz: Fazer[] = [];
@@ -212,19 +215,57 @@ const App = () => {
     WS.onerror = function (event: any) {
       console.log("WS.current.onerror:", event);
     };
+
+    const ActionOnTflight = (data: any) => {
+      let flagChange = false;
+      for (let j = 0; j < data.tflight.length; j++) {
+        for (let i = 0; i < dateMapGl.tflight.length; i++)
+          if (data.tflight[j].idevice === dateMapGl.tflight[i].idevice) {
+            dateMapGl.tflight[i].tlsost = data.tflight[j].tlsost;
+            flagChange = true;
+            // проверка на то, что занятый другим пользователем светофор освободился
+            let statusVertex = dateMapGl.tflight[j].tlsost.num;
+            let clinch = CLINCH.indexOf(statusVertex) < 0 ? false : true;
+            let goodCode = GoodCODE.indexOf(statusVertex) < 0 ? false : true;
+            if (!clinch && !dateStat.demo) {
+              for (let jj = 0; jj < massfaz.length; jj++) {
+                let fz = massfaz[jj];
+                if (dateMapGl.tflight[j].idevice === fz.idevice) {
+                  if (!goodCode) {
+                    if (fz.busy) fz.busy = false; // светофор освободился
+                  } else {
+                    if (!fz.busy && !fz.active) {
+                      fz.busy = true; // светофор занят другим пользователем
+                      //          console.log("ID", fz.id, " светофор АКТИВИРОВАН", fz);
+                    }
+                  }
+                  dispatch(massfazCreate(massfaz));
+                }
+              }
+            }
+          }
+      }
+      if (flagChange) {
+        dispatch(mapCreate(dateMapGl));
+        dispatch(massfazCreate(massfaz));
+        setTrigger(!trigger);
+      }
+    };
+
     WS.onmessage = function (event: any) {
       let allData = JSON.parse(event.data);
       let data = allData.data;
       //console.log("пришло:", allData.type, data);
       switch (allData.type) {
         case "tflight":
-          for (let j = 0; j < data.tflight.length; j++) {
-            for (let i = 0; i < dateMapGl.tflight.length; i++)
-              if (data.tflight[j].idevice === dateMapGl.tflight[i].idevice)
-                dateMapGl.tflight[i].tlsost = data.tflight[j].tlsost;
-          }
-          dispatch(mapCreate(dateMapGl));
-          setTrigger(!trigger);
+          ActionOnTflight(data);
+          // for (let j = 0; j < data.tflight.length; j++) {
+          //   for (let i = 0; i < dateMapGl.tflight.length; i++)
+          //     if (data.tflight[j].idevice === dateMapGl.tflight[i].idevice)
+          //       dateMapGl.tflight[i].tlsost = data.tflight[j].tlsost;
+          // }
+          // dispatch(mapCreate(dateMapGl));
+          // setTrigger(!trigger);
           break;
         case "phases":
           let flagChange = 0;
