@@ -425,9 +425,9 @@ export const StatusLine = (statusName: string, clinch: boolean) => {
 
 export const MakeMassFaz = (idx: number, datestat: Stater, map: DateMAP) => {
   let massFaz: Fazer = {
-    idx: idx,
+    idx: idx, // номер записи в опорном справочнике MAP
     area: Number(datestat.area),
-    id: Number(datestat.id),
+    id: Number(datestat.id), // ID в системе
     faza: 0,
     fazaSist: -1,
     fazaSistOld: -1,
@@ -436,14 +436,13 @@ export const MakeMassFaz = (idx: number, datestat: Stater, map: DateMAP) => {
     idevice: map.tflight[idx].idevice,
     coordinates: [map.tflight[idx].points.Y, map.tflight[idx].points.X],
     name: map.tflight[idx].description,
-    busy: false, // светофор занят другим пользователем
+    busy: false, // светофор занят/не занят другим пользователем
     active: false, // светофор активирован/деактивирован
   };
   if (!DEMO) {
     let statusVertex = map.tflight[idx].tlsost.num;
     massFaz.busy = GoodCODE.indexOf(statusVertex) < 0 ? false : true; // светофор занят другим пользователем?
-
-    massFaz.busy && console.log("ID занят:", massFaz.id);
+    //massFaz.busy && console.log("ID занят:", massFaz.id);
   }
   return massFaz;
 };

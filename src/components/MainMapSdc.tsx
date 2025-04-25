@@ -131,18 +131,21 @@ const MainMapSdc = (props: { trigger: boolean }) => {
 
   const OnPlacemarkClickPoint = (index: number) => {
     const SoobBusy = () => {
-      datestat.busy = true;
-      soobErr =
-        "⚠️Предупреждение\xa0\xa0\xa0Перекрёсток ID" +
-        map.tflight[index].ID +
-        " управляется другим пользователем. Работа с ним возможна только после того как он освободится";
-      setOpenSetErr(true);
+      if (!DEMO) {
+        datestat.busy = true;
+        soobErr =
+          "⚠️Предупреждение\xa0\xa0\xa0Перекрёсток ID" +
+          map.tflight[index].ID +
+          " управляется другим пользователем. Работа с ним возможна только после того как он освободится...";
+        setOpenSetErr(true);
+      }
     };
 
     let statusVertex = map.tflight[index].tlsost.num;
     let badCode = BadCODE.indexOf(statusVertex) < 0 ? false : true;
     let nomIn = datestat.massMem.indexOf(index); // запускался ли светофор ранее?
     let goodCode = GoodCODE.indexOf(statusVertex) < 0 ? false : true; // светофор занят другим пользователем?
+    if (DEMO) goodCode = false
     if (nomIn >= 0) {
       // ранее запускался
       if (massfaz[nomIn].busy) {

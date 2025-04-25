@@ -100,7 +100,7 @@ export interface Fazer {
   idevice: number;
   coordinates: Array<number>;
   name: string;
-  busy: boolean; // светофор занят другим пользователем
+  busy: boolean; // светофор занят/не занят другим пользователем
   active: boolean; // светофор активирован/деактивирован
 }
 
@@ -217,6 +217,7 @@ const App = () => {
     };
 
     const ActionOnTflight = (data: any) => {
+      // console.log("Tflight:", data, massfaz);
       let flagChange = false;
       for (let j = 0; j < data.tflight.length; j++) {
         for (let i = 0; i < dateMapGl.tflight.length; i++)
@@ -224,21 +225,17 @@ const App = () => {
             dateMapGl.tflight[i].tlsost = data.tflight[j].tlsost;
             flagChange = true;
             // проверка на то, что занятый другим пользователем светофор освободился
-            let statusVertex = dateMapGl.tflight[j].tlsost.num;
+            let statusVertex = dateMapGl.tflight[i].tlsost.num;
             let clinch = CLINCH.indexOf(statusVertex) < 0 ? false : true;
             let goodCode = GoodCODE.indexOf(statusVertex) < 0 ? false : true;
             if (!clinch && !dateStat.demo) {
               for (let jj = 0; jj < massfaz.length; jj++) {
                 let fz = massfaz[jj];
-                if (dateMapGl.tflight[j].idevice === fz.idevice) {
+                if (dateMapGl.tflight[i].idevice === fz.idevice) {
                   if (!goodCode) {
                     if (fz.busy) fz.busy = false; // светофор освободился
-                  } else {
-                    if (!fz.busy && !fz.active) {
-                      fz.busy = true; // светофор занят другим пользователем
-                      //          console.log("ID", fz.id, " светофор АКТИВИРОВАН", fz);
-                    }
-                  }
+                  } else if (!fz.busy && !fz.active) fz.busy = true; // светофор занят другим пользователем
+
                   dispatch(massfazCreate(massfaz));
                 }
               }
@@ -259,13 +256,6 @@ const App = () => {
       switch (allData.type) {
         case "tflight":
           ActionOnTflight(data);
-          // for (let j = 0; j < data.tflight.length; j++) {
-          //   for (let i = 0; i < dateMapGl.tflight.length; i++)
-          //     if (data.tflight[j].idevice === dateMapGl.tflight[i].idevice)
-          //       dateMapGl.tflight[i].tlsost = data.tflight[j].tlsost;
-          // }
-          // dispatch(mapCreate(dateMapGl));
-          // setTrigger(!trigger);
           break;
         case "phases":
           let flagChange = 0;

@@ -153,11 +153,10 @@ const SdcControlVertex = (props: {
     } else {
       nomInMass = nomIn; // повторное открытие
       if (massfaz[nomInMass].busy && !goodCode && !clinch && !badCode) {
-        massfaz[nomInMass].busy = false;
+        massfaz[nomInMass].busy = false; // светофор не занят другим пользователем
       }
     }
-    console.log("Зашли", nomInMass, massfaz);
-
+    //console.log("Зашли", nomInMass, massfaz);
     mF = massfaz[nomInMass];
     if (!DEMO && !clinch) SendSocketDispatch(mF.idevice, 4, 1); // начало работы
     setSentParam(-1);
@@ -267,7 +266,7 @@ const SdcControlVertex = (props: {
       if (mF.fazaZU) {
         console.log("Отправлена фаза c id", present, mF.id, mF.faza);
         !clinch && SendSocketDispatch(mF.idevice, 9, mF.faza);
-      } else console.log("Отправлена пустышка c id", mF.id);
+      } // else console.log("Отправлена пустышка c id", mF.id);
     } else {
       datestat.demoTlsost[present] = 1;
       if (!datestat.stopSwitch[present]) {
