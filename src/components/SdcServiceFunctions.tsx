@@ -769,7 +769,10 @@ const StrokaHeader = (xss: number, soob: string) => {
 
 export const HeaderTabl = () => {
   return (
-    <Grid container sx={{ fontSize: 14, bgcolor: "#B8CBB9" }}>
+    <Grid
+      container
+      sx={{ fontSize: 14, cursor: "default", bgcolor: "#B8CBB9" }}
+    >
       {StrokaHeader(0.8, "id")}
       {StrokaHeader(2.1, "Счётчик")}
       {StrokaHeader(1.8, "Фаза")}

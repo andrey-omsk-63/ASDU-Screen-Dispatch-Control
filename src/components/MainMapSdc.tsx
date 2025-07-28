@@ -145,7 +145,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     let badCode = BadCODE.indexOf(statusVertex) < 0 ? false : true;
     let nomIn = datestat.massMem.indexOf(index); // запускался ли светофор ранее?
     let goodCode = GoodCODE.indexOf(statusVertex) < 0 ? false : true; // светофор занят другим пользователем?
-    if (DEMO) goodCode = false
+    if (DEMO) goodCode = false;
     if (nomIn >= 0) {
       // ранее запускался
       if (massfaz[nomIn].busy) {
@@ -396,13 +396,15 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     backlight && DrawCircle(ymaps, mapp, massfaz, datestat.demoLR); // нарисовать окружности на запущенных светофорах
   }
 
+  console.log("map.tflight:", map.tflight);
+
   return (
     <Grid container sx={{ height: "99.9vh" }}>
       <Grid item xs={12}>
         {MainMenu()}
         <Grid container sx={{ height: "96.9vh" }}>
-          <Grid item xs>
-            {Object.keys(map.tflight).length && (
+          {/* <Grid item xs> */}
+            {Object.keys(map.tflight).length && flagOpen && (
               <YMaps query={{ apikey: MyYandexKey, lang: "ru_RU" }}>
                 <Map
                   modules={YMapsModul}
@@ -431,7 +433,7 @@ const MainMapSdc = (props: { trigger: boolean }) => {
                 </Map>
               </YMaps>
             )}
-          </Grid>
+          {/* </Grid> */}
         </Grid>
       </Grid>
       {typeVert !== 2 && !!HaveActivеVert(datestat) && clicker && (

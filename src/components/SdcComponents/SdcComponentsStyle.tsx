@@ -87,6 +87,7 @@ export const StyleSetControl = (DEMO: boolean) => {
     boxShadow: 24,
     textShadow: "2px 2px 3px rgba(0,0,0,0.3)",
     padding: "1px 10px 12px 10px",
+    cursor: "default",
   };
   return styleSetControl;
 };

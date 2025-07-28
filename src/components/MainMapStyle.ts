@@ -39,6 +39,7 @@ export const styleSetPK01 = (wdth: number, hdth: number) => {
     boxShadow: 24,
     textAlign: "center",
     padding: "1px 10px 10px 10px",
+    cursor: "default",
   };
 
   const styleSetPK02 = {
@@ -54,6 +55,7 @@ export const styleSetPK01 = (wdth: number, hdth: number) => {
     boxShadow: 24,
     textAlign: "center",
     padding: "1px 10px 10px 10px",
+    cursor: "default",
   };
   return hdth ? styleSetPK01 : styleSetPK02;
 };
@@ -140,6 +142,7 @@ export const styleServis00 = {
   borderRadius: 1,
   boxShadow: 24,
   padding: "0 9px 5px 10px",
+  cursor: "default",
 };
 
 export const styleServis01 = {
