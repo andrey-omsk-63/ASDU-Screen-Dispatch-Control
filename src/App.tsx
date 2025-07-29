@@ -133,6 +133,7 @@ const App = () => {
   //========================================================
   const Initialisation = () => {
     console.log("dateMapGl:", dateMapGl);
+
     for (let i = 0; i < dateMapGl.tflight.length; i++) {
       let coord = [];
       coord[0] = dateMapGl.tflight[i].points.Y;
@@ -179,7 +180,8 @@ const App = () => {
 
     dispatch(coordinatesCreate(coordinates));
     dispatch(statsaveCreate(dateStat));
-    console.log("dateStat:", window.localStorage.counterFazaD, dateStat);
+
+    console.log("dateStat:", dateStat);
   };
 
   const host =

@@ -74,7 +74,6 @@ const SdcControlVertex = (props: {
     const { statsaveReducer } = state;
     return statsaveReducer.datestat;
   });
-  //const debug = datestat.debug;
   const dispatch = useDispatch();
   let timer = debug || DEMO ? 10000 : 60000;
 
@@ -220,7 +219,7 @@ const SdcControlVertex = (props: {
         }
         if (DEMO) {
           needRend = true;
-          setFlagPusk(!flagPusk);
+          //setFlagPusk(!flagPusk);
         }
       } else {
         datestat.massСounter[nomInMass] = 0; // массив счётчиков отправки КУ на "запущенные" светофоры
@@ -274,7 +273,7 @@ const SdcControlVertex = (props: {
       } else mF.fazaSist = mF.faza;
       dispatch(massfazCreate(massfaz));
       needRend = true;
-      setFlagPusk(!flagPusk);
+      //setFlagPusk(!flagPusk);
     }
     if (DEMO && mF.faza < 9 && mF.faza > 0) datestat.demoTlsost[present] = 2; // Передана фаза
     if (DEMO) {
@@ -286,7 +285,7 @@ const SdcControlVertex = (props: {
         }
         needRend = true;
         datestat.stopSwitch[present] = false;
-        setFlagPusk(!flagPusk);
+        //setFlagPusk(!flagPusk);
         dispatch(massfazCreate(massfaz));
         dispatch(statsaveCreate(datestat));
       }
@@ -362,8 +361,6 @@ const SdcControlVertex = (props: {
             ? ""
             : (i + 1).toString();
         let I = i + 1;
-
-        //console.log('@@@:',clinch,(!clinch && !massfaz[nomInMass].busy),DEMO,massfaz[nomInMass])
 
         resStr.push(
           <Grid container key={i}>

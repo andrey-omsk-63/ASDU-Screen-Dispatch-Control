@@ -396,44 +396,40 @@ const MainMapSdc = (props: { trigger: boolean }) => {
     backlight && DrawCircle(ymaps, mapp, massfaz, datestat.demoLR); // нарисовать окружности на запущенных светофорах
   }
 
-  console.log("map.tflight:", map.tflight);
-
   return (
     <Grid container sx={{ height: "99.9vh" }}>
       <Grid item xs={12}>
         {MainMenu()}
         <Grid container sx={{ height: "96.9vh" }}>
-          {/* <Grid item xs> */}
-            {Object.keys(map.tflight).length && flagOpen && (
-              <YMaps query={{ apikey: MyYandexKey, lang: "ru_RU" }}>
-                <Map
-                  modules={YMapsModul}
-                  state={mapState}
-                  instanceRef={(ref) => InstanceRefDo(ref)}
-                  onLoad={(ref) => {
-                    ref && setYmaps(ref);
-                  }}
-                  width={"99.9%"}
-                  height={"99.9%"}
-                >
-                  {YandexServices()}
-                  <PlacemarkDo />
-                  {control && datestat.readyFaza && (
-                    <SdcControlVertex
-                      setOpen={setControl}
-                      idx={idxObj}
-                      trigger={props.trigger}
-                      change={ChangeDemoSost}
-                    />
-                  )}
-                  {fragments && <SdcFragments close={SetFragments} />}
-                  {openSetErr && (
-                    <SdcErrorMessage setOpen={setOpenSetErr} sErr={soobErr} />
-                  )}
-                </Map>
-              </YMaps>
-            )}
-          {/* </Grid> */}
+          {Object.keys(map.tflight).length && flagOpen && (
+            <YMaps query={{ apikey: MyYandexKey, lang: "ru_RU" }}>
+              <Map
+                modules={YMapsModul}
+                state={mapState}
+                instanceRef={(ref) => InstanceRefDo(ref)}
+                onLoad={(ref) => {
+                  ref && setYmaps(ref);
+                }}
+                width={"99.9%"}
+                height={"99.9%"}
+              >
+                {YandexServices()}
+                <PlacemarkDo />
+                {control && datestat.readyFaza && (
+                  <SdcControlVertex
+                    setOpen={setControl}
+                    idx={idxObj}
+                    trigger={props.trigger}
+                    change={ChangeDemoSost}
+                  />
+                )}
+                {fragments && <SdcFragments close={SetFragments} />}
+                {openSetErr && (
+                  <SdcErrorMessage setOpen={setOpenSetErr} sErr={soobErr} />
+                )}
+              </Map>
+            </YMaps>
+          )}
         </Grid>
       </Grid>
       {typeVert !== 2 && !!HaveActivеVert(datestat) && clicker && (

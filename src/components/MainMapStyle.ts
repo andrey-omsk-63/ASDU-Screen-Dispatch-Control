@@ -173,9 +173,7 @@ export const styleToDo02 = (DEMO: boolean) => {
 };
 
 export const styleToDo03 = {
-  // position: "absolute",
-   marginTop: "3px",
-  // marginLeft: "380px",
+  marginTop: "3px",
   background: "red",
   height: "18px",
   width: "18px",

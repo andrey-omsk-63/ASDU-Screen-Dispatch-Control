@@ -74,8 +74,6 @@ const SdcDoPlacemarkDo = (props: {
     }
   }
 
-  //if (mappp.ID === 139) console.log("3###:", nomInMass, fazaImg, massfaz);
-
   let numer = datestat.typeVert && !fazaImg && nomInMass >= 0;
 
   let counterFaza = datestat.counterFaza; // наличие счётчика длительность фазы ДУ
@@ -223,8 +221,6 @@ const SdcDoPlacemarkDo = (props: {
 
   const GetPointOptions0 = React.useCallback(
     (hoster: any) => {
-      //console.log("getPointOptions0", numer);
-
       let Hoster = hoster;
       let imger = "";
       let hostt = "";

@@ -279,7 +279,6 @@ export const InputDirect = (func: any, otherWork: boolean) => {
           break;
         case 4: // Фрагменты
           func(64);
-        //setCurrency(1);
       }
     }
   };
@@ -442,7 +441,6 @@ export const MakeMassFaz = (idx: number, datestat: Stater, map: DateMAP) => {
   if (!DEMO) {
     let statusVertex = map.tflight[idx].tlsost.num;
     massFaz.busy = GoodCODE.indexOf(statusVertex) < 0 ? false : true; // светофор занят другим пользователем?
-    //massFaz.busy && console.log("ID занят:", massFaz.id);
   }
   return massFaz;
 };
@@ -462,6 +460,7 @@ export const BadExit = (badExit: boolean, handleCloseEnd: Function) => {
     boxShadow: 24,
     textAlign: "center",
     p: 1,
+    cursor: "default",
   };
 
   const styleModalMenu = {
