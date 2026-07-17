@@ -21,19 +21,5 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx"
-  },
-  "include": [
-    "src",
-    "basket/GsSelectMD.tsx",
-    "basket/GsSetPhase.tsx",
-    "build/RgsToDoMode.tsx",
-    "basket/RgsProcessObject.tsx",
-    "basket/RgsErrorMessage.tsx",
-    "basket/RgsEditName.tsx",
-    "basket/GsComponentsStyle.tsx",
-    "basket/RgsCreateObject.tsx",
-    "basket/RgsAppointVertex.tsx",
-    "basket/MainMapSdc.tsx",
-    "basket/MainMapSdcNew.tsx"
-, "basket/massmodeReducer1.tsx", "basket/massdkReducer1.tsx", "basket/bindingsReducer1.tsx", "basket/interfaceBindings1.d.ts", "addobjReducer1.tsx", "interfaceAddObjects1.d.ts"  ]
+  }
 }

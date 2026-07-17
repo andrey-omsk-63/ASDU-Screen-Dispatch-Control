@@ -9,6 +9,9 @@ import Grid from "@mui/material/Grid";
 import MainMapSdc from "./components/MainMapSdc";
 
 import { MasskPoint } from "./components/SdcServiceFunctions";
+import ServerError from "./AppServerError";
+
+import { styleMainScreen } from "./AppStyle";
 
 import { dataMap } from "./otladkaMaps";
 import { imgFaza } from "./otladkaPicFaza";
@@ -114,6 +117,7 @@ let flagOpenDebug = true;
 let flagOpenWS = true;
 let homeRegion: string = "0";
 let flagMap = false;
+let notServerError = true; // не было ошибки сервера
 
 const App = () => {
   //=== Piece of Redux =====================================
@@ -209,13 +213,15 @@ const App = () => {
 
   React.useEffect(() => {
     WS.onopen = function (event: any) {
-      console.log("WS.current.onopen:", event);
+      console.log("WS.current.onopen:", notServerError, event);
     };
     WS.onclose = function (event: any) {
-      console.log("WS.current.onclose:", event);
+      if (!debug) notServerError = false;
+      console.log("WS.current.onclose:", notServerError, event);
     };
     WS.onerror = function (event: any) {
-      console.log("WS.current.onerror:", event);
+      console.log("WS.current.onerror:", notServerError, event);
+      if (!debug) notServerError = false;
     };
 
     const ActionOnTflight = (data: any) => {
@@ -360,11 +366,17 @@ const App = () => {
   }
 
   return (
-    <Grid container sx={{ height: "100vh", width: "100%", bgcolor: "#E9F5D8" }}>
-      <Grid item xs>
-        {openMapInfo && <MainMapSdc trigger={trigger} />}
-      </Grid>
-    </Grid>
+    <>
+      {!notServerError ? (
+        <ServerError />
+      ) : (
+        <Grid container sx={styleMainScreen}>
+          <Grid item xs>
+            {openMapInfo && <MainMapSdc trigger={trigger} />}
+          </Grid>
+        </Grid>
+      )}
+    </>
   );
 };
 
