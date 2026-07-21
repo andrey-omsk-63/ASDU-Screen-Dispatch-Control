@@ -11,7 +11,8 @@ import MainMapSdc from "./components/MainMapSdc";
 import { MasskPoint } from "./components/SdcServiceFunctions";
 import ServerError from "./AppServerError";
 
-import { styleMainScreen } from "./AppStyle";
+//import { styleMainScreen } from "./AppStyle";
+import { styleMainScreen } from "./components/MainMapStyle";
 
 import { dataMap } from "./otladkaMaps";
 import { imgFaza } from "./otladkaPicFaza";
